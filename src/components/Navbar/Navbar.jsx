@@ -105,19 +105,23 @@ export default function Navbar() {
 
                     <nav className="flex-1 flex flex-col justify-center px-12 space-y-8">
                         <Link to="/services/business-consulting" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
-                            Business Consulting
+                            Investment & Market Entry
                         </Link>
 
                         <Link to="/services/legal-service" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
-                            Legal Support
+                            Legal & Regulatory Advisory
                         </Link>
 
-                        <Link to="/services/strategic-insights" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
-                            Strategic Insights
+                        <Link to="/services/policy" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
+                             Strategy & Policy Advisory
                         </Link>
 
                         <Link to="/services/startup-support" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
-                            Startup Support
+                            Startup & Venture Support
+                        </Link>
+
+                        <Link to="/services/strategic-insights" onClick={closeMenu} className="text-3xl font-semibold hover:text-orange-600">
+                            Insights
                         </Link>
 
                         <Link to="/contact-us" onClick={closeMenu} className="text-3xl font-bold text-orange-600">
