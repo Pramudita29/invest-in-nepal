@@ -11,8 +11,10 @@ import SectorDetail from './pages/SectorDetails';
 import StartupHubPage from './pages/StartupHubPage';
 import StoriesPage from './pages/StoriesPage';
 
+
 // Services
 import BusinessConsultingPage from './pages/BusinessConsultingPage';
+import PolicyPage from './pages/PolicyPage';
 import StartupSupportPage from './pages/StartupSupportPage';
 
 // Strategic Insights
@@ -38,6 +40,10 @@ function App() {
                     <Route
                         path="/services/legal-service"
                         element={<LegalSupportPage />}
+                    />
+                    <Route
+                        path="/services/policy"
+                        element={<PolicyPage />}
                     />
                     <Route
                         path="/services/startup-support"

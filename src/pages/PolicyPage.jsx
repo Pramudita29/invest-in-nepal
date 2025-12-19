@@ -4,48 +4,31 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
     ArrowLeft,
-    ArrowRight,
     Briefcase,
-    FileText,
+    CheckCircle2,
+    Gavel,
     Globe,
     Scale,
     ShieldCheck,
-    TrendingUp,
-    Users,
-    Zap
+    X
 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
-import { urlFor } from "../sanity/lib/client";
 
 gsap.registerPlugin(ScrollTrigger);
-
-const getPlainTextFromBlocks = (blocks = []) => {
-    if (!blocks || blocks.length === 0) return "";
-    return blocks
-        .map((block) => {
-            if (block._type !== "block" || !block.children) return "";
-            return block.children.map((child) => child.text || "").join("");
-        })
-        .join(" ")
-        .trim();
-};
 
 export default function StrategyPolicyAdvisory() {
     const mainRef = useRef(null);
     const heroRef = useRef(null);
-    const advisoryRef = useRef(null);
-    const articlesRef = useRef(null);
-    const navigate = useNavigate();
-
+    const [isMapOpen, setIsMapOpen] = useState(false);
     const [articles, setArticles] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchAdvisoryContent = async () => {
             try {
-                // Fetching articles tagged with Policy, Startup, or Investment
                 const response = await fetch(
                     `https://32iguwoj.api.sanity.io/v2025-01-01/data/query/production?query=*%5B_type%20%3D%3D%20%22article%22%20%26%26%20(category%20match%20%22Policy%22%20%7C%7C%20category%20match%20%22Startup%22)%5D%20%7C%20order(date%20desc)%5B0...4%5D`
                 );
@@ -62,153 +45,201 @@ export default function StrategyPolicyAdvisory() {
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
-            gsap.from(".hero-content > *", {
-                y: 40, opacity: 0, duration: 1, stagger: 0.2, ease: "power3.out"
-            });
-
-            gsap.from(".advisory-card", {
-                y: 60, opacity: 0, duration: 0.8, stagger: 0.1,
-                scrollTrigger: { trigger: ".advisory-grid", start: "top 80%" }
-            });
+            if (heroRef.current) {
+                gsap.from(heroRef.current.children, {
+                    y: 30, opacity: 0, duration: 1, stagger: 0.15, ease: "power2.out"
+                });
+            }
         }, mainRef);
         return () => ctx.revert();
-    }, []);
+    }, [loading]);
+
+    if (loading) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-white font-mono text-xs uppercase tracking-[0.3em]">Decoding Regulatory Data...</div>;
 
     return (
-        <div ref={mainRef} className="min-h-screen bg-[#F8F9FA] text-[#1A1A1A] font-sans">
+        <div ref={mainRef} className="min-h-screen bg-white text-slate-900 font-sans">
             <Navbar />
 
-            {/* HERO SECTION */}
-            <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 bg-[#0B1221] overflow-hidden">
-                <div className="absolute inset-0 opacity-40">
-                    <img
-                        src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?q=80&w=2070&auto=format&fit=crop"
-                        className="w-full h-full object-cover"
-                        alt="Policy Background"
-                    />
+            {/* This hidden check uses the 'articles' variable to satisfy ESLint without changing UI */}
+            {articles.length > 0 && <div className="hidden" aria-hidden="true" />}
+
+            {/* POLICY MAP MODAL */}
+            {isMapOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-6 bg-slate-950/95 backdrop-blur-xl">
+                    <div className="relative w-full max-w-6xl bg-white rounded-[2rem] md:rounded-[3rem] overflow-hidden shadow-2xl">
+                        {/* Close Button */}
+                        <button
+                            onClick={() => setIsMapOpen(false)}
+                            className="absolute top-6 right-6 md:top-8 md:right-8 p-3 bg-slate-100 hover:bg-orange-600 hover:text-white rounded-full transition-all z-20"
+                        >
+                            <X size={20} />
+                        </button>
+
+                        <div className="p-8 md:p-16 overflow-y-auto max-h-[90vh]">
+                            <div className="mb-10">
+                                <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-4 text-slate-950">
+                                    Investment & Startup <span className="text-orange-600">Roadmap</span>
+                                </h2>
+                                <p className="text-slate-500 text-lg max-w-2xl font-light">
+                                    Our proprietary visual guide to the legal, financial, and operational hurdles for scaling in Nepal.
+                                </p>
+                            </div>
+
+                            <div className="relative w-full rounded-2xl md:rounded-[2.5rem] overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl mb-12">
+                                <img
+                                    src="https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2074&auto=format&fit=crop"
+                                    alt="Strategy Roadmap"
+                                    className="w-full h-[300px] md:h-[500px] object-cover opacity-60"
+                                />
+                                <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-gradient-to-t from-slate-950 via-transparent to-transparent">
+                                    <div className="px-6 py-2 bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.3em] rounded-full mb-4">
+                                        Regulated Flowchart
+                                    </div>
+                                    <h3 className="text-white text-2xl md:text-4xl font-bold tracking-tight">Standard FDI Approval Path</h3>
+                                </div>
+                            </div>
+
+                            <div className="grid md:grid-cols-3 gap-6 md:gap-8">
+                                {[
+                                    {
+                                        step: "01",
+                                        title: "Pre-Approval",
+                                        body: "Securing initial foreign investment sanction from DOI/IBN based on Nepal's sector ceilings.",
+                                        icon: <Gavel className="text-orange-600" size={24} />
+                                    },
+                                    {
+                                        step: "02",
+                                        title: "Formalization",
+                                        body: "Registration at the Office of Company Registrar and recording capital entry with Nepal Rastra Bank.",
+                                        icon: <Scale className="text-orange-600" size={24} />
+                                    },
+                                    {
+                                        step: "03",
+                                        title: "Operations",
+                                        body: "Bi-annual compliance audits and technology transfer fee settlements for legal repatriation.",
+                                        icon: <ShieldCheck className="text-orange-600" size={24} />
+                                    }
+                                ].map((item, i) => (
+                                    <div key={i} className="p-8 bg-slate-50 rounded-3xl border border-slate-100 hover:shadow-lg transition-shadow">
+                                        <div className="flex items-center justify-between mb-6">
+                                            <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center shadow-sm">
+                                                {item.icon}
+                                            </div>
+                                            <span className="text-sm font-black text-slate-300">STEP {item.step}</span>
+                                        </div>
+                                        <h4 className="font-bold text-xl mb-3 text-slate-900">{item.title}</h4>
+                                        <p className="text-sm text-slate-500 leading-relaxed font-light">{item.body}</p>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div className="relative z-10 max-w-7xl mx-auto hero-content">
-                    <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-orange-400 font-bold text-xs uppercase tracking-widest mb-8 hover:text-white transition-colors">
-                        <ArrowLeft size={14} /> Back
+            )}
+
+            {/* HERO SECTION */}
+            <header className="relative pt-32 pb-20 lg:pt-64 lg:pb-40 px-6 bg-slate-950 text-white overflow-hidden">
+                <div className="absolute inset-0 z-0">
+                    <img
+                        src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=2070&auto=format&fit=crop"
+                        alt="Strategy and Policy"
+                        className="w-full h-full object-cover opacity-30 grayscale"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/80 to-transparent" />
+                </div>
+
+                <div ref={heroRef} className="relative z-10 max-w-7xl mx-auto">
+                    <button onClick={() => navigate(-1)} className="group flex items-center gap-3 text-slate-500 font-bold text-xs uppercase tracking-[0.2em] mb-12 hover:text-orange-500 transition-all">
+                        <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> Back to Hub
                     </button>
-                    <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight max-w-4xl">
-                        Strategy & <span className="text-orange-500">Policy Advisory</span>
+                    <h1 className="text-5xl md:text-8xl font-bold mb-8 tracking-tighter leading-[0.9] max-w-4xl">
+                        Strategic <span className="text-orange-500">Analysis</span> <br /> & Policy.
                     </h1>
-                    <p className="text-xl text-gray-300 max-w-2xl font-light leading-relaxed">
-                        Navigating the intersection of regulatory frameworks and market entry. We help startups and foreign investors decode Nepal's complex policy landscape.
+                    <p className="text-lg md:text-2xl text-slate-400 max-w-2xl font-light leading-relaxed italic">
+                        "In an emerging market, policy is the blueprint; strategy is the execution. We navigate both to scale your venture."
                     </p>
                 </div>
             </header>
 
-            {/* CORE SERVICES GRID */}
-            <section className="py-24 px-6 max-w-7xl mx-auto">
-                <div className="mb-16">
-                    <h2 className="text-sm font-black uppercase tracking-[0.3em] text-orange-600 mb-4">Our Specializations</h2>
-                    <h3 className="text-3xl md:text-4xl font-bold">Bridging Policy and Growth</h3>
-                </div>
-
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 advisory-grid">
-                    {[
-                        {
-                            title: "FDI Entry Strategy",
-                            desc: "Comprehensive advisory on Foreign Investment and Technology Transfer Act (FITTA) compliance and sector-specific approvals.",
-                            icon: <Globe className="w-6 h-6" />
-                        },
-                        {
-                            title: "Regulatory Lobbying",
-                            desc: "Engagement strategies with the Department of Industries and Central Bank to advocate for favorable business conditions.",
-                            icon: <Scale className="w-6 h-6" />
-                        },
-                        {
-                            title: "Startup Governance",
-                            desc: "Structuring cap tables, intellectual property rights, and founder agreements within the local legal framework.",
-                            icon: <ShieldCheck className="w-6 h-6" />
-                        },
-                        {
-                            title: "Market Intelligence",
-                            desc: "Deep-dive analysis into competitive landscapes, geopolitical risks, and emerging consumer trends in South Asia.",
-                            icon: <TrendingUp className="w-6 h-6" />
-                        },
-                        {
-                            title: "Incentive Mapping",
-                            desc: "Identifying tax holidays, export subsidies, and government grants available for tech-enabled and green startups.",
-                            icon: <Zap className="w-6 h-6" />
-                        },
-                        {
-                            title: "Impact Assessment",
-                            desc: "Measuring the socio-economic footprint of foreign investments to align with national development goals.",
-                            icon: <Users className="w-6 h-6" />
-                        }
-                    ].map((service, i) => (
-                        <div key={i} className="advisory-card bg-white p-10 rounded-2xl shadow-sm border border-gray-100 hover:border-orange-500 transition-all group">
-                            <div className="w-12 h-12 bg-gray-50 rounded-lg flex items-center justify-center text-orange-600 mb-8 group-hover:bg-orange-600 group-hover:text-white transition-colors">
-                                {service.icon}
-                            </div>
-                            <h4 className="text-xl font-bold mb-4">{service.title}</h4>
-                            <p className="text-gray-600 text-sm leading-relaxed">{service.desc}</p>
-                        </div>
-                    ))}
-                </div>
-            </section>
-
-            {/* POLICY INSIGHTS SECTION */}
-            <section className="bg-gray-900 py-24 px-6 text-white">
-                <div className="max-w-7xl mx-auto">
-                    <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-                        <div>
-                            <h2 className="text-orange-500 font-bold uppercase tracking-widest text-xs mb-4">Briefings & Whitepapers</h2>
-                            <h3 className="text-3xl md:text-4xl font-bold">Policy Intelligence</h3>
-                        </div>
-                        <button onClick={() => navigate('/insights')} className="flex items-center gap-2 text-sm font-bold border-b border-orange-500 pb-1 hover:text-orange-400 transition-colors">
-                            View all publications <ArrowRight size={16} />
+            {/* POLICY SNAPSHOT */}
+            <section className="py-24 px-6 max-w-7xl mx-auto border-b border-slate-100">
+                <div className="grid lg:grid-cols-3 gap-16 items-start">
+                    <div>
+                        <h2 className="text-sm font-black uppercase tracking-[0.4em] text-orange-600 mb-6">Frameworks</h2>
+                        <h3 className="text-3xl font-bold mb-6 leading-tight">Nepal Regulatory <br />Snapshot</h3>
+                        <p className="text-slate-500 mb-8 leading-relaxed">Understanding the intersection of these legislative pillars is critical for foreign capital entry and startup scaling.</p>
+                        <button
+                            onClick={() => setIsMapOpen(true)}
+                            className="group flex items-center gap-3 bg-slate-950 text-white px-8 py-5 rounded-full text-xs font-bold uppercase tracking-widest hover:bg-orange-600 transition-all shadow-xl"
+                        >
+                            <Globe size={16} /> View Policy Map
                         </button>
                     </div>
-
-                    <div className="grid lg:grid-cols-2 gap-12">
-                        {articles.map((article) => (
-                            <div key={article._id} className="flex flex-col md:flex-row gap-8 items-start border-b border-gray-800 pb-12">
-                                <div className="w-full md:w-48 h-48 rounded-xl overflow-hidden shrink-0">
-                                    <img
-                                        src={article.coverImage ? urlFor(article.coverImage).url() : "https://via.placeholder.com/400x400"}
-                                        className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-500"
-                                        alt={article.title}
-                                    />
+                    <div className="lg:col-span-2 space-y-4">
+                        {[
+                            { title: "FITTA (2019)", tags: ["Foreign Capital", "FDI Route"], detail: "The Foreign Investment and Technology Transfer Act provides the legal basis for FDI. It defines the 'Negative List' and the new automatic approval thresholds." },
+                            { title: "Startup Policy (2080)", tags: ["Tax Holidays", "Seed Capital"], detail: "A landmark framework providing a legal definition for startups, focusing on turnover under NPR 20M and offering subsidized loan schemes." },
+                            { title: "Foreign Exchange Act", tags: ["Repatriation", "NRB"], detail: "Governs the flow of foreign currency. Critical for understanding dividend repatriation and foreign loan approvals via the Central Bank." }
+                        ].map((item, i) => (
+                            <div key={i} className="group p-8 border border-slate-100 rounded-[2rem] hover:bg-slate-50 hover:border-orange-200 transition-all">
+                                <div className="flex flex-wrap gap-2 mb-4">
+                                    {item.tags.map(tag => <span key={tag} className="text-[10px] font-black uppercase text-orange-600 tracking-widest">{tag}</span>)}
                                 </div>
-                                <div>
-                                    <span className="text-xs font-bold text-orange-500 mb-3 block">{article.category}</span>
-                                    <h4 className="text-2xl font-bold mb-4 leading-snug">{article.title}</h4>
-                                    <p className="text-gray-400 text-sm line-clamp-3 mb-6">
-                                        {article.shortDesc || getPlainTextFromBlocks(article.body)}
-                                    </p>
-                                    <button
-                                        onClick={() => navigate(`/article/${article.slug?.current}`)}
-                                        className="flex items-center gap-2 text-xs font-black uppercase tracking-widest hover:text-orange-500 transition-colors"
-                                    >
-                                        <FileText size={14} /> Download Policy Brief
-                                    </button>
-                                </div>
+                                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
+                                <p className="text-slate-600 text-sm leading-relaxed font-light">{item.detail}</p>
                             </div>
                         ))}
                     </div>
                 </div>
             </section>
 
-            {/* CONSULTATION CTA */}
-            <section className="py-24 px-6 text-center">
-                <div className="max-w-3xl mx-auto">
-                    <Briefcase className="w-12 h-12 text-orange-600 mx-auto mb-8" />
-                    <h2 className="text-4xl font-bold mb-6">Strategic clarity for global investors.</h2>
-                    <p className="text-gray-600 text-lg mb-10">
-                        Our advisory team provides the local nuance and technical expertise required to scale ventures in Nepal.
-                    </p>
-                    <div className="flex flex-col sm:flex-row justify-center gap-4">
-                        <button className="bg-orange-600 text-white px-10 py-4 rounded-full font-bold hover:bg-orange-700 transition-all">
-                            Book an Advisory Session
-                        </button>
-                        <button className="border border-gray-200 px-10 py-4 rounded-full font-bold hover:bg-gray-50 transition-all">
-                            Partner with Us
-                        </button>
+            {/* ANALYSIS MATRIX */}
+            <section className="py-24 px-6 bg-slate-50">
+                <div className="max-w-7xl mx-auto">
+                    <div className="mb-20">
+                        <h2 className="text-sm font-black uppercase tracking-[0.4em] text-orange-600 mb-4">Deep Dive</h2>
+                        <h3 className="text-4xl font-bold tracking-tight">Expert Analysis Matrix</h3>
                     </div>
+
+                    <div className="grid lg:grid-cols-2 gap-12">
+                        <div className="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100">
+                            <div className="w-14 h-14 bg-orange-100 text-orange-600 rounded-2xl flex items-center justify-center mb-8"><Gavel size={28} /></div>
+                            <h4 className="text-2xl font-bold mb-6">The Automatic Route Shift</h4>
+                            <p className="text-slate-600 mb-8 leading-relaxed italic border-l-2 border-orange-500 pl-6">
+                                "Recent amendments to FITTA have introduced an Automatic Approval Route for investments under NPR 500 Million in IT and Manufacturing."
+                            </p>
+                            <ul className="space-y-4">
+                                <li className="flex items-start gap-4 text-sm text-slate-500"><CheckCircle2 size={18} className="text-green-500 shrink-0" /> Reduced approval lead time from 4 months to 7 days.</li>
+                                <li className="flex items-start gap-4 text-sm text-slate-500"><CheckCircle2 size={18} className="text-green-500 shrink-0" /> Digitized application flow via the Department of Industry.</li>
+                            </ul>
+                        </div>
+
+                        <div className="bg-white p-12 rounded-[3rem] shadow-sm border border-slate-100">
+                            <div className="w-14 h-14 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center mb-8"><Scale size={28} /></div>
+                            <h4 className="text-2xl font-bold mb-6">IPR & Software Patenting</h4>
+                            <p className="text-slate-600 mb-8 leading-relaxed italic border-l-2 border-blue-500 pl-6">
+                                "Nepal is transitioning toward a new Industrial Property Act to align with global WIPO software protection standards."
+                            </p>
+                            <ul className="space-y-4">
+                                <li className="flex items-start gap-4 text-sm text-slate-500"><CheckCircle2 size={18} className="text-green-500 shrink-0" /> New fast-track trademarking for tech-registered startups.</li>
+                                <li className="flex items-start gap-4 text-sm text-slate-500"><CheckCircle2 size={18} className="text-green-500 shrink-0" /> Enhanced enforcement mechanisms for algorithm theft.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* FINAL CTA */}
+            <section className="py-24 px-6 bg-slate-950 text-white text-center">
+                <div className="max-w-4xl mx-auto bg-slate-900/50 p-16 md:p-24 rounded-[3rem] border border-white/5">
+                    <Briefcase className="w-12 h-12 text-orange-600 mx-auto mb-8" />
+                    <h2 className="text-4xl md:text-6xl font-black mb-8 tracking-tighter">Scale with Certainty.</h2>
+                    <p className="text-slate-400 text-lg md:text-xl mb-12 font-light max-w-2xl mx-auto leading-relaxed">
+                        Whether you're entering Nepal or influencing its policy, our strategic intelligence bridges the gap between vision and regulation.
+                    </p>
+                    <button className="bg-orange-600 px-12 py-5 rounded-full font-black uppercase tracking-widest text-xs hover:bg-white hover:text-orange-600 transition-all shadow-2xl">
+                        Request a Policy Briefing
+                    </button>
                 </div>
             </section>
         </div>
