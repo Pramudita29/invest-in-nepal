@@ -89,15 +89,19 @@ export default function HeroSection() {
 
             {/* --- MAIN CONTENT (Left) --- */}
             <div className="max-w-5xl z-20 text-white mt-auto mb-12">
-                <h1 className="mt-12 text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem] font-black leading-tight tracking-tighter drop-shadow-2xl">
-                    {['Bridging investment,', 'growth & impact', 'in Nepal'].map((line, i) => (
-                        <span
-                            key={i}
-                            className={`block ${i === 0 ? 'text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400' : 'text-white'}`}
-                        >
-                            {line}
-                        </span>
-                    ))}
+                <h1 className="mt-10 text-4xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8.5rem] font-black leading-[1.1] tracking-tight drop-shadow-2xl">
+                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400">
+                        Bridging investment,
+                    </span>
+                    <span className="block text-white">
+                        growth
+                    </span>
+                    <span className="block text-white">
+                        & impact
+                    </span>
+                    <span className="block text-white">
+                        in Nepal
+                    </span>
                 </h1>
             </div>
             {/* --- CTA BUTTON (Right) --- */}
