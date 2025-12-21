@@ -49,12 +49,12 @@ export default function Navbar() {
                         <div className="flex items-center space-x-3 font-black text-3xl md:text-4xl">
                             {/* The Brand Name */}
                             <div>
-                                <span className="text-white">STRAT</span>
-                                <span className="text-orange-500">BRIDGE</span>
+                                {/* <span className="text-white">STRAT</span> */}
+                                <span className="text-orange-500">STRATBRIDGE</span>
                             </div>
 
                             {/* The Tagline/Secondary Word */}
-                            <span className="text-white">Partners</span>
+                            <span className="text-white">PARTNERS</span>
                         </div>
                     </Link>
 
@@ -112,9 +112,9 @@ export default function Navbar() {
                     <nav className="flex-1 flex flex-col justify-center px-10 space-y-6">
                         {[
                             { name: "Investment & Market Entry", path: "/services/business-consulting" },
-                            { name: "Legal & Regulatory Advisory", path: "/services/legal-service" },
-                            { name: "Strategy & Policy Advisory", path: "/services/policy" },
-                            { name: "Startup & Venture Support", path: "/services/startup-support" },
+                            { name: "Legal & Regulatory ", path: "/services/legal-service" },
+                            { name: "Strategy & Policy ", path: "/services/policy" },
+                            { name: "Startup & Ventures", path: "/services/startup-support" },
                             { name: "Insights", path: "/services/strategic-insights" }
                         ].map((link) => (
                             <Link
