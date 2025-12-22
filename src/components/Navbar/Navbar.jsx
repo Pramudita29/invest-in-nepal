@@ -40,43 +40,37 @@ export default function Navbar() {
             >
                 <div className="mx-auto max-w-[100rem] px-6 lg:px-8 flex items-center justify-between h-24">
 
-                    {/* LOGO */}
+                    {/* LOGO - Updated for Mobile Responsiveness */}
                     <Link
                         to="/"
                         className={`transition-all duration-500 transform ${isScrolled ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 translate-y-0'
                             }`}
                     >
-                        <div className="flex items-center space-x-3 font-black text-3xl md:text-4xl">
-                            {/* The Brand Name */}
-                            <div>
-                                {/* <span className="text-white">STRAT</span> */}
-                                <span className="text-orange-500">STRATBRIDGE</span>
-                            </div>
-
-                            {/* The Tagline/Secondary Word */}
-                            <span className="text-white">PARTNERS</span>
+                        <div className="flex flex-col md:flex-row md:items-center leading-[0.9] md:leading-normal font-black text-2xl md:text-4xl">
+                            <span className="text-orange-500 tracking-tighter md:tracking-normal">STRATBRIDGE</span>
+                            <span className="text-white text-lg md:text-4xl md:ml-3 tracking-widest md:tracking-normal">PARTNERS</span>
                         </div>
                     </Link>
 
                     {/* ACTIONS CONTAINER */}
                     <div className="flex items-center gap-4">
-                        {/* CONTACT US BUTTON - Fixed visibility logic */}
+                        {/* CONTACT US BUTTON */}
                         <Link
                             to="/contact-us"
                             className={`hidden lg:inline-flex rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-8 py-3 text-white font-bold transition-all duration-500 transform ${isScrolled
-                                ? 'opacity-0 translate-x-10 pointer-events-none invisible'
-                                : 'opacity-100 translate-x-0 visible'
+                                    ? 'opacity-0 translate-x-10 pointer-events-none invisible'
+                                    : 'opacity-100 translate-x-0 visible'
                                 }`}
                         >
                             Contact Us
                         </Link>
 
-                        {/* MENU BUTTON - High Z-index to ensure it captures clicks */}
+                        {/* MENU BUTTON */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className={`relative z-[60] w-14 h-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center ${isScrolled
-                                ? 'bg-white border-2 border-orange-500'
-                                : 'bg-gradient-to-r from-red-600 to-orange-500'
+                                    ? 'bg-white border-2 border-orange-500'
+                                    : 'bg-gradient-to-r from-red-600 to-orange-500'
                                 }`}
                         >
                             <div className="w-5 h-5 grid grid-cols-2 gap-1">
@@ -97,12 +91,16 @@ export default function Navbar() {
             <div
                 className={`fixed inset-y-0 right-0 z-[100] w-80 md:w-96 transform transition-transform duration-500 ease-in-out bg-white shadow-2xl ${isOpen ? 'translate-x-0' : 'translate-x-full'
                     }`}
-                style={{ top: showBanner ? '48px' : '0', height: showBanner ? 'calc(100% - 48px)' : '100%' }}
+                style={{
+                    top: showBanner ? '48px' : '0',
+                    height: showBanner ? 'calc(100% - 48px)' : '100%'
+                }}
             >
                 <div className="h-full flex flex-col">
                     <div className="flex items-center justify-between p-8 border-b">
-                        <h2 className="text-2xl font-black italic">
-                            STRAT <span className="text-orange-500">BRIDGE</span>
+                        <h2 className="flex flex-col text-2xl font-black italic leading-none">
+                            <span className="text-slate-900">STRAT <span className="text-orange-500">BRIDGE</span></span>
+                            <span className="text-slate-400 text-sm tracking-[0.2em] mt-1">PARTNERS</span>
                         </h2>
                         <button onClick={closeMenu} className="p-3 rounded-xl bg-slate-100 hover:bg-orange-100 transition-colors text-slate-900">
                             <X className="w-6 h-6" />
