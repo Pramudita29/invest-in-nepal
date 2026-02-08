@@ -1,186 +1,128 @@
 'use client';
 
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { ArrowLeft, ArrowRight, Grid3x3, PhoneCall, TrendingUp } from "lucide-react";
-import { useLayoutEffect, useRef } from "react";
+import Lenis from '@studio-freight/lenis';
+import { ArrowLeft, ArrowUpRight, PhoneCall } from "lucide-react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { reasons } from "../data/reasons";
 
-gsap.registerPlugin(ScrollTrigger);
-
 export default function ReasonDetailPage() {
-    const sectionRef = useRef(null);
-    const circlesRef = useRef(null);
-    const contentRef = useRef(null);
-    const btnRef = useRef(null);
-    const noteRef = useRef(null);
-    const floatingRef = useRef(null);
-
     const { slug } = useParams();
     const navigate = useNavigate();
     const reason = reasons.find((r) => r.id === slug);
-    const accent = reason ? getAccentColor(reason.title) : "#2563eb";
+    const containerRef = useRef(null);
 
-    // Scroll to top on page load
-    useLayoutEffect(() => {
-        window.scrollTo(0, 0);
-    }, []);
-
-    // CTA Animations + Floating Note
-    useLayoutEffect(() => {
-        if (!reason) return;
-
-        const ctx = gsap.context(() => {
-            // Circles animation
-            if (circlesRef.current) {
-                const circles = circlesRef.current.children;
-                gsap.fromTo(
-                    circles,
-                    { scale: 0.8, opacity: 0 },
-                    { scale: 1, opacity: 0.6, duration: 2, stagger: 0.15, ease: "elastic.out(1,0.6)" }
-                );
-                gsap.to(circlesRef.current, { rotation: 360, duration: 120, repeat: -1, ease: "none" });
-            }
-
-            // Text entrance
-            gsap.from("h2", { y: 20, opacity: 0, duration: 1 });
-            if (contentRef.current) {
-                const paragraphs = contentRef.current.querySelectorAll("p");
-                gsap.from(paragraphs, { y: 20, opacity: 0, duration: 1, stagger: 0.15 });
-            }
-
-            // Button animation + hover
-            if (btnRef.current) {
-                gsap.fromTo(btnRef.current, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "elastic.out(1,0.5)" });
-                btnRef.current.addEventListener("mouseenter", () => {
-                    gsap.to(btnRef.current, { scale: 1.05, boxShadow: `0 20px 40px ${accent}40`, duration: 0.3 });
-                });
-                btnRef.current.addEventListener("mouseleave", () => {
-                    gsap.to(btnRef.current, { scale: 1, boxShadow: "0 0 0 rgba(0,0,0,0)", duration: 0.3 });
-                });
-            }
-
-            // Floating Note animation
-            if (noteRef.current) {
-                gsap.to(noteRef.current, { y: 10, rotation: 5, duration: 3, repeat: -1, yoyo: true, ease: "sine.inOut" });
-            }
-
-            // Floating Icon animation
-            if (floatingRef.current) {
-                gsap.to(floatingRef.current, { y: -8, duration: 1.5, repeat: -1, yoyo: true, ease: "sine.inOut" });
-            }
-        }, sectionRef);
-
-        return () => ctx.revert();
-    }, [reason, accent]);
+    useEffect(() => {
+        const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        return () => lenis.destroy();
+    }, [reason]);
 
     if (!reason) return null;
 
     const { title, shortDescription, image, stats = [], content = [] } = reason;
 
     return (
-        <div className="min-h-screen bg-gray-50 relative">
-            {/* Back Button */}
-            <div className="max-w-7xl mx-auto px-6 pt-10 lg:px-8">
+        <main ref={containerRef} className="min-h-screen bg-[#F5F2ED] font-sans text-[#13231F] selection:bg-[#344E41] selection:text-[#F5F2ED]">
+
+            {/* --- NAVIGATION: HIGH-VIS WHITE PILL --- */}
+            <nav className="fixed top-8 left-8 z-50">
                 <button
                     onClick={() => navigate(-1)}
-                    className="text-gray-600 hover:text-gray-900 flex items-center gap-2 text-sm uppercase tracking-wider transition"
+                    className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-[#13231F] rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.1)] transition-all duration-500 hover:scale-105 active:scale-95 border border-[#13231F]/5"
                 >
-                    <ArrowLeft size={18} /> Back to Reasons
+                    <ArrowLeft className="w-4 h-4 transition-transform group-hover:-translate-x-1" />
+                    <span className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold">Return to Index</span>
                 </button>
-            </div>
+            </nav>
 
-            {/* Header */}
-            <header className="py-12 max-w-5xl mx-auto text-center px-6 lg:px-8">
-                <p className="text-xs font-semibold uppercase tracking-widest mb-2 text-gray-500">Report Detail</p>
-                <h1 className="text-4xl md:text-5xl font-extrabold text-gray-900 leading-tight">{title}</h1>
-                <p className="mt-3 text-base md:text-lg text-gray-600 font-light">{shortDescription}</p>
+            {/* --- 01. EDITORIAL MASTHEAD --- */}
+            <header className="pt-48 pb-16 px-8 md:px-16 lg:px-24 max-w-7xl mx-auto">
+                <div className="max-w-4xl">
+                    <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#344E41] mb-6 block font-bold">Confidential Dossier</span>
+                    <h1 className="text-6xl md:text-8xl font-serif leading-[0.9] tracking-tighter lowercase text-[#13231F] mb-8">
+                        {title}
+                    </h1>
+                    <p className="text-xl md:text-2xl font-light text-[#13231F]/60 italic leading-relaxed">
+                        {shortDescription}
+                    </p>
+                </div>
             </header>
 
-            {/* Full-width Image */}
-            <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-12">
-                <div className="w-full h-64 overflow-hidden rounded-xl">
-                    <img src={image} alt={title} className="w-full h-full object-cover brightness-[.9]" />
+            {/* --- 02. CLEAN IMAGE FRAME --- */}
+            <section className="px-4 md:px-8 mb-32">
+                <div className="h-[65vh] w-full overflow-hidden rounded-sm bg-[#DEDAD5]">
+                    <img
+                        src={image}
+                        alt={title}
+                        className="w-full h-full object-cover grayscale-[20%] brightness-95 transition-all duration-700"
+                    />
                 </div>
-            </div>
+            </section>
 
-            {/* Stats */}
-            <section className="max-w-7xl mx-auto px-6 lg:px-8 mb-16 p-6 rounded-xl bg-white shadow-md border-t-4" style={{ borderColor: accent }}>
-                <h2 className="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
-                    <TrendingUp size={20} style={{ color: accent }} /> Key Metrics
-                </h2>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {/* --- 03. METRICS GRID --- */}
+            <section className="max-w-7xl mx-auto px-8 md:px-16 lg:px-24 mb-48">
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-12 border-t border-[#13231F]/10 pt-16">
                     {stats.slice(0, 4).map((s, i) => (
-                        <div key={i}>
-                            <div className="text-2xl font-extrabold" style={{ color: accent }}>
+                        <div key={i} className="flex flex-col">
+                            <span className="text-4xl md:text-5xl font-serif italic text-[#344E41] mb-2 leading-none">
                                 {s.prefix}{s.value.toLocaleString()}{s.suffix}
-                            </div>
-                            <p className="mt-1 text-xs uppercase tracking-wider text-gray-500">{s.label}</p>
+                            </span>
+                            <span className="font-mono text-[9px] uppercase tracking-[0.3em] text-[#13231F]/40 font-bold">{s.label}</span>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* Main Content */}
-            <section className="py-12 max-w-7xl mx-auto px-6 lg:px-8">
-                <h2 className="text-2xl font-bold text-gray-900 mb-8 border-b pb-3 flex items-center gap-2">
-                    <Grid3x3 size={24} style={{ color: accent }} /> Detailed Breakdown
-                </h2>
-                <div className="grid lg:grid-cols-2 gap-8">
+            {/* --- 04. THE PROTOCOL GALLERY (CLEAN GRID) --- */}
+            <section className="max-w-7xl mx-auto px-8 md:px-16 lg:px-24 pb-56">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {content.map((c, i) => (
-                        <div key={i} id={`section-${i}`} className="p-6 bg-white rounded-xl shadow-lg hover:shadow-xl transition duration-300 border border-gray-100">
-                            <div className="text-4xl font-extralight mb-3 leading-none" style={{ color: accent }}>{(i + 1).toString().padStart(2, '0')}</div>
-                            <h3 className="text-2xl font-bold text-gray-900 mb-3 leading-snug">{c.heading}</h3>
-                            <p className="text-base text-gray-700 leading-relaxed">{c.text}</p>
+                        <div key={i} className="bg-white p-12 border border-[#13231F]/5 group hover:bg-[#13231F] transition-all duration-500 flex flex-col justify-between min-h-[300px]">
+                            <span className="text-3xl font-serif italic text-[#344E41]/20 group-hover:text-[#A3B18A] transition-colors mb-8">0{i + 1}</span>
+                            <div>
+                                <h3 className="text-2xl font-serif text-[#13231F] group-hover:text-white mb-4 lowercase transition-colors">
+                                    {c.heading}
+                                </h3>
+                                <p className="text-[#13231F]/60 group-hover:text-white/70 text-base font-light leading-relaxed italic transition-colors">
+                                    {c.text}
+                                </p>
+                            </div>
                         </div>
                     ))}
                 </div>
             </section>
 
-            {/* CTA Section */}
-            <section ref={sectionRef} className="relative min-h-[50vh] flex items-center justify-center overflow-hidden py-12">
-                {/* Circles */}
-                <div ref={circlesRef} className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                    <div className="absolute w-[600px] h-[600px] rounded-full border" style={{ borderColor: `${accent}60` }} />
-                    <div className="absolute w-[450px] h-[450px] rounded-full border-dashed" style={{ borderColor: `${accent}40` }} />
-                    <div className="absolute w-[300px] h-[300px] rounded-full border" style={{ borderColor: `${accent}20` }} />
-                </div>
+            {/* --- 05. COMPACT ACTION TRAY (NO BOTTOM GAP) --- */}
+            <section className="w-full px-4 md:px-8">
+                <div className="bg-[#13231F] rounded-t-2xl py-24 px-8 text-center relative overflow-hidden">
+                    <div className="relative z-10 max-w-2xl mx-auto">
+                        <h2 className="text-4xl md:text-5xl font-serif text-[#F5F2ED] mb-12 tracking-tighter lowercase italic leading-none">
+                            Request <span className="not-italic">Advisory.</span>
+                        </h2>
 
-                {/* Content */}
-                <div className="relative z-10 max-w-4xl mx-auto px-6 text-center" ref={contentRef}>
-                    <h2 className="text-3xl md:text-4xl font-bold text-slate-800 mb-4 tracking-tight">Ready for Consultation?</h2>
-                    <p className="mt-3 text-base md:text-lg text-slate-700 max-w-2xl mx-auto leading-relaxed font-light">
-                        Connect with our experts and explore tailored business opportunities in Nepal.
-                    </p>
+                        <div className="flex flex-col items-center gap-8">
+                            <a href="/contact" className="group inline-flex items-center gap-10 bg-white text-[#13231F] px-12 py-6 hover:bg-[#F5F2ED] transition-all duration-500 rounded-sm">
+                                <span className="font-mono text-[10px] uppercase tracking-[0.4em] font-bold">Initiate Protocol</span>
+                                <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                            </a>
 
-                    {/* CTA Button */}
-                    <a ref={btnRef} href="/contact" className="mt-8 inline-flex items-center justify-center px-10 py-4 rounded-full text-white font-bold text-lg" style={{ backgroundColor: accent }}>
-                        Get Consultation <ArrowRight size={20} className="ml-2" />
-                    </a>
+                            <button
+                                onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                                className="font-mono text-[9px] uppercase tracking-[0.4em] text-white/30 hover:text-white transition-colors"
+                            >
+                                ↑ Scroll to top
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </section>
 
-            {/* Floating Consultation Icon */}
-            <a
-                ref={floatingRef}
-                href="/contact-us"
-                className="fixed bottom-8 right-8 w-16 h-16 text-white rounded-full shadow-lg flex items-center justify-center z-50 transition hover:brightness-90"
-                style={{ backgroundColor: accent }}
-                title="Book a Consultation"
-            >
-                <PhoneCall size={28} />
+            {/* FLOATING CONTACT */}
+            <a href="/contact-us" className="fixed bottom-8 right-8 w-14 h-14 bg-white text-[#13231F] rounded-full shadow-2xl flex items-center justify-center z-50 border border-[#13231F]/10 hover:scale-110 transition-transform">
+                <PhoneCall size={20} />
             </a>
-        </div>
+        </main>
     );
-}
-
-// Helper to get accent color
-function getAccentColor(title) {
-    if (title.includes("Trade")) return "#059669";
-    if (title.includes("Labour") || title.includes("Labor")) return "#4f46e5";
-    if (title.includes("Strategic")) return "#d97706";
-    if (title.includes("Visa")) return "#ec4899";
-    if (title.includes("Policy")) return "#7c3aed";
-    return "#2563eb";
 }

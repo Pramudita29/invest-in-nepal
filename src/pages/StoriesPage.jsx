@@ -1,121 +1,161 @@
-// src/pages/StoriesPage.jsx
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Link } from 'react-router-dom';
+'use client';
+
+import Lenis from '@studio-freight/lenis';
+import { motion } from 'framer-motion';
+import { ArrowLeft, ArrowUpRight, PhoneCall } from 'lucide-react';
+import { useLayoutEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const allStories = [
-    // HYDROPOWER
-    { title: 'Upper Tamakoshi Hydropower (456 MW)', description: 'Nepal’s largest domestically funded hydropower project, fully operational since 2021.', image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-red-800 text-white', url: 'https://www.sasec.asia/index.php?page=news&nid=1290&url=upper-tamakoshi-operates' },
-    { title: 'Rasuwagadhi Hydropower (111 MW)', description: 'China-backed project boosting cross-border energy cooperation.', image: 'https://images.unsplash.com/photo-1473341304170-9712b40c60bb?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-blue-900 text-white', url: 'https://kathmandupost.com/money/2023/03/15/rasuwagadhi-hydropower-project-nears-completion' },
-    { title: 'Sanjen Hydro Projects (78 MW)', description: 'Two cascading plants by Chilime Hydropower, powering the Kathmandu Valley.', image: 'https://images.pexels.com/photos/414837/pexels-photo-414837.jpeg?w=1200', colorClass: 'bg-cyan-800 text-white', url: 'https://myrepublica.nagariknetwork.com/news/sanjen-hydropower-projects-begin-commercial-operation' },
-
-    // MANUFACTURING & INDUSTRY
-    { title: 'Hongshi Shivam Cement', description: 'Nepal-China JV, one of the largest cement plants in South Asia.', image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-gray-700 text-white', url: 'https://www.globalcement.com/news/itemlist/tag/Hongshi%20Shivam%20Cement' },
-    { title: 'Unilever Nepal Factory Expansion', description: 'Global FMCG giant doubles production capacity in Nepal.', image: 'https://images.unsplash.com/photo-1581093450021-4a7360e9a6b5?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-green-700 text-white', url: 'https://kathmandupost.com/money/2022/07/20/unilever-nepal-to-invest-rs3-5-billion-in-new-factory' },
-    { title: 'Asian Paints Nepal', description: 'Major Indian paint manufacturer sets up advanced plant in Hetauda.', image: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-purple-800 text-white', url: 'https://myrepublica.nagariknetwork.com/news/asian-paints-nepal-inaugurates-rs1-2-billion-plant' },
-
-    // TECH & INNOVATION
-    { title: 'Fusemachines AI Center', description: 'Nepali-founded AI company training thousands and going global.', image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-gray-900 text-white', url: 'https://fusemachines.com/' },
-    { title: 'Khalti Digital Wallet', description: 'Nepal’s leading fintech platform with over 3 million users.', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-indigo-800 text-white', url: 'https://khalti.com/' },
-    { title: 'Deerwalk Institute of Technology', description: 'Producing top-tier software engineers for Silicon Valley and Nepal.', image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-pink-800 text-white', url: 'https://deerwalk.edu.np/' },
-    { title: 'CloudFactory (AI Data Labeling)', description: 'Nepali company powering AI for Tesla, Microsoft, and more.', image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-teal-900 text-white', url: 'https://www.cloudfactory.com/' },
-
-    // TOURISM & HOSPITALITY
-    { title: 'Marriott & Sheraton Hotels', description: 'Five-star international chains open in Kathmandu and Pokhara.', image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-orange-600 text-white', url: 'https://kathmandupost.com/money/2024/01/15/sheraton-kathmandu-opens' },
-    { title: 'Hilton Kathmandu', description: 'Global hospitality giant enters Nepal with 170-room luxury hotel.', image: 'https://images.unsplash.com/photo-1542314831-0682f6e04d62?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-amber-700 text-white', url: 'https://myrepublica.nagariknetwork.com/news/hilton-kathmandu-opens-doors-to-guests' },
-    { title: 'Pokhara International Airport', description: 'New gateway welcoming direct flights from India, China, and beyond.', image: 'https://images.unsplash.com/photo-1508193638397-1c4234db14d8?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-sky-800 text-white', url: 'https://kathmandupost.com/national/2023/01/01/pokhara-international-airport-comes-into-operation' },
-
-    // HEALTHCARE & EDUCATION
-    { title: 'Manipal Teaching Hospital', description: 'Transforming medical education and healthcare in Western Nepal.', image: 'https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?w=1200', colorClass: 'bg-teal-700 text-white', url: 'https://kathmandupost.com/miscellaneous/2019/07/22/manipal-teaching-hospital-a-pioneering-medical-institution-in-western-nepal' },
-    { title: 'B.P. Koirala Cancer Hospital Expansion', description: 'Major upgrade with Indian grant support for advanced cancer care.', image: 'https://images.unsplash.com/photo-1579684386123-ed2b2b95c413?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-rose-800 text-white', url: 'https://myrepublica.nagariknetwork.com/news/bp-koirala-memorial-cancer-hospital-gets-new-facilities' },
-    { title: 'Kathmandu University School of Medicine', description: 'Producing world-class doctors and researchers.', image: 'https://images.unsplash.com/photo-1588776813674-342e3d3f7cbd?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-emerald-800 text-white', url: 'https://kusms.edu.np/' },
-
-    // STARTUPS & INVESTMENT
-    { title: 'Tootle & Pathao Ride-Sharing', description: 'Local startups revolutionizing urban transport in Kathmandu.', image: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-violet-800 text-white', url: 'https://tootle.today/' },
-    { title: 'Daraz Nepal (Alibaba Group)', description: 'E-commerce giant transforms online shopping in Nepal.', image: 'https://images.unsplash.com/photo-1563013544-824ae1b704d3?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-yellow-700 text-white', url: 'https://www.daraz.com.np/' },
-    { title: 'Sastodeal Success Story', description: 'Homegrown e-commerce platform competing with global players.', image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-lime-800 text-white', url: 'https://www.sastodeal.com/' },
-    { title: 'Nepal Investment Mega Bank', description: 'One of Nepal’s fastest-growing commercial banks with nationwide reach.', image: 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-slate-800 text-white', url: 'https://www.nimb.com.np/' },
-    { title: 'Chaudhary Group (CG Corp Global)', description: 'Nepal’s first billionaire conglomerate expanding across 40+ countries.', image: 'https://images.unsplash.com/photo-1519389951293-0ab56edafb4e?auto=format&fit=crop&w=1200&q=80', colorClass: 'bg-amber-900 text-white', url: 'https://www.chaudharygroup.com/' }
+    {
+        title: 'Upper Tamakoshi Project',
+        sector: 'Energy & Infrastructure',
+        description: 'Nepal’s pride: A 456 MW project carved into the Himalayas, symbolizing the nation’s path to energy sovereignty.',
+        // Concrete dam/hydro infrastructure vibe
+        image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://www.sasec.asia/index.php?page=news&nid=1290'
+    },
+    {
+        title: 'The Himalayan Java Story',
+        sector: 'Hospitality & Retail',
+        description: 'From a single shop in Thamel to a global franchise, redefining Nepal’s coffee culture for the modern world.',
+        image: 'https://images.unsplash.com/photo-1447933601403-0c6688de566e?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://himalayanjava.com/'
+    },
+    {
+        title: 'Fusemachines AI',
+        sector: 'Technology & SaaS',
+        description: 'Leading the AI revolution from Kathmandu, creating a bridge between local talent and global enterprise.',
+        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://fusemachines.com/'
+    },
+    {
+        title: 'Hilton Kathmandu',
+        sector: 'Luxury Hospitality',
+        description: 'A new landmark in the city skyline, blending international standards with Nepali warmth.',
+        image: 'https://images.unsplash.com/photo-1542314831-0682f6e04d62?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://www.hilton.com'
+    },
+    {
+        title: 'CloudFactory Operations',
+        sector: 'Digital Economy',
+        description: 'Scaling the future of work by connecting high-growth companies with Nepal’s digital workforce.',
+        image: 'https://images.unsplash.com/photo-1519389951293-0ab56edafb4e?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://www.cloudfactory.com/'
+    },
+    {
+        title: 'CG Global Footprint',
+        sector: 'Conglomerate',
+        description: 'Expanding the Wai Wai empire across continents, representing Nepal on the global corporate stage.',
+        image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=1200&auto=format&fit=crop',
+        url: 'https://www.chaudharygroup.com/'
+    },
 ];
 
-// Reusable Card Component (same beautiful 3D tilt + shine)
-const StoryCard = ({ story, index }) => {
-    const x = useMotionValue(0);
-    const y = useMotionValue(0);
-    const rotateX = useTransform(y, [-120, 120], [12, -12]);
-    const rotateY = useTransform(x, [-120, 120], [-12, 12]);
-
+const ImageWithFallback = ({ src, alt, className }) => {
+    const [imgSrc, setImgSrc] = useState(src);
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 80 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: index * 0.08 }}
-            viewport={{ once: true }}
-            style={{ rotateX, rotateY, transformPerspective: 1200 }}
-            onMouseMove={(e) => {
-                const rect = e.currentTarget.getBoundingClientRect();
-                x.set(e.clientX - rect.left - rect.width / 2);
-                y.set(e.clientY - rect.top - rect.height / 2);
-            }}
-            onMouseLeave={() => { x.set(0); y.set(0); }}
-            className={`relative group rounded-3xl overflow-hidden shadow-2xl cursor-pointer h-[560px] ${story.colorClass} transition-all duration-500 hover:scale-[1.02] hover:shadow-3xl`}
-        >
-            <a href={story.url} target="_blank" rel="noopener noreferrer" className="absolute inset-0 z-20" aria-label={story.title} />
-
-            <img src={story.image} alt={story.title} className="absolute inset-0 w-full h-full object-cover opacity-50 group-hover:opacity-60 transition-opacity duration-700" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-
-            <div className="relative z-10 h-full flex flex-col justify-end p-12 pb-16">
-                <h3 className="text-4xl md:text-5xl font-extrabold mb-5 leading-tight text-white drop-shadow-2xl">
-                    {story.title}
-                </h3>
-                <p className="text-lg md:text-xl text-gray-100 leading-relaxed max-w-2xl drop-shadow-lg">
-                    {story.description}
-                </p>
-            </div>
-
-            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1200" />
-            </div>
-        </motion.div>
+        <img
+            src={imgSrc}
+            alt={alt}
+            className={className}
+            onError={() => setImgSrc('https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200&auto=format&fit=crop')}
+        />
     );
 };
 
+const StoryCard = ({ story, index }) => (
+    <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: index * 0.05 }}
+        viewport={{ once: true }}
+        className="group flex flex-col bg-white border border-[#13231F]/10 hover:border-[#004B33] transition-all duration-500 overflow-hidden shadow-sm hover:shadow-xl"
+    >
+        <div className="aspect-[16/10] overflow-hidden bg-[#DEDAD5]">
+            <ImageWithFallback
+                src={story.image}
+                alt={story.title}
+                className="w-full h-full object-cover grayscale-[20%] group-hover:grayscale-0 group-hover:scale-105 transition-all duration-1000"
+            />
+        </div>
+        <div className="p-8 md:p-10 flex flex-col flex-1 justify-between">
+            <div>
+                <span className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#004B33] font-bold mb-4 block">Sector: {story.sector}</span>
+                <h3 className="text-3xl font-serif lowercase italic text-[#13231F] mb-6 leading-tight">{story.title}</h3>
+                <p className="text-[#13231F]/60 text-base font-light italic leading-relaxed mb-10">{story.description}</p>
+            </div>
+            <a href={story.url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-between w-full border-t border-[#13231F]/5 pt-6 group-hover:text-[#004B33] transition-colors">
+                <span className="font-mono text-[10px] uppercase tracking-[0.2em] font-bold text-[#13231F] group-hover:text-[#004B33]">Read More</span>
+                <ArrowUpRight size={16} />
+            </a>
+        </div>
+    </motion.div>
+);
+
 export default function StoriesPage() {
+    const navigate = useNavigate();
+
+    useLayoutEffect(() => {
+        const lenis = new Lenis({ duration: 1.2, smoothWheel: true });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+        return () => lenis.destroy();
+    }, []);
+
     return (
-        <>
-            <title>All Success Stories | Nepal Ventures</title>
-
-            <div className="min-h-screen bg-gradient-to-b from-gray-50 via-white to-gray-100 py-24">
-                <div className="max-w-screen-2xl mx-auto px-8">
-
-                    <div className="text-center mb-20">
-                        <h1 className="text-7xl md:text-9xl font-black leading-tight tracking-tighter">
-                            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-600 to-yellow-500">
-                                All Success
-                            </span>
-                            <span className="block text-gray-900">Stories</span>
+        <main className="min-h-screen bg-[#F5F2ED] text-[#13231F]">
+            {/* HERO SECTION - Using a more "Development/Power" focused Nepal image */}
+            <header className="relative w-full h-[85vh] flex items-center pt-20">
+                <div className="absolute top-0 right-0 w-full lg:w-2/3 h-[90%] overflow-hidden">
+                    <ImageWithFallback
+                        src="https://images.unsplash.com/photo-1621252723429-2328fa693963?q=80&w=1600&auto=format&fit=crop"
+                        className="w-full h-full object-cover grayscale brightness-50"
+                        alt="Infrastructure in Nepal"
+                    />
+                </div>
+                <div className="relative z-10 w-full max-w-7xl mx-auto px-8">
+                    <div className="bg-[#F5F2ED] p-10 md:p-20 max-w-2xl border-l-8 border-[#004B33] shadow-2xl">
+                        <button onClick={() => navigate('/')} className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#004B33] mb-8 flex items-center gap-3 hover:-translate-x-2 transition-transform font-bold">
+                            <ArrowLeft size={16} /> Return Home
+                        </button>
+                        <h1 className="text-6xl md:text-8xl font-serif tracking-tighter leading-none lowercase mb-8">
+                            Success <br /> <span className="italic text-[#004B33]/60">Stories.</span>
                         </h1>
-                        <p className="mt-8 text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto">
-                            20+ inspiring investments and ventures shaping the future of Nepal.
+                        <p className="text-lg font-light italic text-[#13231F]/50 border-t border-[#13231F]/10 pt-8">
+                            Celebrating the milestones of a nation in motion.
                         </p>
                     </div>
-
-                    <div className="mb-12">
-                        <Link to="/" className="inline-flex items-center gap-3 text-orange-600 font-bold text-lg hover:text-orange-700 transition">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                            Back to Home
-                        </Link>
-                    </div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12">
-                        {allStories.map((story, i) => (
-                            <StoryCard key={i} story={story} index={i} />
-                        ))}
-                    </div>
                 </div>
+            </header>
+
+            <div className="h-[25vh] md:h-[40vh] flex flex-col items-center justify-center pointer-events-none">
+                <div className="w-px h-24 bg-gradient-to-b from-[#004B33] to-transparent mb-6" />
+                <span className="font-mono text-[9px] uppercase tracking-[0.6em] text-[#13231F]/30 animate-pulse">Evolution in progress</span>
             </div>
-        </>
+
+            <section className="max-w-7xl mx-auto px-8 pb-40">
+                <div className="mb-16">
+                    <h2 className="text-sm font-mono uppercase tracking-[0.4em] text-[#004B33] mb-2 font-bold italic">The Portfolio</h2>
+                    <div className="w-20 h-px bg-[#13231F]/20" />
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                    {allStories.map((story, i) => (
+                        <StoryCard key={i} story={story} index={i} />
+                    ))}
+                </div>
+            </section>
+
+            <footer className="bg-[#13231F] py-32 text-center rounded-t-[4rem]">
+                <h2 className="text-4xl md:text-7xl font-serif text-white italic lowercase mb-12">Shaping <span className="not-italic text-[#004B33]">tomorrow.</span></h2>
+                <Link to="/contact" className="inline-flex items-center gap-10 bg-white text-[#13231F] px-16 py-8 font-mono text-xs uppercase tracking-[0.5em] font-bold hover:bg-[#F5F2ED] transition-all">
+                    Inquire Now <ArrowUpRight size={20} />
+                </Link>
+            </footer>
+
+            <Link to="/contact" className="fixed bottom-8 right-8 w-14 h-14 bg-[#004B33] text-white rounded-full shadow-2xl flex items-center justify-center z-50 border border-white/10 hover:scale-110 transition-transform">
+                <PhoneCall size={20} />
+            </Link>
+        </main>
     );
 }
