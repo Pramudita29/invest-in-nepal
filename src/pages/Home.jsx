@@ -1,6 +1,11 @@
-import { ArrowRight, Calendar, TrendingUp } from 'lucide-react';
+'use client';
+
+import Lenis from '@studio-freight/lenis';
+import { ArrowRight } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+
+// Component Imports
 import CTASection from '../components/CTASection/CTASection';
 import HeroSection from '../components/HeroSection/HeroSection';
 import Navbar from '../components/Navbar/Navbar';
@@ -8,11 +13,37 @@ import SectorsSection from '../components/SectorsSection/SectorsSection';
 import Startup from '../components/StartupHub/StartupHub';
 import SuccessStories from '../components/SuccessStories/SuccessStories';
 import WhyNepal from '../components/WhyNepal/WhyNepal';
-import { urlFor } from '../sanity/lib/client'; // Adjust path if needed
+import { urlFor } from '../sanity/lib/client';
+import NationalAgendaModal from './NationalAgendaModal';
 
 const Home = () => {
     const [latestArticles, setLatestArticles] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    // MODAL STATE
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    useEffect(() => {
+        const lenis = new Lenis({
+            duration: 1.8,
+            easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            lerp: 0.05,
+        });
+
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+        }
+        requestAnimationFrame(raf);
+
+        // TRIGGER MODAL after 3 seconds for demonstration
+        const timer = setTimeout(() => setIsModalOpen(true), 3000);
+
+        return () => {
+            lenis.destroy();
+            clearTimeout(timer);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchLatest = async () => {
@@ -23,101 +54,58 @@ const Home = () => {
                 const data = await response.json();
                 setLatestArticles(data.result || []);
             } catch (error) {
-                console.error("Failed to load latest articles:", error);
+                console.error("Failed to fetch articles:", error);
             } finally {
                 setLoading(false);
             }
         };
-
         fetchLatest();
     }, []);
 
     return (
-        <div className="w-full overflow-x-hidden">
+        <div className="w-full bg-[#F4F1EE]">
             <Navbar />
             <HeroSection />
             <SectorsSection />
             <WhyNepal />
 
-
-            {/* Latest Insights Section - Directly added in Home */}
-            <section className="py-20 bg-gray-50">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="flex items-center justify-between mb-10">
-                        <h2 className="text-3xl md:text-4xl font-extrabold text-gray-900 flex items-center gap-3">
-                            <TrendingUp className="text-orange-600" size={32} />
-                            Latest Insights
+            {/* INSIGHTS SECTION */}
+            <section className="py-40 bg-[#F4F1EE]">
+                <div className="max-w-6xl mx-auto px-6">
+                    <div className="text-center mb-32 space-y-4">
+                        <p className="text-[10px] font-bold tracking-[0.6em] text-[#007354] uppercase">Insights</p>
+                        <h2 className="editorial-font text-6xl md:text-9xl text-[#13231F] leading-none tracking-tighter italic">
+                            The Latest
                         </h2>
-                        <Link
-                            to="/insights"
-                            className="text-sm font-bold text-gray-600 hover:text-orange-600 flex items-center gap-1 transition-colors"
-                        >
-                            View All <ArrowRight size={16} />
-                        </Link>
                     </div>
 
                     {loading ? (
-                        <div className="text-center text-gray-500 py-16">
-                            <p className="text-lg">Loading latest insights...</p>
-                        </div>
-                    ) : latestArticles.length === 0 ? (
-                        <div className="text-center text-gray-500 py-16">
-                            <p className="text-lg">No articles available yet.</p>
-                        </div>
+                        <div className="h-96 flex items-center justify-center italic text-[#13231F]/20 editorial-font text-3xl">Loading Thesis...</div>
                     ) : (
-                        <div className="grid md:grid-cols-3 gap-8">
-                            {latestArticles.map((article) => (
+                        <div className="space-y-40">
+                            {latestArticles.map((article, idx) => (
                                 <Link
                                     key={article._id}
-                                    to={`/article/${article.slug?.current || ''}`}
-                                    className="group bg-white rounded-2xl shadow-md overflow-hidden hover:shadow-2xl hover:-translate-y-2 transition-all duration-300"
+                                    to={`/article/${article.slug?.current}`}
+                                    className={`flex flex-col ${idx % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'} gap-12 md:gap-24 items-center group`}
                                 >
-                                    <div className="h-48 overflow-hidden">
+                                    <div className="w-full md:w-1/2 overflow-hidden bg-[#E5E2DF]">
                                         <img
-                                            src={
-                                                article.coverImage
-                                                    ? urlFor(article.coverImage).width(800).height(400).url()
-                                                    : 'https://via.placeholder.com/800x400?text=Insight'
-                                            }
-                                            alt={article.title}
-                                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                                            loading="lazy"
+                                            src={urlFor(article.coverImage).width(1000).url()}
+                                            alt=""
+                                            className="w-full aspect-square object-cover grayscale transition-all duration-[2s] group-hover:grayscale-0 group-hover:scale-105"
                                         />
                                     </div>
-
-                                    <div className="p-6">
-                                        <div className="flex items-center gap-2 text-xs text-gray-500 uppercase font-bold tracking-wider mb-3">
-                                            <Calendar size={14} />
-                                            {article.date
-                                                ? new Date(article.date).toLocaleDateString('en-GB', {
-                                                    day: 'numeric',
-                                                    month: 'short',
-                                                    year: 'numeric',
-                                                })
-                                                : 'Recent'}
-                                            {article.category && (
-                                                <>
-                                                    <span className="mx-2">•</span>
-                                                    <span className="text-orange-600">{article.category}</span>
-                                                </>
-                                            )}
-                                        </div>
-
-                                        <h3 className="text-xl font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-orange-600 transition-colors">
+                                    <div className="w-full md:w-1/2 space-y-8">
+                                        <h3 className="editorial-font text-4xl md:text-7xl text-[#13231F] leading-[1.1] group-hover:italic transition-all duration-500">
                                             {article.title}
                                         </h3>
-
-                                        <p className="text-gray-600 text-sm line-clamp-3 mb-4">
-                                            {article.shortDesc || 'Latest strategic analysis from our experts.'}
+                                        <p className="text-[#13231F]/50 text-xl font-serif italic max-w-md">
+                                            {article.shortDesc}
                                         </p>
-
-                                        <span className="inline-flex items-center text-sm font-bold text-gray-900 group-hover:text-orange-600 transition-colors">
-                                            Read More{' '}
-                                            <ArrowRight
-                                                size={16}
-                                                className="ml-1 group-hover:translate-x-1 transition-transform"
-                                            />
-                                        </span>
+                                        <div className="pt-4 flex items-center gap-2 text-xs font-bold uppercase text-[#13231F] group-hover:translate-x-3 transition-transform">
+                                            Read Full Thesis <ArrowRight size={16} />
+                                        </div>
                                     </div>
                                 </Link>
                             ))}
@@ -125,10 +113,24 @@ const Home = () => {
                     )}
                 </div>
             </section>
+
             <Startup />
             <SuccessStories />
-
             <CTASection />
+
+            {/* MODAL MOVED TO BOTTOM OF DOM WITH STATE PROPS */}
+            <NationalAgendaModal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                sectorId="energy" // or whatever dynamic ID you need
+            />
+
+            <style jsx global>{`
+                @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@1,400;1,700;1,900&display=swap');
+                .editorial-font { font-family: 'Playfair Display', serif; }
+                html.lenis { height: auto; }
+                .lenis.lenis-smooth { scroll-behavior: auto !important; }
+            `}</style>
         </div>
     );
 };

@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, CheckCircle, Mail, Phone, Scale } from "lucide-react";
+import { ArrowLeft, ArrowUpRight, Zap } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { practiceAreas } from "../data/legalContent";
@@ -12,154 +12,158 @@ export default function LegalTemplate() {
     const area = practiceAreas.find(a => a.id === areaId);
 
     if (!area) {
-        return <div className="p-10">Area not found</div>;
+        return (
+            <div className="min-h-screen bg-[#F5F2ED] flex items-center justify-center font-mono text-xs uppercase tracking-widest text-[#004b33]">
+                Protocol not found / 404
+            </div>
+        );
     }
 
     const Icon = area.icon;
-    const contact = area.contactInfo || { phone: '(555) LAW-FIRM', email: 'contact@lawfirm.com' };
+    const contact = area.contactInfo || { phone: '+977 1 000000', email: 'advisory@firm.com' };
 
     return (
-        <div className="min-h-screen bg-stone-50 text-slate-800 selection:bg-amber-200 selection:text-amber-900">
-            {/* FONT IMPORT */}
+        <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white antialiased">
             <style>
                 {`
-                    @import url('https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap');
+                    @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap');
                     
+                    /* RESTORING PREVIOUS FONT TOKENS */
                     .font-heading { font-family: 'Playfair Display', serif; }
-                    .font-body { font-family: 'Lato', sans-serif; }
+                    .font-body { font-family: 'Hanken Grotesk', sans-serif; }
+                    .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+                    .hide-scrollbar::-webkit-scrollbar { display: none; }
+                    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+                    
+                    .text-balance { text-wrap: balance; }
                 `}
             </style>
 
             <Navbar />
 
-            {/* HERO HEADER */}
-            <header
-                className="relative py-32 px-4 sm:px-6 lg:px-8 border-b-8 border-amber-700"
-                style={{
-                    backgroundImage: `linear-gradient(to right, rgba(15, 23, 42, 0.95) 0%, rgba(15, 23, 42, 0.85) 50%, rgba(15, 23, 42, 0.6) 100%), url(${area.image})`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                }}
-            >
-                <div className="relative z-10 max-w-7xl mx-auto">
+            {/* 1. FIXED LEFT PANEL */}
+            <div className="lg:fixed lg:inset-y-0 lg:left-0 lg:w-1/2 p-8 lg:p-24 flex flex-col justify-between pointer-events-none z-10 bg-[#F5F2ED]">
+                <div className="pointer-events-auto">
                     <button
                         onClick={() => navigate(-1)}
-                        className="group flex items-center gap-2 text-amber-500 hover:text-amber-400 font-body font-medium text-sm tracking-widest uppercase mb-8 transition-colors"
+                        className="group flex items-center gap-3 text-[#004b33] font-mono text-[10px] uppercase tracking-[0.5em] mb-24 transition-all hover:opacity-50"
                     >
-                        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                        Return to Legal Services
+                        <ArrowLeft size={12} /> Return to Index
                     </button>
 
-                    <div className="flex flex-col md:flex-row md:items-end gap-6 mb-6">
-                        <div className="p-3 bg-amber-700 rounded-sm shadow-sm inline-block">
-                            <Icon className="w-10 h-10 text-white" />
-                        </div>
-                        <h1 className="text-5xl md:text-6xl font-heading font-bold text-white tracking-tight">
-                            {area.title}
-                        </h1>
+                    <div className="flex items-center gap-4 mb-8 text-[#004b33]">
+                        <Icon size={20} strokeWidth={1.5} />
+                        <span className="font-mono text-[9px] uppercase tracking-[0.6em] font-medium opacity-60">Archive // {areaId}</span>
                     </div>
 
-                    <div className="h-1 w-24 bg-amber-600 mb-8"></div>
+                    <h1 className="text-6xl md:text-8xl font-heading font-normal tracking-tight leading-[0.9] text-balance">
+                        {area.title} <br />
+                        <span className="italic font-normal text-[#004b33]">Protocol</span>
+                    </h1>
+                </div>
 
-                    <p className="text-xl md:text-2xl max-w-3xl text-slate-200 font-heading italic leading-relaxed opacity-90">
-                        "{area.shortDescription || area.desc}"
+                <div className="hidden lg:block pointer-events-auto max-w-sm border-l border-[#004b33]/20 pl-8">
+                    <p className="text-base font-body font-light text-[#13231F]/60 leading-relaxed uppercase tracking-widest">
+                        {area.shortDescription || area.desc}
                     </p>
                 </div>
-            </header>
-
-            {/* MAIN CONTENT AREA */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-12 mt-16 mb-24">
-
-                {/* LEFT COLUMN (Content) */}
-                <div className="lg:col-span-8">
-                    <section className="bg-white p-8 md:p-12 shadow-sm border-t-4 border-slate-200">
-                        <div className="flex items-center gap-3 mb-8">
-                            <Scale className="text-amber-700 w-6 h-6" />
-                            <h2 className="text-3xl font-heading font-bold text-slate-900">
-                                Legal Overview
-                            </h2>
-                        </div>
-
-                        <div className="font-body text-lg text-slate-600 leading-loose space-y-6">
-                            {area.content}
-
-                            <p>
-                                At our firm, we understand that {area.title.toLowerCase()} matters require a nuanced approach.
-                                Our dedicated team combines decades of litigation experience with a deep understanding of current case law
-                                to provide you with the most effective representation possible.
-                            </p>
-                            <p>
-                                We navigate the complexities of the legal system so you don't have to, ensuring every detail
-                                of your case is meticulously examined and leveraged for your benefit.
-                            </p>
-                        </div>
-
-                        <div className="mt-12 bg-slate-50 p-8 border-l-4 border-amber-700">
-                            <h4 className="text-xl font-heading font-bold text-slate-900 mb-4">Why Retain Our Firm?</h4>
-                            <p className="font-body text-slate-700 leading-relaxed text-lg">
-                                We approach {area.title.toLowerCase()} cases with rigorous attention to detail and a commitment to ethical representation.
-                                Your outcome is our priority, and we fight tirelessly to protect your rights.
-                            </p>
-                        </div>
-                    </section>
-
-                    {area.keyServices && area.keyServices.length > 0 && (
-                        <div className="mt-12">
-                            <h3 className="text-2xl font-heading font-bold text-slate-900 mb-6">Matters We Handle</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {area.keyServices.map((service, index) => (
-                                    <div key={index} className="flex items-start gap-4 p-5 bg-white border border-slate-200 hover:border-amber-600 transition-colors shadow-sm group">
-                                        <CheckCircle className="w-5 h-5 text-amber-700 flex-shrink-0 mt-1 group-hover:scale-110 transition-transform" />
-                                        <span className="font-body text-slate-800 font-medium text-lg">{service}</span>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
-                </div>
-
-                {/* RIGHT COLUMN (Sidebar) */}
-                <aside className="lg:col-span-4 space-y-8 lg:sticky lg:top-8 lg:h-fit">
-
-                    <div className="bg-slate-900 text-white p-8 shadow-xl relative overflow-hidden">
-                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-amber-700 opacity-20 rounded-full blur-2xl"></div>
-
-                        <h3 className="text-2xl font-heading font-bold mb-2 text-white">Case Evaluation</h3>
-                        <p className="text-slate-400 font-body text-sm mb-8 border-b border-slate-700 pb-4">
-                            Confidential & Complimentary
-                        </p>
-
-                        <div className="space-y-6 font-body">
-                            <div className="flex items-center gap-4 group cursor-pointer">
-                                <div className="p-2 bg-slate-800 border border-slate-700 group-hover:border-amber-600 transition">
-                                    <Phone className="w-5 h-5 text-amber-500" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-400 uppercase tracking-wider">Call Us 24/7</p>
-                                    <p className="text-lg font-bold text-white group-hover:text-amber-500 transition">{contact.phone}</p>
-                                </div>
-                            </div>
-
-                            <div className="flex items-center gap-4 group cursor-pointer">
-                                <div className="p-2 bg-slate-800 border border-slate-700 group-hover:border-amber-600 transition">
-                                    <Mail className="w-5 h-5 text-amber-500" />
-                                </div>
-                                <div>
-                                    <p className="text-xs text-slate-400 uppercase tracking-wider">Email Us</p>
-                                    <p className="text-lg font-bold text-white group-hover:text-amber-500 transition">{contact.email}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <button className="w-full mt-8 bg-amber-700 hover:bg-amber-600 text-white font-body font-bold py-4 uppercase tracking-widest text-sm transition duration-200 shadow-lg">
-                            Request Consultation
-                        </button>
-                    </div>
-
-                </aside>
             </div>
 
-            <main className="max-w-7xl mx-auto pt-12 pb-12"></main>
+            {/* 2. SCROLLING RIGHT PANEL - ALL FONTS RESTORED */}
+            <main className="lg:ml-[50%] min-h-screen bg-white shadow-[-20px_0_40px_rgba(0,0,0,0.02)]">
+
+                {/* 01 Briefing */}
+                <section className="px-8 lg:px-24 pt-48 pb-32">
+                    <div className="max-w-xl">
+                        <div className="flex items-center gap-4 mb-16">
+                            <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">01.0</span>
+                            <div className="h-[1px] flex-grow bg-[#13231F]/10" />
+                        </div>
+
+                        <h2 className="font-heading text-4xl mb-12 italic">Strategic Context</h2>
+
+                        <div className="font-body text-xl text-[#13231F]/80 leading-relaxed space-y-12">
+                            <p className="font-light tracking-tight">
+                                {area.content}
+                            </p>
+                            <div className="p-10 bg-[#F5F2ED] border-r-4 border-[#004b33]">
+                                <p className="text-sm uppercase tracking-[0.2em] leading-loose text-[#13231F]/60">
+                                    Our firm operates at the frontier of {area.title.toLowerCase()}—where institutional stability meets high-velocity growth.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                {/* 02 Capability Matrix - NO GAP / FULL WIDTH START */}
+                {area.keyServices && area.keyServices.length > 0 && (
+                    <section className="pb-48">
+                        <div className="px-8 lg:px-24 mb-16 flex items-center gap-4">
+                            <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">02.0</span>
+                            <h3 className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#13231F]/40">Capability Matrix</h3>
+                        </div>
+
+                        <div className="flex overflow-x-auto hide-scrollbar border-y border-[#13231F]/10">
+                            {area.keyServices.map((service, index) => (
+                                <div
+                                    key={index}
+                                    className="flex-none w-[320px] aspect-[3/4] bg-white p-12 group hover:bg-[#004b33] transition-all duration-700 cursor-default border-r border-[#13231F]/10 last:border-r-0"
+                                >
+                                    <div className="h-full flex flex-col justify-between">
+                                        <span className="font-mono text-[10px] text-[#004b33] font-bold group-hover:text-white/30">
+                                            ({index + 1})
+                                        </span>
+                                        <div>
+                                            {/* Headings back to Playfair Serif */}
+                                            <h4 className="font-heading text-3xl text-[#13231F] group-hover:text-white transition-colors leading-none mb-6 italic">
+                                                {service}
+                                            </h4>
+                                            <div className="h-[1px] w-0 group-hover:w-full bg-white/20 transition-all duration-700" />
+                                            <ArrowUpRight className="mt-6 w-4 h-4 text-[#004b33] opacity-0 group-hover:opacity-100 transition-all" />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </section>
+                )}
+
+                {/* 03 Advisory */}
+                <section className="px-8 lg:px-24 pb-48">
+                    <div className="bg-[#13231F] text-white p-12 lg:p-20 relative overflow-hidden">
+                        <div className="relative z-10">
+                            <h3 className="font-heading text-5xl mb-20 italic">Initiate Briefing</h3>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-20 mb-20">
+                                <div className="space-y-4">
+                                    <p className="font-mono text-[9px] text-white/30 uppercase tracking-[0.5em]">Global Line</p>
+                                    <p className="text-2xl font-body font-light tracking-tighter">{contact.phone}</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <p className="font-mono text-[9px] text-white/30 uppercase tracking-[0.5em]">Direct Endpoint</p>
+                                    <p className="text-2xl font-body font-light tracking-tighter">{contact.email}</p>
+                                </div>
+                            </div>
+
+                            <button className="group flex items-center gap-8 border border-white/20 hover:border-[#004b33] px-10 py-6 transition-all">
+                                <span className="font-mono text-[10px] uppercase tracking-[0.6em]">Request Protocol</span>
+                                <Zap size={14} className="group-hover:text-[#004b33] transition-colors" fill="currentColor" />
+                            </button>
+                        </div>
+
+                        <div className="absolute -right-12 -bottom-12 text-[24rem] font-heading font-bold text-white/[0.02] select-none pointer-events-none">
+                            S
+                        </div>
+                    </div>
+                </section>
+
+                <footer className="px-8 lg:px-24 py-16 flex justify-between items-center bg-[#F5F2ED]/30">
+                    <span className="font-mono text-[9px] text-[#13231F]/30 uppercase tracking-[0.6em]">Ref: Stratbridge_V.26</span>
+                    <div className="h-[1px] w-24 bg-[#13231F]/10 hidden md:block" />
+                    <span className="font-mono text-[9px] text-[#13231F]/30 uppercase tracking-[0.6em]">Institutional Excellence</span>
+                </footer>
+            </main>
         </div>
     );
 }
