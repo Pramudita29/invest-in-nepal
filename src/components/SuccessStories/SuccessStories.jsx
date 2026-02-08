@@ -1,202 +1,204 @@
-// src/components/SuccessStoriesHorizontal.jsx
 'use client';
 
-import { motion, useMotionValue, useTransform } from 'framer-motion';
+import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { ArrowRight, ChevronRight, MoveRight } from 'lucide-react';
 import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 
-// --- FULL STORIES DATA ---
+const BRAND = {
+  green: "#002E28",
+  orange: "#FF4F00",
+  paper: "#F4F1EE",
+  mutedGreen: "rgba(0, 46, 40, 0.6)",
+  borderGreen: "rgba(0, 46, 40, 0.15)"
+};
+
 const stories = [
   {
-    type: 'single',
-    title: 'Upper Tamakoshi Hydropower',
-    description: 'Nepal’s largest domestically funded project (456 MW) became fully operational in 2021.',
+    id: '01',
+    title: 'Upper Tamakoshi',
+    subtitle: 'Infrastructure // Energy',
+    description: 'Nepal’s largest domestically funded project (456 MW) redefining the regional power grid.',
     image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80',
-    colorClass: 'bg-red-700',
-    height: 'h-[400px] md:h-[520px]',
-    width: 'w-full md:w-[400px]',
     url: 'https://www.sasec.asia/index.php?page=news&nid=1290&url=upper-tamakoshi-operates'
   },
   {
-    type: 'stack',
-    width: 'w-full md:w-[580px]',
-    cards: [
-      {
-        title: 'Hongshi Shivam Cement',
-        description: 'A landmark Nepal-China joint venture.',
-        image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
-        colorClass: 'bg-gray-600',
-        height: 'h-[200px] md:h-[250px]',
-        url: 'https://www.globalcement.com/news/itemlist/tag/Hongshi%20Shivam%20Cement'
-      },
-      {
-        title: 'Hotel Expansion',
-        description: 'Luxury groups expanding into Nepal.',
-        image: 'https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80',
-        colorClass: 'bg-orange-500',
-        height: 'h-[200px] md:h-[250px]',
-        url: 'https://www.hospitalitynet.org/announcement/41003331.html'
-      }
-    ]
-  },
-  {
-    type: 'single',
+    id: '02',
     title: 'Fusemachines AI',
-    description: 'A Nepali-led global AI company training engineers and expanding worldwide.',
+    subtitle: 'Deep Tech // Intelligence',
+    description: 'Nepali-led global AI intelligence scaling from Kathmandu to the world.',
     image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=1200&q=80',
-    colorClass: 'bg-gray-800',
-    height: 'h-[400px] md:h-[520px]',
-    width: 'w-full md:w-[400px]',
     url: 'https://fusemachines.com/'
   },
   {
-    type: 'single',
+    id: '03',
+    title: 'Hongshi Shivam',
+    subtitle: 'Industry // Cross-Border',
+    description: 'A landmark Nepal-China industrial partnership in the cement sector.',
+    image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+    url: 'https://www.globalcement.com/news/itemlist/tag/Hongshi%20Shivam%20Cement'
+  },
+  {
+    id: '04',
     title: 'Manipal Group',
-    description: 'Large-scale investment transforming Nepal’s healthcare landscape.',
+    subtitle: 'Infrastructure // Health',
+    description: 'Transforming Nepal’s healthcare landscape through large-scale medical investment.',
     image: 'https://images.pexels.com/photos/263402/pexels-photo-263402.jpeg?auto=compress&cs=tinysrgb&w=1200',
-    colorClass: 'bg-teal-600',
-    height: 'h-[400px] md:h-[520px]',
-    width: 'w-full md:w-[400px]',
     url: 'https://kathmandupost.com/miscellaneous/2019/07/22/manipal-teaching-hospital-a-pioneering-medical-institution-in-western-nepal'
   },
   {
-    type: 'single',
+    id: '05',
     title: 'Chaudhary Group',
-    description: 'Nepal’s first billionaire conglomerate operating in 40+ countries.',
-    image: 'https://images.unsplash.com/photo-1519389951293-0ab56edafb4e?auto=format&fit=crop&w=1200&q=80',
-    colorClass: 'bg-amber-800',
-    height: 'h-[400px] md:h-[520px]',
-    width: 'w-full md:w-[400px]',
+    subtitle: 'Global // Conglomerate',
+    description: 'Nepal’s first billionaire-led entity operating across 40+ global territories.',
+    image: 'https://images.unsplash.com/photo-1554469384-e58fac16e23a?auto=format&fit=crop&w=1200&q=80', // Specific corporate/skyscraper image
     url: 'https://www.chaudharygroup.com/'
   }
 ];
 
-// --- STORY CARD ---
-const StoryCard = ({ story, index }) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  const rotateX = useTransform(y, [-150, 150], [5, -5]);
-  const rotateY = useTransform(x, [-150, 150], [-5, 5]);
+export default function SuccessStories() {
+  const containerRef = useRef(null);
+  const { scrollXProgress } = useScroll({ container: containerRef });
+  const scaleX = useSpring(scrollXProgress, { stiffness: 100, damping: 30 });
+  const hintOpacity = useTransform(scrollXProgress, [0, 0.05], [1, 0]);
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true, margin: '-50px' }}
-      className={`relative rounded-2xl overflow-hidden shadow-md group cursor-pointer 
-        w-full mb-4 md:mb-0 md:flex-shrink-0 md:snap-center 
-        ${story.height} ${story.width || ''} ${story.colorClass}`}
-      style={{ rotateX, rotateY, transformPerspective: 1000 }}
-      onMouseMove={(e) => {
-        const rect = e.currentTarget.getBoundingClientRect();
-        x.set(e.clientX - (rect.left + rect.width / 2));
-        y.set(e.clientY - (rect.top + rect.height / 2));
-      }}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
+    <section
+      className="min-h-screen py-32 flex flex-col relative antialiased"
+      style={{ backgroundColor: BRAND.paper, fontFamily: "'Montserrat', sans-serif" }}
     >
-      {/* Fixed Accessibility Warning */}
-      <a
-        href={story.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="absolute inset-0 z-20"
-        aria-label={`Read more about ${story.title}`}
-      />
+      <style jsx global>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600;1,700&family=Montserrat:wght@400;700&display=swap');
+        .editorial-serif { font-family: 'Cormorant Garamond', serif; }
+      `}</style>
 
-      <img
-        src={story.image}
-        alt={story.title}
-        className="absolute inset-0 w-full h-full object-cover opacity-60 group-hover:opacity-70 transition-opacity duration-700"
-      />
-
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-
-      <div className="relative z-10 h-full flex flex-col justify-end p-5 md:p-8">
-        <h3 className="text-xl md:text-3xl lg:text-4xl font-bold text-white mb-1 leading-tight drop-shadow-lg">{story.title}</h3>
-        <p className="text-sm md:text-base text-gray-200 leading-relaxed max-w-md drop-shadow line-clamp-2">{story.description}</p>
-      </div>
-    </motion.div>
-  );
-};
-
-// --- MAIN COMPONENT ---
-export default function SuccessStoriesHorizontal() {
-  const scrollRef = useRef(null);
-
-  const scrollLeft = () => scrollRef.current?.scrollBy({ left: -500, behavior: 'smooth' });
-  const scrollRight = () => scrollRef.current?.scrollBy({ left: 500, behavior: 'smooth' });
-
-  return (
-    <section className="py-12 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
-      <div className="max-w-screen-2xl mx-auto px-4 md:px-6">
-
-        {/* HEADER */}
-        <div className="mb-10 md:mb-16">
-          <div className="flex flex-col lg:flex-row items-center gap-8">
-            <h2 className="w-full text-center lg:text-left pl-0 lg:pl-[2vw] xl:pl-[160px]">
-              <span className="block text-transparent bg-clip-text bg-gradient-to-r from-orange-400 via-red-500 to-yellow-400 
-                text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black leading-tight tracking-tighter">
-                Nepal Ventures
-              </span>
-              <span className="block text-gray-900 
-                text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight tracking-tighter">
-                Success
-              </span>
-            </h2>
-
-            <div className="flex flex-col sm:flex-row items-center gap-6 lg:ml-auto">
-              <Link
-                to="/stories"
-                className="px-6 py-3 bg-white text-orange-500 font-bold text-base border-2 border-orange-500 rounded-full hover:bg-orange-50 transition-all duration-300 flex items-center gap-2 shadow-sm hover:shadow-md whitespace-nowrap"
-              >
-                VIEW ALL STORIES
-                <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </div>
-              </Link>
-              <div className="hidden md:flex gap-2">
-                <button onClick={scrollLeft} className="w-12 h-12 rounded-full bg-white shadow-sm border border-gray-200 hover:bg-orange-50 flex items-center justify-center transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                </button>
-                <button onClick={scrollRight} className="w-12 h-12 rounded-full bg-white shadow-sm border border-gray-200 hover:bg-orange-50 flex items-center justify-center transition-colors">
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+      {/* HEADER */}
+      <div className="max-w-[1400px] mx-auto w-full px-8 mb-24">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-12">
+          <div className="space-y-6">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-[1.5px]" style={{ backgroundColor: BRAND.green }} />
+              <p className="text-[10px] font-bold tracking-[0.5em] uppercase" style={{ color: BRAND.green }}>
+                Strategic Outcomes
+              </p>
             </div>
+            <h2
+              className="editorial-serif text-8xl md:text-[11rem] italic tracking-tighter leading-[0.7]"
+              style={{ color: BRAND.green }}
+            >
+              Impact.
+            </h2>
+          </div>
+
+          <div className="max-w-xs">
+            <p
+              className="text-xl editorial-serif italic leading-relaxed border-l-2 pl-8"
+              style={{ color: BRAND.mutedGreen, borderColor: BRAND.borderGreen }}
+            >
+              Charting the capital flow and industrial growth that defines modern Nepal.
+            </p>
           </div>
         </div>
       </div>
 
-      <div
-        ref={scrollRef}
-        className="flex flex-col md:flex-row md:items-start gap-4 md:gap-6 px-4 md:px-6 md:pb-10
-          md:overflow-x-auto md:scroll-smooth md:snap-x md:snap-mandatory
-          [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
-        style={{
-          paddingLeft: typeof window !== 'undefined' && window.innerWidth >= 768 ? 'max(1.5rem, calc(50vw - 500px))' : '1.5rem',
-          paddingRight: '1.5rem'
-        }}
-      >
-        {stories.map((story, i) => {
-          if (story.type === 'stack') {
-            return (
-              <div key={i} className={`flex flex-col gap-4 md:gap-6 flex-shrink-0 snap-center w-full ${story.width?.replace('w-[600px]', 'md:w-[600px]')}`}>
-                {story.cards.map((card, j) => (
-                  <StoryCard key={j} story={card} index={i + j * 0.1} />
-                ))}
-              </div>
-            );
-          }
-          return <StoryCard key={i} story={story} index={i} />;
-        })}
+      {/* PROGRESS TRACKER (GREEN DOMINANT) */}
+      <div className="max-w-[1400px] mx-auto w-full px-8 mb-12">
+        <div className="flex justify-between items-end mb-4">
+          <div className="flex items-center gap-6">
+            <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: BRAND.green }}>
+              Case Archives
+            </span>
+            <motion.div style={{ opacity: hintOpacity }} className="flex items-center gap-2">
+              <ArrowRight size={14} style={{ color: BRAND.orange }} className="animate-pulse-x" />
+              <span className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: BRAND.orange }}>
+                Explore
+              </span>
+            </motion.div>
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-widest opacity-40" style={{ color: BRAND.green }}>
+            Index 2026
+          </span>
+        </div>
+
+        <div className="h-[2px] w-full relative" style={{ backgroundColor: BRAND.borderGreen }}>
+          <motion.div
+            style={{ scaleX, backgroundColor: BRAND.green }}
+            className="absolute top-0 left-0 h-full w-full origin-left"
+          />
+        </div>
       </div>
+
+      {/* HORIZONTAL GALLERY */}
+      <div
+        ref={containerRef}
+        className="flex gap-16 overflow-x-auto snap-x snap-mandatory px-8 md:px-[calc((100vw-1400px)/2+32px)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden pb-20"
+      >
+        {stories.map((story) => (
+          <div key={story.id} className="min-w-[85vw] md:min-w-[750px] snap-center group">
+            <div className="flex flex-col gap-12">
+              <div className="aspect-[16/9] overflow-hidden rounded-sm relative shadow-[0_30px_60px_rgba(0,46,40,0.15)]" style={{ backgroundColor: BRAND.green }}>
+                <img
+                  src={story.image}
+                  alt={story.title}
+                  className="w-full h-full object-cover saturate-[1.3] brightness-95 group-hover:scale-105 transition-all duration-[3s] ease-out"
+                />
+                <a
+                  href={story.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute inset-0 z-30"
+                  aria-label={`Read more about ${story.title}`}
+                />
+
+                <div className="absolute bottom-8 right-8 w-14 h-14 rounded-full backdrop-blur-md flex items-center justify-center text-white border transition-all duration-500 group-hover:bg-white group-hover:text-[#002E28]"
+                  style={{ backgroundColor: 'rgba(0,46,40,0.4)', borderColor: 'rgba(255,255,255,0.2)' }}>
+                  <ChevronRight size={28} />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div className="col-span-1 border-t pt-4" style={{ borderColor: BRAND.borderGreen }}>
+                  <span className="editorial-serif text-7xl italic leading-none opacity-20" style={{ color: BRAND.green }}>
+                    {story.id}
+                  </span>
+                </div>
+                <div className="col-span-3 space-y-5">
+                  <p className="text-[11px] font-bold tracking-[0.4em] uppercase" style={{ color: BRAND.green }}>
+                    {story.subtitle}
+                  </p>
+                  <h3 className="editorial-serif text-6xl italic tracking-tight leading-tight" style={{ color: BRAND.green }}>
+                    {story.title}
+                  </h3>
+                  <p className="text-xl editorial-serif italic max-w-md leading-relaxed" style={{ color: BRAND.mutedGreen }}>
+                    {story.description}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="min-w-[20vw]" />
+      </div>
+
+      {/* FOOTER ACTION */}
+      <div className="max-w-[1400px] mx-auto w-full px-8 mt-12 border-t pt-12" style={{ borderColor: BRAND.borderGreen }}>
+        <Link to="/stories" className="group flex items-center gap-8 text-[12px] font-bold uppercase tracking-[0.4em]" style={{ color: BRAND.green }}>
+          View Full Archive
+          <div className="w-12 h-12 rounded-full border flex items-center justify-center transition-all group-hover:bg-[#002E28] group-hover:text-white" style={{ borderColor: BRAND.green }}>
+            <MoveRight size={20} />
+          </div>
+        </Link>
+      </div>
+
+      <style jsx global>{`
+        @keyframes pulse-x {
+          0%, 100% { transform: translateX(0); opacity: 1; }
+          50% { transform: translateX(8px); opacity: 0.5; }
+        }
+        .animate-pulse-x {
+          animation: pulse-x 2.5s infinite ease-in-out;
+        }
+      `}</style>
     </section>
   );
 }
