@@ -1,134 +1,163 @@
-// src/pages/ContactUsPage.jsx
+'use client';
+
 import { motion } from 'framer-motion';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Send, ShieldCheck } from 'lucide-react';
 import { useLayoutEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import Navbar from '../components/Navbar/Navbar';
 
 export default function ContactUsPage() {
   const [budget, setBudget] = useState(null);
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Force scroll to top when opening Contact page
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // Smart Back Button — goes back to exact previous location
   const handleBack = () => {
-    // If we came from somewhere with state (like your Startup Hub cards)
     if (location.state?.from && location.state?.scrollTo) {
       navigate('/', { replace: true });
       setTimeout(() => {
         const element = document.getElementById(location.state.scrollTo);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          // Optional: subtle highlight
-          element.style.transition = 'background 1s';
-          element.style.background = 'linear-gradient(90deg, #fff7ed 0%, transparent 40%)';
-          setTimeout(() => element.style.background = '', 2000);
-        }
+        if (element) element.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }, 100);
     } else {
-      // Normal browser back
       navigate(-1);
     }
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Thanks — we’ll reply within 24 hours.");
-  };
-
-  const budgets = ["$5K - $25K", "$25K - $50K", "$50K - $100K", "$100K+"];
+  // Simplified Budget in NPR
+  const budgets = ["Under 1 Lakh", "1L - 5 Lakh", "5L - 10 Lakh", "10 Lakh+"];
 
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-gray-50 via-white to-orange-50 py-16 px-5 md:py-20">
+    <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white antialiased">
+      <style>
+        {`
+                    @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap');
+                    .font-heading { font-family: 'Playfair Display', serif; }
+                    .font-body { font-family: 'Hanken Grotesk', sans-serif; }
+                    .font-mono { font-family: 'JetBrains Mono', monospace; }
+                `}
+      </style>
 
-      {/* SMART BACK BUTTON */}
-      <button
-        onClick={handleBack}
-        className="absolute top-6 left-6 z-50 flex items-center gap-2 text-gray-700 hover:text-orange-600 font-bold transition px-5 py-3"
-      >
-        <ArrowLeft size={22} /> Back
-      </button>
+      <Navbar />
 
-      <div className="max-w-3xl mx-auto">
+      <main className="grid lg:grid-cols-2 min-h-screen pt-20">
 
-        <motion.div
-          initial={{ y: 25, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-12 pt-20"
-        >
-          <h1 className="text-4xl md:text-6xl font-black bg-clip-text text-transparent bg-gradient-to-r from-orange-600 to-red-600 leading-tight">
-            Let’s talk
-          </h1>
-          <p className="mt-6 text-gray-600 text-base md:text-lg max-w-xl mx-auto leading-relaxed">
-            Share your project details or email us at{" "}
-            <a href="mailto:info@xxxxx.com" className="text-orange-600 font-bold hover:underline">
-              info@xxxxx.com
-            </a>
-          </p>
-        </motion.div>
-
-        <form onSubmit={handleSubmit} className="space-y-8">
-          {/* All your form fields — unchanged but slightly improved */}
+        {/* LEFT PANEL */}
+        <div className="p-8 lg:p-24 flex flex-col justify-between border-r border-[#13231F]/5">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Name & Company</label>
-            <input type="text" placeholder="Don from Earth, Inc." required className="w-full px-6 py-4 rounded-2xl border border-gray-300 bg-white focus:outline-none focus:ring-4 focus:ring-orange-500/30 focus:border-orange-500 transition" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            <div><label className="block text-sm font-medium text-gray-700 mb-2">Domain or URL</label><input type="text" placeholder="donfromearth.me" className="w-full px-5 py-4 rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-orange-500/30 focus:border-orange-500 outline-none transition" /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-2">Email</label><input type="email" placeholder="don@orionco.co" required className="w-full px-5 py-4 rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-orange-500/30 focus:border-orange-500 outline-none transition" /></div>
-            <div><label className="block text-sm font-medium text-gray-700 mb-2">Phone (optional)</label><input type="tel" placeholder="+977 98XXXXXXXX" className="w-full px-5 py-4 rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-orange-500/30 focus:border-orange-500 outline-none transition" /></div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Project Description</label>
-            <textarea rows={6} placeholder="Tell us what you're building…" required className="w-full px-6 py-5 rounded-2xl border border-gray-300 bg-white focus:ring-4 focus:ring-orange-500/30 focus:border-orange-500 outline-none resize-none transition" />
-          </div>
-
-          <div className="text-center">
-            <p className="text-sm font-medium text-gray-700 mb-4">Estimated Budget</p>
-            <div className="flex flex-wrap justify-center gap-4">
-              {budgets.map((range) => (
-                <button key={range} type="button" onClick={() => setBudget(range)}
-                  className={`px-8 py-4 rounded-full font-bold transition-all ${budget === range ? "bg-gradient-to-r from-orange-600 to-red-600 text-white shadow-lg scale-105" : "bg-white text-gray-700 border-2 border-gray-300 hover:border-orange-500"}`}>
-                  {range}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          <div className="flex justify-center pt-8">
-            <button type="submit" className="bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-700 hover:to-red-700 text-white font-black text-lg px-14 py-6 rounded-full shadow-2xl hover:scale-105 hover:shadow-3xl transition-all duration-300">
-              Send Message
+            <button
+              onClick={handleBack}
+              className="group flex items-center gap-3 text-[#004b33] font-mono text-[10px] uppercase tracking-[0.5em] mb-24 transition-all hover:opacity-50"
+            >
+              <ArrowLeft size={12} /> Go Back
             </button>
-          </div>
-        </form>
 
-        <div className="relative my-16 text-center">
-          <div className="absolute inset-x-0 top-1/2 h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent"></div>
-          <span className="relative bg-gradient-to-br from-gray-50 via-white to-orange-50 px-8 text-xl font-light text-gray-500">or</span>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+            >
+              <h1 className="text-6xl md:text-8xl font-heading font-normal tracking-tight leading-[0.9] mb-12">
+                Contact <br />
+                <span className="italic text-[#004b33]">Us.</span>
+              </h1>
+
+              <div className="max-w-md space-y-8">
+                <p className="font-body text-xl font-light text-[#13231F]/70 leading-relaxed">
+                  Fill out the form to tell us about your project. We usually reply within 24 hours.
+                </p>
+
+                <div className="flex items-center gap-4 text-[#004b33]/60 font-mono text-[10px] uppercase tracking-widest">
+                  <ShieldCheck size={16} />
+                  <span>Private & Secure</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          <div className="mt-24 pt-12 border-t border-[#13231F]/10">
+            <p className="font-mono text-[9px] uppercase tracking-[0.4em] text-[#000000] mb-8 font-bold">Email Us Directly</p>
+            <a href="mailto:stratbpartners@gmail.com" className="font-heading text-3xl italic hover:text-[#004b33] transition-colors">
+              stratbpartners@gmail.com
+            </a>
+          </div>
         </div>
 
-        <div className="max-w-2xl mx-auto bg-gradient-to-br from-orange-100 to-pink-50 rounded-3xl p-10 shadow-2xl border border-orange-200/50 flex flex-col md:flex-row items-center justify-between gap-8">
-          <div className="text-center md:text-left">
-            <p className="text-2xl font-bold text-gray-800">Prefer talking?</p>
-            <p className="text-gray-600 mt-1">Book a free 30-minute consultation call</p>
-          </div>
-          <a href="https://cal.com/your-link" target="_blank" rel="noopener noreferrer"
-            className="bg-orange-600 hover:bg-orange-700 text-white font-bold px-10 py-5 rounded-full flex items-center gap-3 shadow-xl hover:scale-105 transition-all">
-            <Calendar size={22} /> Book a Call
-          </a>
-        </div>
+        {/* RIGHT PANEL */}
+        <div className="bg-white p-8 lg:p-24">
+          <form className="max-w-xl space-y-12">
 
-        <p className="text-center text-gray-600 mt-12 text-base max-w-xl mx-auto font-light">
-          The form is fastest, but a short call works great if that’s easier.
-        </p>
-      </div>
-    </section>
+            {/* SECTION 1 */}
+            <div className="space-y-8">
+              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">01 / Your Info</span>
+              <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
+                <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Name & Company</label>
+                <input type="text" placeholder="Your name or business" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
+                  <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Email Address</label>
+                  <input type="email" placeholder="name@email.com" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+                </div>
+                <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
+                  <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Phone Number</label>
+                  <input type="tel" placeholder="+977" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+                </div>
+              </div>
+            </div>
+
+            {/* SECTION 2 */}
+            <div className="space-y-8">
+              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">02 / Project</span>
+              <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
+                <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Project Details</label>
+                <textarea rows={4} placeholder="Tell us what you are building..." className="w-full bg-transparent font-body text-xl outline-none resize-none placeholder:opacity-20 text-[#13231F]" />
+              </div>
+            </div>
+
+            {/* SECTION 3 */}
+            <div className="space-y-8">
+              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">03 / Budget (NPR)</span>
+              <div className="flex flex-wrap gap-3">
+                {budgets.map((range) => (
+                  <button
+                    key={range}
+                    type="button"
+                    onClick={() => setBudget(range)}
+                    className={`px-6 py-3 font-mono text-[10px] uppercase tracking-widest border transition-all ${budget === range
+                      ? "bg-[#004b33] border-[#004b33] text-white shadow-md"
+                      : "border-[#13231F]/10 hover:border-[#004b33] text-[#13231F]/60"
+                      }`}
+                  >
+                    {range}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* SUBMIT */}
+            <div className="pt-12">
+              <button className="w-full group flex items-center justify-between bg-[#13231F] text-white p-8 hover:bg-[#004b33] transition-colors duration-500 shadow-xl">
+                <span className="font-mono text-[11px] uppercase tracking-[0.6em] font-bold">Send Message</span>
+                <Send size={18} className="group-hover:translate-x-2 transition-transform" />
+              </button>
+            </div>
+          </form>
+
+          {/* BOOK CALL */}
+          <div className="mt-20 p-10 bg-[#F5F2ED] border-l-4 border-[#004b33] flex flex-col md:flex-row items-center justify-between gap-8">
+            <div>
+              <p className="font-heading text-2xl italic leading-none text-[#000000]">Need a call?</p>
+              <p className="font-mono text-[9px] uppercase tracking-widest text-[#000000] mt-2 font-bold">Schedule a free 30-min meeting</p>
+            </div>
+
+          </div>
+        </div>
+      </main>
+    </div>
   );
 }
