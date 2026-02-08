@@ -1,4 +1,5 @@
 'use client';
+import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
@@ -6,148 +7,156 @@ import { Link } from 'react-router-dom';
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
     const [isScrolled, setIsScrolled] = useState(false);
-    const [showBanner, setShowBanner] = useState(true);
+    const [hoveredId, setHoveredId] = useState(null);
 
     useEffect(() => {
-        const handleScroll = () => setIsScrolled(window.scrollY > 50);
+        const handleScroll = () => setIsScrolled(window.scrollY > 10);
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
     const closeMenu = () => setIsOpen(false);
 
+    // SINGLE ROUND STROKE
+    const SingleStrokeScribble = ({ isSmall = false }) => (
+        <motion.div
+            className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+        >
+            <svg
+                viewBox="0 0 100 40"
+                preserveAspectRatio="none"
+                className={`${isSmall ? 'w-[160%] h-[190%]' : 'w-[140%] h-[160%]'} overflow-visible`}
+            >
+                <defs>
+                    <filter id="pencil-grit">
+                        <feTurbulence type="fractalNoise" baseFrequency="1.2" numOctaves="3" result="noise" />
+                        <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" />
+                    </filter>
+                </defs>
+                <g filter="url(#pencil-grit)" fill="none" stroke="#2D5A43" strokeLinecap="round">
+                    <motion.path
+                        d="M5,20 C5,5 95,5 95,20 C95,35 5,35 5,22"
+                        strokeWidth={isSmall ? "1.8" : "1.4"}
+                        initial={{ pathLength: 0 }}
+                        animate={{ pathLength: 1 }}
+                        transition={{ duration: 0.4, ease: "easeOut" }}
+                    />
+                </g>
+            </svg>
+        </motion.div>
+    );
+
     return (
         <>
-            {/* UNDER CONSTRUCTION BANNER */}
-            {showBanner && (
-                <div className="fixed inset-x-0 top-0 z-[70] flex items-center justify-center bg-orange-600 text-white font-semibold py-3 px-6 shadow-lg">
-                    <span className="text-sm md:text-base text-center">
-                        ⚠️ This website is currently under construction
-                    </span>
-                    <button
-                        onClick={() => setShowBanner(false)}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-white/20 transition"
-                    >
-                        <X className="w-5 h-5" />
-                    </button>
-                </div>
-            )}
+            <nav className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 bg-[#F5F2ED] ${isScrolled ? 'h-16' : 'h-20'}`}>
+                <div className="mx-auto max-w-[100rem] h-full px-8 lg:px-16 flex items-center justify-between text-[#13231F]">
 
-            {/* MAIN NAVBAR */}
-            <nav
-                className="fixed inset-x-0 z-50 transition-all duration-300"
-                style={{ top: showBanner ? '48px' : '0' }}
-            >
-                <div className="mx-auto max-w-[100rem] px-6 lg:px-8 flex items-center justify-between h-24">
-
-                    {/* LOGO - Updated for Mobile Responsiveness */}
-                    <Link
-                        to="/"
-                        className={`transition-all duration-500 transform ${isScrolled ? 'opacity-0 -translate-y-10 pointer-events-none' : 'opacity-100 translate-y-0'
-                            }`}
-                    >
-                        <div className="flex flex-col md:flex-row md:items-center leading-[0.9] md:leading-normal font-black text-2xl md:text-4xl">
-                            <span className="text-orange-500 tracking-tighter md:tracking-normal">STRATBRIDGE</span>
-                            <span className="text-white text-lg md:text-4xl md:ml-3 tracking-widest md:tracking-normal">PARTNERS</span>
-                        </div>
+                    <Link to="/" className="flex flex-col">
+                        <span className="text-xl md:text-2xl font-serif tracking-tighter uppercase font-semibold leading-none">Stratbridge</span>
+                        <span className="text-[9px] font-bold tracking-[0.4em] uppercase mt-1 text-[#344E41] opacity-60 font-sans">Partners</span>
                     </Link>
 
-                    {/* ACTIONS CONTAINER */}
-                    <div className="flex items-center gap-4">
-                        {/* CONTACT US BUTTON */}
-                        <Link
-                            to="/contact-us"
-                            className={`hidden lg:inline-flex rounded-full bg-gradient-to-r from-red-600 to-orange-500 px-8 py-3 text-white font-bold transition-all duration-500 transform ${isScrolled
-                                    ? 'opacity-0 translate-x-10 pointer-events-none invisible'
-                                    : 'opacity-100 translate-x-0 visible'
-                                }`}
-                        >
-                            Contact Us
-                        </Link>
-
-                        {/* MENU BUTTON */}
+                    <div className="flex items-center gap-6 text-[13px] font-serif font-bold uppercase tracking-widest">
+                        <div className="hidden md:flex items-center gap-4">
+                            {[
+                                { name: 'About Us', path: '/about' },
+                                { name: 'The Agenda', path: '/proposal' },
+                                { name: 'Contact', path: '/contact-us' }
+                            ].map((item) => (
+                                <Link
+                                    key={item.name}
+                                    to={item.path}
+                                    className="relative px-5 py-2 flex items-center justify-center"
+                                    onMouseEnter={() => setHoveredId(`nav-${item.name}`)}
+                                    onMouseLeave={() => setHoveredId(null)}
+                                >
+                                    <span className="relative z-10">{item.name}</span>
+                                    <AnimatePresence>{hoveredId === `nav-${item.name}` && <SingleStrokeScribble isSmall />}</AnimatePresence>
+                                </Link>
+                            ))}
+                        </div>
                         <button
                             onClick={() => setIsOpen(!isOpen)}
-                            className={`relative z-[60] w-14 h-14 rounded-full shadow-xl transition-all duration-300 flex items-center justify-center ${isScrolled
-                                    ? 'bg-white border-2 border-orange-500'
-                                    : 'bg-gradient-to-r from-red-600 to-orange-500'
-                                }`}
+                            className="relative px-5 py-2 flex items-center justify-center"
+                            onMouseEnter={() => setHoveredId('nav-menu')}
+                            onMouseLeave={() => setHoveredId(null)}
                         >
-                            <div className="w-5 h-5 grid grid-cols-2 gap-1">
-                                {[...Array(4)].map((_, i) => (
-                                    <span
-                                        key={i}
-                                        className={`block w-2 h-2 rounded-full transition-colors ${isScrolled ? 'bg-orange-500' : 'bg-white'
-                                            }`}
-                                    />
-                                ))}
-                            </div>
+                            <span className="relative z-10">{isOpen ? 'Close' : 'MENU'}</span>
+                            <AnimatePresence>{hoveredId === 'nav-menu' && <SingleStrokeScribble isSmall />}</AnimatePresence>
                         </button>
                     </div>
                 </div>
             </nav>
 
-            {/* SIDE MENU */}
-            <div
-                className={`fixed inset-y-0 right-0 z-[100] w-80 md:w-96 transform transition-transform duration-500 ease-in-out bg-white shadow-2xl ${isOpen ? 'translate-x-0' : 'translate-x-full'
-                    }`}
-                style={{
-                    top: showBanner ? '48px' : '0',
-                    height: showBanner ? 'calc(100% - 48px)' : '100%'
-                }}
-            >
-                <div className="h-full flex flex-col">
-                    <div className="flex items-center justify-between p-8 border-b">
-                        <h2 className="flex flex-col text-2xl font-black italic leading-none">
-                            <span className="text-slate-900">STRAT <span className="text-orange-500">BRIDGE</span></span>
-                            <span className="text-slate-400 text-sm tracking-[0.2em] mt-1">PARTNERS</span>
-                        </h2>
-                        <button onClick={closeMenu} className="p-3 rounded-xl bg-slate-100 hover:bg-orange-100 transition-colors text-slate-900">
-                            <X className="w-6 h-6" />
-                        </button>
-                    </div>
+            {/* INNER MENU */}
+            <div className={`fixed inset-0 z-[110] transform transition-transform duration-[0.8s] ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+                <div className="h-full w-full bg-[#F5F2ED] flex flex-col pt-36 px-8 md:px-20 overflow-y-auto">
+                    <div className="max-w-7xl mx-auto w-full pb-20">
+                        <div className="grid lg:grid-cols-12 gap-12 text-[#13231F]">
 
-                    <nav className="flex-1 flex flex-col justify-center px-10 space-y-6">
-                        {[
-                            { name: "Investment & Market Entry", path: "/services/business-consulting" },
-                            { name: "Legal & Regulatory ", path: "/services/legal-service" },
-                            { name: "Strategy & Policy ", path: "/services/policy" },
-                            { name: "Startup & Ventures", path: "/services/startup-support" },
-                            { name: "Insights", path: "/services/strategic-insights" }
-                        ].map((link) => (
-                            <Link
-                                key={link.path}
-                                to={link.path}
-                                onClick={closeMenu}
-                                className="text-2xl font-bold text-slate-900 hover:text-orange-600 transition-colors border-b border-transparent hover:border-orange-200 pb-2"
-                            >
-                                {link.name}
-                            </Link>
-                        ))}
+                            <nav className="lg:col-span-8 flex flex-col space-y-4">
+                                <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-[#344E41] opacity-40 mb-6 font-sans block">Directory 2026</span>
+                                {
+                                    [
+                                        { name: "About StratB", id: "00", path: "/about" },
+                                        { name: "The Agenda", id: "01", path: "/proposal" },
+                                        { name: "Investment", id: "02", path: "/services/business-consulting" },
+                                        { name: "Legal Advisory", id: "03", path: "/services/legal-service" },
+                                        { name: "Public Policy", id: "04", path: "/services/policy" },
+                                        { name: "Venture Capital", id: "05", path: "/services/startup-support" },
+                                        { name: "Insights", id: "06", path: "/services/strategic-insights" }
+                                    ].map((item) => (
+                                        <Link
+                                            key={item.id}
+                                            to={item.path}
+                                            onClick={closeMenu}
+                                            onMouseEnter={() => setHoveredId(item.id)}
+                                            onMouseLeave={() => setHoveredId(null)}
+                                            className="group flex items-baseline gap-6 border-b border-[#13231F]/5 pb-4 max-w-fit"
+                                        >
+                                            <span className="text-[11px] font-mono text-[#13231F]/20">{item.id}</span>
+                                            <div className="relative inline-block px-10 py-3 flex items-center justify-center">
+                                                <span className="relative z-10 text-xl md:text-2xl font-serif font-semibold tracking-tight uppercase group-hover:italic transition-all">
+                                                    {item.name}
+                                                </span>
+                                                <AnimatePresence>
+                                                    {hoveredId === item.id && <SingleStrokeScribble />}
+                                                </AnimatePresence>
+                                            </div>
+                                        </Link>
+                                    ))
+                                }
+                            </nav>
 
-                        <Link
-                            to="/contact-us"
-                            onClick={closeMenu}
-                            className="text-2xl font-black text-orange-600 pt-4"
-                        >
-                            Contact Us →
-                        </Link>
-                    </nav>
-
-                    <div className="p-8 border-t text-center text-[10px] font-black uppercase tracking-widest text-slate-400">
-                        © 2025 Strat Bridge | Policy & Strategy
+                            <div className="lg:col-span-4 flex flex-col justify-start space-y-12 pt-10 font-serif uppercase tracking-tight">
+                                <div className="space-y-4">
+                                    <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-[#344E41] opacity-40 block font-sans">Corporate office</span>
+                                    <p className="text-xl md:text-2xl font-semibold">Kathmandu, Nepal</p>
+                                </div>
+                                <div className="space-y-4">
+                                    <span className="text-[9px] font-bold uppercase tracking-[0.4em] text-[#344E41] opacity-40 block font-sans">Partnership Portal</span>
+                                    <a href="mailto:stratbpartners@gmail.com"
+                                        className="relative flex items-center justify-center px-10 py-4 text-lg md:text-xl font-semibold italic hover:opacity-50 transition-opacity max-w-fit"
+                                        onMouseEnter={() => setHoveredId('email')}
+                                        onMouseLeave={() => setHoveredId(null)}>
+                                        <span className="relative z-10">stratbpartners@gmail.com</span>
+                                        <AnimatePresence>
+                                            {hoveredId === 'email' && <SingleStrokeScribble isSmall />}
+                                        </AnimatePresence>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+                <button onClick={closeMenu} className="absolute top-10 right-10 text-[#13231F] hover:rotate-90 transition-transform duration-300">
+                    <X size={32} strokeWidth={1} />
+                </button>
             </div>
-
-            {/* OVERLAY */}
-            {isOpen && (
-                <div
-                    className="fixed inset-0 bg-slate-950/60 backdrop-blur-sm z-[90]"
-                    onClick={closeMenu}
-                    style={{ top: showBanner ? '48px' : '0' }}
-                />
-            )}
         </>
     );
 }

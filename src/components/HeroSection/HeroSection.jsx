@@ -5,13 +5,34 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const slides = [
-    { url: "https://images.pexels.com/photos/2097921/pexels-photo-2097921.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Economic Hubs", subtitle: "Rapid Urbanization & FDI" },
-    { url: "https://images.pexels.com/photos/6076272/pexels-photo-6076272.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Hydropower", subtitle: "43,000 MW Untapped Potential" },
-    { url: "https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Infrastructure", subtitle: "Building the Future" },
-    { url: "https://images.pexels.com/photos/1438516/pexels-photo-1438516.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Agriculture", subtitle: "Premium Organic Exports" },
-    { url: "https://images.pexels.com/photos/356036/pexels-photo-356036.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Green Energy", subtitle: "Sustainable ROI" },
-    { url: "https://images.pexels.com/photos/34783860/pexels-photo-34783860.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Tourism", subtitle: "World-Class Destinations" },
-    { url: "https://images.pexels.com/photos/15922603/pexels-photo-15922603.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop", title: "Strategic Gateway", subtitle: "Between India & China Markets" }
+    {
+        url: "https://images.pexels.com/photos/2097921/pexels-photo-2097921.jpeg?auto=compress&cs=tinysrgb&w=1920",
+        title: "Metropolitan Growth",
+        bigTitle: "modernizing",
+        highlight: "cities.",
+        subtitle: "Directing investment into urban infrastructure and smart-city ecosystems within Kathmandu Valley."
+    },
+    {
+        url: "https://images.pexels.com/photos/6076272/pexels-photo-6076272.jpeg?auto=compress&cs=tinysrgb&w=1920",
+        title: "Renewable Assets",
+        bigTitle: "harvesting",
+        highlight: "energy.",
+        subtitle: "Capitalizing on Nepal's hydro-wealth to power the sustainable transition of South Asia."
+    },
+    {
+        url: "https://images.pexels.com/photos/1216589/pexels-photo-1216589.jpeg?auto=compress&cs=tinysrgb&w=1920",
+        title: "Logistics Backbone",
+        bigTitle: "bridging",
+        highlight: "markets.",
+        subtitle: "Building the physical and digital corridors connecting two of the world’s largest economies."
+    },
+    {
+        url: "https://images.pexels.com/photos/15922603/pexels-photo-15922603.jpeg?auto=compress&cs=tinysrgb&w=1920",
+        title: "Strategic Entry",
+        bigTitle: "opening",
+        highlight: "frontiers.",
+        subtitle: "A world-class gateway for investors looking at the next great emerging market."
+    }
 ];
 
 const SLIDE_DURATION = 5000;
@@ -28,154 +49,152 @@ export default function HeroSection() {
         return () => clearInterval(timer);
     }, []);
 
-    const prevIndex = (index - 1 + slides.length) % slides.length;
-
-    // --- UPDATED NAVIGATION FUNCTIONS ---
-
-    const goToStartups = () => {
-        setShowModal(false);
-        // Navigates to <StartupSupportPage />
-        navigate('/services/startup-support');
-    };
-
-    // Renamed goToFDI for clarity, now navigates to Business Consulting Page
-    const goToBusiness = () => {
-        setShowModal(false);
-        // Navigates to <BusinessConsultingPage />
-        navigate('/services/business-consulting');
-    };
-
-    // --- END UPDATED NAVIGATION FUNCTIONS ---
-
+    const currentSlide = slides[index] || slides[0];
 
     return (
-        <section className="relative w-full min-h-screen flex flex-col md:flex-row items-center justify-between px-4 sm:px-8 md:px-12 lg:px-24 py-24 md:py-32 lg:py-40 overflow-hidden">
+        <section className="relative w-full h-screen bg-[#F5F2ED] flex flex-col lg:flex-row overflow-hidden font-sans">
 
-            {/* ... (Background Slideshow and Overlays remain the same) ... */}
-            <div className="absolute inset-0 -z-10">
-                <div
-                    key={index}
-                    className="absolute inset-0 bg-cover bg-center transition-opacity duration-3000 ease-linear"
-                    style={{ backgroundImage: `url(${slides[index].url})` }}
-                />
-                {index !== 0 && (
-                    <div
-                        key={prevIndex}
-                        className="absolute inset-0 bg-cover bg-center transition-opacity duration-3000 ease-linear opacity-0"
-                        style={{ backgroundImage: `url(${slides[prevIndex].url})` }}
+            {/* LEFT: CONTENT */}
+            <div className="relative z-20 w-full lg:w-1/2 h-full flex flex-col justify-between p-8 md:p-16 lg:p-24 bg-[#F5F2ED]">
+                <div className="flex items-center gap-4">
+                    <div className="w-8 h-[1px] bg-[#13231F]/20" />
+                </div>
+
+                <div className="max-w-xl">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={index}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -30 }}
+                            transition={{ duration: 0.6, ease: "easeOut" }}
+                        >
+                            <h1 className="text-[#13231F] text-5xl md:text-7xl lg:text-[7.5rem] font-serif leading-[0.85] tracking-tighter mb-8 lowercase">
+                                {currentSlide.bigTitle} <br />
+                                <span className="relative inline-block text-[#344E41] italic font-light">
+                                    {currentSlide.highlight}
+                                    <svg className="absolute -bottom-2 left-0 w-full h-4 opacity-60" viewBox="0 0 300 20" preserveAspectRatio="none">
+                                        <motion.path
+                                            initial={{ pathLength: 0 }}
+                                            animate={{ pathLength: 1 }}
+                                            transition={{ duration: 1, delay: 0.3 }}
+                                            d="M5 15C50 15 100 5 150 10C200 15 250 5 295 10"
+                                            stroke="#344E41" strokeWidth="4" strokeLinecap="round"
+                                        />
+                                    </svg>
+                                </span>
+                            </h1>
+                            <p className="text-[#13231F]/70 text-lg md:text-xl font-light leading-relaxed mb-10 border-l border-[#344E41]/20 pl-6 max-w-md">
+                                {currentSlide.subtitle}
+                            </p>
+                        </motion.div>
+                    </AnimatePresence>
+
+                    <button
+                        onClick={() => setShowModal(true)}
+                        className="group relative flex items-center justify-between w-full max-w-xs px-8 py-6 bg-[#13231F] overflow-hidden rounded-sm transition-all shadow-xl active:scale-95"
+                    >
+                        <span className="relative z-10 text-[#F5F2ED] text-[10px] font-bold uppercase tracking-[0.4em]">Start Investing</span>
+                        <span className="relative z-10 text-[#F5F2ED] font-light text-xl transition-transform group-hover:translate-x-2">→</span>
+                        <div className="absolute inset-0 bg-[#344E41] translate-y-full group-hover:translate-y-0 transition-transform duration-400" />
+                    </button>
+                </div>
+
+                <div className="flex items-end gap-6">
+                    <span className="text-[#13231F] font-serif italic text-4xl leading-none">0{index + 1}</span>
+                    <div className="flex-1 h-[1px] bg-[#13231F]/10 mb-2 relative">
+                        <motion.div
+                            key={index}
+                            initial={{ width: "0%" }} animate={{ width: "100%" }}
+                            transition={{ duration: SLIDE_DURATION / 1000, ease: "linear" }}
+                            className="h-full bg-[#344E41]"
+                        />
+                    </div>
+                    <span className="text-[#13231F]/30 font-mono text-xs mb-1">04</span>
+                </div>
+            </div>
+
+            {/* RIGHT: IMAGE */}
+            <div className="relative w-full lg:w-1/2 h-[50vh] lg:h-full bg-[#13231F] overflow-hidden">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 1.2 }}
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${currentSlide.url})` }}
                     />
-                )}
+                </AnimatePresence>
+
+                {/* PORTFOLIO TITLE - REPOSITIONED TO BOTTOM RIGHT */}
+                <div className="absolute bottom-0 right-0 p-8 lg:p-12">
+                    <div className="bg-[#F5F2ED] px-6 py-2 shadow-sm">
+                        <motion.p
+                            key={index}
+                            initial={{ opacity: 0, x: 10 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="text-[#13231F] font-mono text-[9px] tracking-[0.3em] uppercase"
+                        >
+                            Portfolio / {currentSlide.title}
+                        </motion.p>
+                    </div>
+                </div>
+
+                <div className="absolute inset-0 bg-gradient-to-r from-[#F5F2ED]/10 to-transparent pointer-events-none" />
             </div>
 
-            <div className="absolute inset-0 bg-black/45 -z-5" />
-
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -20 }}
-                    transition={{ duration: 0.6 }}
-                    className="absolute bottom-12 right-8 text-white text-right z-10"
-                >
-                    <h3 className="text-xl md:text-2xl lg:text-3xl font-bold drop-shadow-lg">
-                        {slides[index].title}
-                    </h3>
-                    <p className="text-md md:text-lg lg:text-xl opacity-90 drop-shadow-lg">
-                        {slides[index].subtitle}
-                    </p>
-                </motion.div>
-            </AnimatePresence>
-
-            {/* --- MAIN CONTENT (Left) --- */}
-            <div className="max-w-5xl z-20 text-white mt-auto mb-12">
-                <h1 className="mt-10 text-4xl sm:text-6xl md:text-7xl lg:text-8xl 2xl:text-[8.5rem] font-black leading-[1.1] tracking-tight drop-shadow-2xl">
-                    <span className="block text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-orange-400 to-yellow-400">
-                        Bridging investment,
-                    </span>
-                    <span className="block text-white">
-                        growth
-                    </span>
-                    <span className="block text-white">
-                        & impact
-                    </span>
-                    <span className="block text-white">
-                        in Nepal
-                    </span>
-                </h1>
-            </div>
-            {/* --- CTA BUTTON (Right) --- */}
-            <div className="mt-8 md:mt-0 z-20 text-white max-w-md">
-                <p className="text-lg md:text-2xl mb-8 font-light italic drop-shadow-lg">
-                    Nepal is rising as a high-growth frontier for global and local investors powered by hydropower, tourism, tech, agriculture, and world-class infrastructure.
-                </p>
-
-                <button
-                    onClick={() => setShowModal(true)}
-                    className="px-10 py-4 rounded-full bg-gradient-to-r from-red-600 to-orange-500 text-white font-bold text-lg shadow-2xl hover:shadow-3xl hover:scale-105 transition-all duration-300"
-                >
-                    START INVESTING
-                </button>
-            </div>
-
-            {/* --- MODAL --- */}
+            {/* MODAL */}
             <AnimatePresence>
                 {showModal && (
                     <motion.div
-                        key="modal-overlay"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
-                        onClick={() => setShowModal(false)}
-                        className="fixed inset-0 z-[999] flex items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+                        className="fixed inset-0 z-[100] flex items-center justify-center bg-[#13231F]/95 backdrop-blur-xl p-6"
                     >
+                        <div className="absolute inset-0" onClick={() => setShowModal(false)} />
+
                         <motion.div
-                            key="modal-content"
-                            initial={{ scale: 0.9, opacity: 0, y: 20 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.9, opacity: 0, y: 20 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 300 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 20 }}
                             onClick={e => e.stopPropagation()}
-                            className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl"
+                            className="relative w-full max-w-4xl bg-[#F5F2ED] p-10 md:p-20 shadow-2xl"
                         >
-                            <div className="h-2 w-full bg-gradient-to-r from-red-600 via-orange-500 to-yellow-400" />
+                            <button
+                                onClick={() => setShowModal(false)}
+                                className="absolute top-8 right-8 text-[#13231F] hover:scale-110 transition-transform"
+                            >
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+                                    <path d="M18 6L6 18M6 6l12 12" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                            </button>
 
-                            <div className="p-8 text-center">
-                                <h2 className="text-3xl font-black text-gray-900 mb-2">Choose Your Path</h2>
-                                <p className="text-gray-500 mb-8">Select the type of investment ecosystem you want to explore today.</p>
+                            <div className="mb-12">
+                                <h2 className="text-4xl md:text-6xl font-serif italic text-[#13231F] tracking-tighter mb-4">How would you like to partner?</h2>
+                                <p className="text-[#13231F]/60 text-sm tracking-wide">Choose the path that best describes your needs.</p>
+                            </div>
 
-                                <div className="space-y-4">
-                                    {/* UPDATED: Startup Button */}
-                                    <button
-                                        onClick={goToStartups}
-                                        className="group w-full py-4 px-6 rounded-xl bg-gradient-to-r from-red-600 to-red-500 text-white font-bold text-lg hover:shadow-lg hover:shadow-red-500/30 hover:scale-[1.02] transition-all flex items-center justify-between"
-                                    >
-                                        <span>Invest in Startups</span>
-                                        <span className="opacity-0 group-hover:opacity-100 transition-opacity">→</span>
-                                    </button>
-
-                                    {/* UPDATED: Business Button (was goToFDI) */}
-                                    <button
-                                        onClick={goToBusiness}
-                                        className="group w-full py-4 px-6 rounded-xl bg-gray-50 text-gray-700 border border-gray-200 font-bold text-lg hover:bg-gray-100 hover:border-gray-300 hover:scale-[1.02] transition-all flex items-center justify-between"
-                                    >
-                                        <span>Invest for Business</span>
-                                        <span className="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400">→</span>
-                                    </button>
-                                </div>
-
-                                <button
-                                    onClick={() => setShowModal(false)}
-                                    className="mt-8 text-sm text-gray-400 hover:text-gray-800 transition uppercase tracking-widest font-semibold"
-                                >
-                                    Cancel
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <button onClick={() => navigate('/services/startup-support')} className="group p-10 border border-[#13231F]/10 bg-white hover:bg-[#13231F] transition-all duration-500 text-left">
+                                    <h3 className="text-xl font-bold text-[#13231F] group-hover:text-[#F5F2ED] mb-2 uppercase tracking-widest font-mono">I am a Founder</h3>
+                                    <p className="text-[#13231F]/50 group-hover:text-[#F5F2ED]/70 text-sm">Looking for capital, mentorship, and scaling support.</p>
+                                </button>
+                                <button onClick={() => navigate('/services/business-consulting')} className="group p-10 border border-[#13231F]/10 bg-white hover:bg-[#13231F] transition-all duration-500 text-left">
+                                    <h3 className="text-xl font-bold text-[#13231F] group-hover:text-[#F5F2ED] mb-2 uppercase tracking-widest font-mono">I am an Investor</h3>
+                                    <p className="text-[#13231F]/50 group-hover:text-[#F5F2ED]/70 text-sm">Seeking market insights and institutional advisory.</p>
                                 </button>
                             </div>
+
+                            <button onClick={() => setShowModal(false)} className="mt-12 text-[#13231F]/40 hover:text-[#13231F] font-mono text-[10px] uppercase tracking-[0.3em] transition-colors">
+                                ← Go back
+                            </button>
                         </motion.div>
                     </motion.div>
                 )}
             </AnimatePresence>
-
         </section>
     );
 }
