@@ -1,11 +1,11 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Loader2, Send, ShieldAlert } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { CheckCircle2, Info, Loader2, Send, ShieldAlert } from 'lucide-react';
+import { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
 import Navbar from '../components/Navbar/Navbar';
 
-// Configuration from your provided link
+// Configuration
 const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeGYyxFhGLkIPsgpLfCOkYWwS4DrockShZscPNxbe8mkEjZBg/formResponse";
 
 const ENTRY_IDS = {
@@ -49,29 +49,17 @@ const PROFESSIONS = [
     { en: "Other", ne: "अन्य" }
 ];
 
+const EXAMPLE_VISION = "My vision for Nepal 2082 is to transition from a labor-exporting economy to a production-driven tech hub by implementing a 'Digital-First' governance model where all municipal services are decentralized through a single biometric app. To support this, the government should introduce a 10-year tax holiday for agro-processing industries in rural corridors. Locally, in my district, the priority should be sustainable road infrastructure with proper drainage to ensure market access during monsoon.";
+
 const AgendaStepPage = () => {
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isRestricted, setIsRestricted] = useState(false);
+    const [showExample, setShowExample] = useState(false);
     const [selectedConcerns, setSelectedConcerns] = useState([]);
     const [formData, setFormData] = useState({
         name: '', contact: '', district: '', profession: '', otherProfession: '', suggestions: ''
     });
-
-    useEffect(() => {
-        const hasSubmitted = localStorage.getItem('agenda_v1_submitted');
-        let storageAccess = true;
-        try {
-            const test = 'test';
-            localStorage.setItem(test, test);
-            localStorage.removeItem(test);
-        } catch (e) { storageAccess = false; }
-
-        if (hasSubmitted || !storageAccess) {
-            setIsRestricted(true);
-            setStep(3);
-        }
-    }, []);
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
     const nextStep = () => { scrollToTop(); setStep((s) => s + 1); };
@@ -84,7 +72,15 @@ const AgendaStepPage = () => {
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
-        if (localStorage.getItem('agenda_v1_submitted')) return;
+
+        const normalizedContact = formData.contact.trim().toLowerCase().replace(/[\s-]/g, '');
+        const pastContacts = JSON.parse(localStorage.getItem('submitted_contacts') || '[]');
+
+        if (pastContacts.includes(normalizedContact)) {
+            setIsRestricted(true);
+            setStep(3);
+            return;
+        }
 
         setIsSubmitting(true);
         const finalProfession = formData.profession === 'Other' ? formData.otherProfession : formData.profession;
@@ -102,7 +98,8 @@ const AgendaStepPage = () => {
                 method: 'POST',
                 mode: 'no-cors',
             });
-            localStorage.setItem('agenda_v1_submitted', 'true');
+
+            localStorage.setItem('submitted_contacts', JSON.stringify([...pastContacts, normalizedContact]));
             toast.success('Your vision has been recorded.');
             setStep(3);
         } catch (err) {
@@ -127,7 +124,7 @@ const AgendaStepPage = () => {
             <main className="max-w-[1400px] mx-auto px-6 lg:px-20 pt-40 pb-32">
                 <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
 
-                    {/* LEFT SIDEBAR */}
+                    {/* LEFT SIDEBAR WITH FULL DESCRIPTIONS */}
                     <div className="lg:w-1/3">
                         <div className="lg:sticky lg:top-40 space-y-12">
                             <div className="space-y-6">
@@ -173,7 +170,7 @@ const AgendaStepPage = () => {
                                                 <input type="text" placeholder="Location" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} />
                                             </div>
                                             <div className="space-y-4">
-                                                <label className={labelStyle}>Contact / सम्पर्क</label>
+                                                <label className={labelStyle}>Contact / सम्पर्क (Unique Phone/Email)</label>
                                                 <input type="text" placeholder="Email or Phone" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
                                             </div>
                                         </div>
@@ -183,19 +180,12 @@ const AgendaStepPage = () => {
                                         <label className={labelStyle}>Select Profession / पेशा वा भूमिका</label>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                             {PROFESSIONS.map(p => (
-                                                <button
-                                                    key={p.en}
-                                                    onClick={() => setFormData({ ...formData, profession: p.en })}
-                                                    className={`group text-left p-4 rounded-xl border transition-all duration-200 ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}
-                                                >
+                                                <button key={p.en} onClick={() => setFormData({ ...formData, profession: p.en })} className={`group text-left p-4 rounded-xl border transition-all duration-200 ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}>
                                                     <p className="text-[15px] font-sans font-medium leading-tight mb-1">{p.en}</p>
                                                     <p className="text-[15px] font-sans font-medium leading-tight">{p.ne}</p>
                                                 </button>
                                             ))}
                                         </div>
-                                        {formData.profession === 'Other' && (
-                                            <motion.input initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} type="text" placeholder="Specify your role" className="w-full bg-transparent border-b-2 border-[#2D5A43] py-4 text-xl outline-none" value={formData.otherProfession} onChange={e => setFormData({ ...formData, otherProfession: e.target.value })} />
-                                        )}
                                     </div>
 
                                     <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-8 rounded-2xl text-[14px] font-bold uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all shadow-xl">
@@ -211,19 +201,11 @@ const AgendaStepPage = () => {
                                             <label className={labelStyle}>Core Concerns / सरोकारका मुख्य विषयहरू</label>
                                             <p className="text-lg text-black/50">Select all that apply / लागू हुने सबै छनोट गर्नुहोस्।</p>
                                         </div>
-
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                             {CONCERNS.map((item) => {
                                                 const active = selectedConcerns.includes(item.en);
                                                 return (
-                                                    <button
-                                                        key={item.id}
-                                                        onClick={() => toggleConcern(item.id)}
-                                                        className={`text-left p-4 rounded-xl border transition-all duration-200 ${active
-                                                            ? 'bg-[#2D5A43] border-[#2D5A43] text-white'
-                                                            : 'bg-white border-black/5 hover:border-[#2D5A43]/40'
-                                                            }`}
-                                                    >
+                                                    <button key={item.id} onClick={() => toggleConcern(item.id)} className={`text-left p-4 rounded-xl border transition-all duration-200 ${active ? 'bg-[#2D5A43] border-[#2D5A43] text-white' : 'bg-white border-black/5 hover:border-[#2D5A43]/40'}`}>
                                                         <p className="text-[15px] font-sans font-medium leading-tight mb-1">{item.en}</p>
                                                         <p className="text-[15px] font-sans font-medium leading-tight">{item.ne}</p>
                                                     </button>
@@ -235,10 +217,26 @@ const AgendaStepPage = () => {
                                     <div className="space-y-10">
                                         <div className="space-y-6 p-10 bg-white rounded-[2rem] border border-black/5 shadow-sm">
                                             <div className="space-y-4">
-                                                <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies</h3>
+                                                <div className="flex justify-between items-center">
+                                                    <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies</h3>
+                                                    <button onClick={() => setShowExample(!showExample)} className="flex items-center gap-2 text-sm font-bold text-[#2D5A43] hover:underline">
+                                                        <Info size={16} /> {showExample ? "Hide Example" : "See Example"}
+                                                    </button>
+                                                </div>
                                                 <p className={bodyTextStyle}>Please share your concrete suggestions or policies you wish to see implemented.</p>
                                                 <p className="text-lg text-[#2D5A43] font-medium italic">नेपाल निर्माणका लागि तपाईंले देख्न चाहनुभएको ठोस सुझाव, नीतिहरू वा स्थानीय क्षेत्रका समस्याहरू यहाँ उल्लेख गर्नुहोस्।</p>
                                             </div>
+
+                                            <AnimatePresence>
+                                                {showExample && (
+                                                    <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
+                                                        <p className="bg-[#FAF9F6] p-6 rounded-xl text-black/50 text-[15px] italic mb-4 border-l-4 border-[#2D5A43]">
+                                                            "{EXAMPLE_VISION}"
+                                                        </p>
+                                                    </motion.div>
+                                                )}
+                                            </AnimatePresence>
+
                                             <textarea className="w-full bg-[#FAF9F6] rounded-2xl p-8 h-80 text-lg font-sans outline-none border border-black/5 focus:border-[#2D5A43]/30 transition-all resize-none" placeholder="Your suggestions..." value={formData.suggestions} onChange={e => setFormData({ ...formData, suggestions: e.target.value })} />
                                         </div>
                                     </div>
@@ -258,8 +256,9 @@ const AgendaStepPage = () => {
                                         <>
                                             <ShieldAlert size={100} className="mx-auto text-red-500 stroke-[1px]" />
                                             <div className="space-y-4 px-10">
-                                                <h2 className="text-4xl font-bold tracking-tighter">Access Restricted</h2>
-                                                <p className="text-xl text-black/40">To ensure integrity, we only allow one response per person. Private/Incognito browsing is not permitted for this form.</p>
+                                                <h2 className="text-4xl font-bold tracking-tighter">Limit Reached</h2>
+                                                <p className="text-xl text-black/40">This contact number has already been used to set an agenda on this device. We only allow one entry per unique contact.</p>
+                                                <button onClick={() => { setStep(1); setIsRestricted(false); }} className="text-[#2D5A43] font-bold underline">Try a different contact</button>
                                             </div>
                                         </>
                                     ) : (
