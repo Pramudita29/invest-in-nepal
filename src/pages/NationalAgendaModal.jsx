@@ -53,12 +53,13 @@ export default function NationalAgendaModal() {
                             </span>
 
                             <h2 className="text-3xl font-medium text-slate-900 leading-tight mb-4">
-                                The Election Agenda <br />
+                                The Agenda <br />
                                 <span className="font-serif italic">Cohort 2082</span>
                             </h2>
 
                             <p className="text-slate-500 text-sm leading-relaxed max-w-[260px] mx-auto mb-10">
-                                Join a refined collective of citizens and experts shaping the next roadmap for Nepal.
+                                Largest Grassroots Agenda-Setting Exercise for Nepal
+
                             </p>
                         </div>
 
@@ -68,7 +69,7 @@ export default function NationalAgendaModal() {
                                 onClick={() => { handleClose(); navigate('/proposal'); }}
                                 className="w-full bg-slate-950 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-slate-200 hover:shadow-orange-200 active:scale-[0.98]"
                             >
-                                <span className="text-sm tracking-widest uppercase">Set the Agenda</span>
+                                <span className="text-sm tracking-widest uppercase">Set Your Agenda</span>
                                 <ChevronRight size={18} />
                             </button>
 

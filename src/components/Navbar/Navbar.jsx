@@ -17,7 +17,6 @@ export default function Navbar() {
 
     const closeMenu = () => setIsOpen(false);
 
-    // SINGLE ROUND STROKE
     const SingleStrokeScribble = ({ isSmall = false }) => (
         <motion.div
             className="absolute inset-0 z-0 flex items-center justify-center pointer-events-none"
@@ -50,86 +49,107 @@ export default function Navbar() {
         </motion.div>
     );
 
+    const serviceItems = [
+        { name: "Investment", id: "01", path: "/services/business-consulting" },
+        { name: "Legal Advisory", id: "02", path: "/services/legal-service" },
+        { name: "Public Policy", id: "03", path: "/services/policy" },
+        { name: "Venture Capital", id: "04", path: "/services/startup-support" },
+        { name: "Strategic Insights", id: "05", path: "/services/strategic-insights" }
+    ];
+
     return (
         <>
             <nav className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 bg-[#F5F2ED] ${isScrolled ? 'h-16' : 'h-20'}`}>
                 <div className="mx-auto max-w-[100rem] h-full px-8 lg:px-16 flex items-center justify-between text-[#13231F]">
 
-                    <Link to="/" className="flex flex-col">
+                    <Link to="/" className="flex flex-col" onClick={closeMenu}>
                         <span className="text-xl md:text-2xl font-serif tracking-tighter uppercase font-semibold leading-none">Stratbridge</span>
                         <span className="text-[9px] font-bold tracking-[0.4em] uppercase mt-1 text-[#344E41] opacity-60 font-sans">Partners</span>
                     </Link>
 
-                    <div className="flex items-center gap-6 text-[13px] font-serif font-bold uppercase tracking-widest">
-                        <div className="hidden md:flex items-center gap-4">
-                            {[
-                                { name: 'About Us', path: '/about' },
-                                { name: 'The Agenda', path: '/proposal' },
-                                { name: 'Contact', path: '/contact-us' }
-                            ].map((item) => (
-                                <Link
-                                    key={item.name}
-                                    to={item.path}
-                                    className="relative px-5 py-2 flex items-center justify-center"
-                                    onMouseEnter={() => setHoveredId(`nav-${item.name}`)}
-                                    onMouseLeave={() => setHoveredId(null)}
-                                >
-                                    <span className="relative z-10">{item.name}</span>
-                                    <AnimatePresence>{hoveredId === `nav-${item.name}` && <SingleStrokeScribble isSmall />}</AnimatePresence>
-                                </Link>
-                            ))}
-                        </div>
+                    {/* MAIN NAVIGATION */}
+                    <div className="flex items-center gap-2 md:gap-6 text-[13px] font-serif font-bold uppercase tracking-widest">
+
+                        {/* 1. ABOUT */}
+                        <Link to="/about"
+                            className="relative px-5 py-2 hidden md:flex items-center justify-center"
+                            onMouseEnter={() => setHoveredId('nav-about')}
+                            onMouseLeave={() => setHoveredId(null)}
+                        >
+                            <span className="relative z-10">About</span>
+                            <AnimatePresence>{hoveredId === 'nav-about' && <SingleStrokeScribble isSmall />}</AnimatePresence>
+                        </Link>
+
+                        {/* 2. SERVICES (Trigger) */}
                         <button
                             onClick={() => setIsOpen(!isOpen)}
                             className="relative px-5 py-2 flex items-center justify-center"
-                            onMouseEnter={() => setHoveredId('nav-menu')}
+                            onMouseEnter={() => setHoveredId('nav-services')}
                             onMouseLeave={() => setHoveredId(null)}
                         >
-                            <span className="relative z-10">{isOpen ? 'Close' : 'MENU'}</span>
-                            <AnimatePresence>{hoveredId === 'nav-menu' && <SingleStrokeScribble isSmall />}</AnimatePresence>
+                            <span className="relative z-10">{isOpen ? 'Close' : 'SERVICES'}</span>
+                            <AnimatePresence>{hoveredId === 'nav-services' && <SingleStrokeScribble isSmall />}</AnimatePresence>
                         </button>
+
+                        {/* 3. INITIATIVES - Now navigating to Initiatives Page */}
+                        <Link to="/initiatives"
+                            className="relative px-5 py-2 hidden md:flex items-center justify-center"
+                            onMouseEnter={() => setHoveredId('nav-init')}
+                            onMouseLeave={() => setHoveredId(null)}
+                        >
+                            <span className="relative z-10">Initiatives</span>
+                            <AnimatePresence>{hoveredId === 'nav-init' && <SingleStrokeScribble isSmall />}</AnimatePresence>
+                        </Link>
+
+                        {/* 4. CONTACT US */}
+                        <Link to="/contact-us"
+                            className="relative px-5 py-2 hidden md:flex items-center justify-center"
+                            onMouseEnter={() => setHoveredId('nav-contact')}
+                            onMouseLeave={() => setHoveredId(null)}
+                        >
+                            <span className="relative z-10">Contact Us</span>
+                            <AnimatePresence>{hoveredId === 'nav-contact' && <SingleStrokeScribble isSmall />}</AnimatePresence>
+                        </Link>
                     </div>
                 </div>
             </nav>
 
-            {/* INNER MENU */}
+            {/* SERVICES OVERLAY */}
             <div className={`fixed inset-0 z-[110] transform transition-transform duration-[0.8s] ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
-                <div className="h-full w-full bg-[#F5F2ED] flex flex-col pt-36 px-8 md:px-20 overflow-y-auto">
+                <div className="h-full w-full bg-[#F5F2ED] flex flex-col pt-40 px-8 md:px-20 overflow-y-auto">
                     <div className="max-w-7xl mx-auto w-full pb-20">
                         <div className="grid lg:grid-cols-12 gap-12 text-[#13231F]">
 
                             <nav className="lg:col-span-8 flex flex-col space-y-4">
-                                <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-[#344E41] opacity-40 mb-6 font-sans block">Directory 2026</span>
-                                {
-                                    [
-                                        { name: "About StratB", id: "00", path: "/about" },
-                                        { name: "The Agenda", id: "01", path: "/proposal" },
-                                        { name: "Investment", id: "02", path: "/services/business-consulting" },
-                                        { name: "Legal Advisory", id: "03", path: "/services/legal-service" },
-                                        { name: "Public Policy", id: "04", path: "/services/policy" },
-                                        { name: "Venture Capital", id: "05", path: "/services/startup-support" },
-                                        { name: "Insights", id: "06", path: "/services/strategic-insights" }
-                                    ].map((item) => (
-                                        <Link
-                                            key={item.id}
-                                            to={item.path}
-                                            onClick={closeMenu}
-                                            onMouseEnter={() => setHoveredId(item.id)}
-                                            onMouseLeave={() => setHoveredId(null)}
-                                            className="group flex items-baseline gap-6 border-b border-[#13231F]/5 pb-4 max-w-fit"
-                                        >
-                                            <span className="text-[11px] font-mono text-[#13231F]/20">{item.id}</span>
-                                            <div className="relative inline-block px-10 py-3 flex items-center justify-center">
-                                                <span className="relative z-10 text-xl md:text-2xl font-serif font-semibold tracking-tight uppercase group-hover:italic transition-all">
-                                                    {item.name}
-                                                </span>
-                                                <AnimatePresence>
-                                                    {hoveredId === item.id && <SingleStrokeScribble />}
-                                                </AnimatePresence>
-                                            </div>
-                                        </Link>
-                                    ))
-                                }
+                                <span className="text-[10px] font-bold uppercase tracking-[0.6em] text-[#344E41] opacity-40 mb-6 font-sans block">Our Services 2026</span>
+
+                                {serviceItems.map((item) => (
+                                    <Link
+                                        key={item.id}
+                                        to={item.path}
+                                        onClick={closeMenu}
+                                        onMouseEnter={() => setHoveredId(item.id)}
+                                        onMouseLeave={() => setHoveredId(null)}
+                                        className="group flex items-baseline gap-6 border-b border-[#13231F]/5 pb-4 max-w-fit"
+                                    >
+                                        <span className="text-[11px] font-mono text-[#13231F]/20">{item.id}</span>
+                                        <div className="relative inline-block px-10 py-3 flex items-center justify-center">
+                                            <span className="relative z-10 text-xl md:text-2xl font-serif font-semibold tracking-tight uppercase group-hover:italic transition-all">
+                                                {item.name}
+                                            </span>
+                                            <AnimatePresence>
+                                                {hoveredId === item.id && <SingleStrokeScribble />}
+                                            </AnimatePresence>
+                                        </div>
+                                    </Link>
+                                ))}
+
+                                {/* Mobile Only Links (Ensuring accessibility on small screens) */}
+                                <div className="flex flex-col space-y-4 pt-10 md:hidden">
+                                    <Link to="/about" onClick={closeMenu} className="text-xl font-serif font-semibold uppercase">About</Link>
+                                    <Link to="/initiatives" onClick={closeMenu} className="text-xl font-serif font-semibold uppercase">Initiatives</Link>
+                                    <Link to="/contact-us" onClick={closeMenu} className="text-xl font-serif font-semibold uppercase">Contact Us</Link>
+                                </div>
                             </nav>
 
                             <div className="lg:col-span-4 flex flex-col justify-start space-y-12 pt-10 font-serif uppercase tracking-tight">

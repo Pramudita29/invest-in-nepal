@@ -1,9 +1,22 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight, Loader2, Send } from 'lucide-react';
-import { useState } from 'react';
-import { toast } from 'react-hot-toast';
+import { CheckCircle2, Loader2, ShieldAlert } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'react-hot-toast';
 import Navbar from '../components/Navbar/Navbar';
+
+// Configuration from your provided link
+const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeGYyxFhGLkIPsgpLfCOkYWwS4DrockShZscPNxbe8mkEjZBg/formResponse";
+
+const ENTRY_IDS = {
+    name: 'entry.2117875584',
+    district: 'entry.1718190618',
+    contact: 'entry.1657225923',
+    profession: 'entry.976442586',
+    concerns: 'entry.1705009081',
+    suggestions: 'entry.648304'
+};
+
 const CONCERNS = [
     { id: 'edu', en: 'Quality Education', ne: 'गुणस्तरीय शिक्षा' },
     { id: 'elec', en: 'Electricity & Energy', ne: 'विद्युत र उर्जा' },
@@ -32,225 +45,195 @@ const PROFESSIONS = [
     { en: "Teacher/Professor", ne: "शिक्षक/प्राध्यापक" },
     { en: "Healthcare Worker", ne: "स्वास्थ्यकर्मी" },
     { en: "Government Employee", ne: "सरकारी कर्मचारी" },
-    { en: "Legal Professional", ne: "कानुन व्यवसायी" }
+    { en: "Legal Professional", ne: "कानुन व्यवसायी" },
+    { en: "Other", ne: "अन्य" }
 ];
 
 const AgendaStepPage = () => {
     const [step, setStep] = useState(1);
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isRestricted, setIsRestricted] = useState(false);
     const [selectedConcerns, setSelectedConcerns] = useState([]);
     const [formData, setFormData] = useState({
-        name: '',
-        district: '',
-        profession: '',
-        suggestions: '',
-        comments: ''
+        name: '', contact: '', district: '', profession: '', otherProfession: '', suggestions: ''
     });
 
-    const nextStep = () => setStep((s) => s + 1);
-    const prevStep = () => setStep((s) => s - 1);
+    useEffect(() => {
+        const hasSubmitted = localStorage.getItem('agenda_v1_submitted');
+        let storageAccess = true;
+        try {
+            const test = 'test';
+            localStorage.setItem(test, test);
+            localStorage.removeItem(test);
+        } catch (e) { storageAccess = false; }
+
+        if (hasSubmitted || !storageAccess) {
+            setIsRestricted(true);
+            setStep(3);
+        }
+    }, []);
+
+    const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
+    const nextStep = () => { scrollToTop(); setStep((s) => s + 1); };
+    const prevStep = () => { scrollToTop(); setStep((s) => s - 1); };
 
     const toggleConcern = (id) => {
-        const concernLabel = CONCERNS.find(c => c.id === id).en;
-        setSelectedConcerns(prev =>
-            prev.includes(concernLabel) ? prev.filter(i => i !== concernLabel) : [...prev, concernLabel]
-        );
+        const label = CONCERNS.find(c => c.id === id).en;
+        setSelectedConcerns(prev => prev.includes(label) ? prev.filter(i => i !== label) : [...prev, label]);
     };
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
+        if (localStorage.getItem('agenda_v1_submitted')) return;
+
         setIsSubmitting(true);
+        const finalProfession = formData.profession === 'Other' ? formData.otherProfession : formData.profession;
 
-        const FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeGYyxFhGLkIPsgpLfCOkYWwS4DrockShZscPNxbe8mkEjZBg/formResponse";
-
-        const data = new FormData();
-        // Use the actual state variables here:
-        data.append('entry.2117875584', formData.name);
-        data.append('entry.1718190618', formData.district);
-        data.append('entry.976442586', formData.profession);
-        data.append('entry.1705009081', selectedConcerns.join(', '));
-        data.append('entry.648304', formData.suggestions);
-        data.append('entry.1060551828', formData.comments);
+        // Encode data for Google Forms
+        const queryParams = new URLSearchParams();
+        queryParams.append(ENTRY_IDS.name, formData.name);
+        queryParams.append(ENTRY_IDS.district, formData.district);
+        queryParams.append(ENTRY_IDS.contact, formData.contact);
+        queryParams.append(ENTRY_IDS.profession, finalProfession);
+        queryParams.append(ENTRY_IDS.concerns, selectedConcerns.join(', '));
+        queryParams.append(ENTRY_IDS.suggestions, formData.suggestions);
 
         try {
-            await fetch(FORM_URL, { method: 'POST', mode: 'no-cors', body: data });
-
-            toast.success('Agenda Submitted! / एजेन्डा पठाइयो।');
-
-            // Clear the form after success
-            setFormData({ name: '', district: '', profession: '', suggestions: '', comments: '' });
-            setSelectedConcerns([]);
-            setStep(1);
+            await fetch(`${GOOGLE_FORM_BASE_URL}?${queryParams.toString()}`, {
+                method: 'POST',
+                mode: 'no-cors',
+            });
+            localStorage.setItem('agenda_v1_submitted', 'true');
+            toast.success('Your vision has been recorded.');
+            setStep(3);
         } catch (err) {
-            toast.error('Error submitting form');
+            toast.error('Submission failed. Please try again.');
         } finally {
             setIsSubmitting(false);
         }
     };
 
+    const labelStyle = "font-sans font-bold text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
+    const bodyTextStyle = "font-sans text-lg text-black/60 leading-relaxed";
+
     return (
-        <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] font-serif">
+        <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] font-sans selection:bg-[#2D5A43] selection:text-white">
+            <Toaster position="top-center" />
             <Navbar />
 
-            {/* Top Progress Bar */}
-            <div className="fixed top-16 md:top-20 left-0 w-full h-1 bg-[#13231F]/5 z-50">
-                <motion.div
-                    className="h-full bg-[#2D5A43]"
-                    initial={{ width: '33%' }}
-                    animate={{ width: `${(step / 3) * 100}%` }}
-                />
+            <div className="fixed top-0 left-0 w-full h-1 bg-black/5 z-[100]">
+                <motion.div className="h-full bg-[#2D5A43]" animate={{ width: `${(step / 3) * 100}%` }} transition={{ duration: 0.8 }} />
             </div>
 
-            <main className="max-w-[100rem] mx-auto px-8 lg:px-16 pt-32 pb-20">
-                <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
-
-                    {/* LEFT COLUMN: FIXED TITLES */}
-                    <div className="lg:col-span-5 flex flex-col justify-between h-fit lg:sticky lg:top-40">
-                        <div>
-                            <span className="font-sans font-bold tracking-[0.4em] text-[9px] uppercase block mb-6 text-[#344E41] opacity-60">
-                                Stratbridge / Phase 02
-                            </span>
-
-                            <AnimatePresence mode="wait">
-                                <motion.div
-                                    key={step}
-                                    initial={{ opacity: 0, x: -15 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    exit={{ opacity: 0, x: 15 }}
-                                    transition={{ duration: 0.4 }}
-                                >
-                                    <h1 className="text-4xl md:text-5xl font-semibold uppercase italic tracking-tighter leading-tight mb-6">
-                                        {step === 1 && <><span className="block text-xl mb-2 not-italic font-sans opacity-40">01.</span> The Participant <br /> <span className="text-2xl not-italic font-sans">सहभागी विवरण</span></>}
-                                        {step === 2 && <><span className="block text-xl mb-2 not-italic font-sans opacity-40">02.</span> The Priorities <br /> <span className="text-2xl not-italic font-sans">सरोकारका विषय</span></>}
-                                        {step === 3 && <><span className="block text-xl mb-2 not-italic font-sans opacity-40">03.</span> The Vision <br /> <span className="text-2xl not-italic font-sans">ठोस एजेन्डा</span></>}
-                                    </h1>
-
-                                    <p className="text-base opacity-60 max-w-sm leading-relaxed font-sans">
-                                        {step === 1 && "Identifying the key stakeholders behind the strategic movement."}
-                                        {step === 2 && "Selecting specific pillars for national policy intervention."}
-                                        {step === 3 && "Defining concrete outcomes for the 2082 Roadmap."}
-                                    </p>
-                                </motion.div>
-                            </AnimatePresence>
-                        </div>
-
-                        <div className="hidden lg:block pt-16 border-t border-[#13231F]/10 mt-16">
-                            <p className="text-lg font-semibold italic">“भोलिको लागि हाम्रो एजेन्डा”</p>
-                            <span className="text-[8px] font-sans font-bold uppercase tracking-[0.4em] opacity-40 mt-2 block text-[#344E41]">Agenda Cohort 2082</span>
+            <main className="max-w-[1400px] mx-auto px-6 lg:px-20 pt-40 pb-32">
+                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+                    <div className="lg:w-1/3">
+                        <div className="lg:sticky lg:top-40 space-y-12">
+                            <div className="space-y-6">
+                                <h2 className={labelStyle}>Beyond Voting: The Agenda Cohort</h2>
+                                <h1 className="text-5xl font-bold tracking-tight leading-tight text-[#13231F]">
+                                    “भोलिको लागि हाम्रो एजेन्डा”<br />
+                                    <span className="text-[#2D5A43] font-medium">“Your Agenda for Tomorrow”</span>
+                                </h1>
+                                <div className="h-[2px] w-20 bg-[#2D5A43]" />
+                            </div>
+                            <div className="space-y-10">
+                                <AnimatePresence mode="wait">
+                                    {step === 1 ? (
+                                        <motion.div key="text1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
+                                            <p className="text-xl text-[#13231F] font-medium">First, help us understand the perspective behind the vision.</p>
+                                            <p className={bodyTextStyle}>तपाईंको पृष्ठभूमिले तपाईंको एजेन्डालाई प्रष्ट पार्छ।</p>
+                                        </motion.div>
+                                    ) : step === 2 ? (
+                                        <motion.div key="text2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
+                                            <p className="text-xl text-[#13231F] font-medium">Define the roadmap. What needs to change?</p>
+                                            <p className={bodyTextStyle}>२०८२ को लागि कार्यदिशा तय गर्नुहोस्।</p>
+                                        </motion.div>
+                                    ) : null}
+                                </AnimatePresence>
+                            </div>
                         </div>
                     </div>
 
-                    {/* RIGHT COLUMN: FORMS */}
-                    <div className="lg:col-span-7">
+                    <div className="lg:w-2/3">
                         <AnimatePresence mode="wait">
                             {step === 1 && (
-                                <motion.div key="step1" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="space-y-12">
-                                    <div className="grid md:grid-cols-2 gap-10">
-                                        <div className="group">
-                                            <label className="text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 opacity-40 group-focus-within:text-[#2D5A43] group-focus-within:opacity-100 transition-all font-sans">Name / नाम</label>
-                                            <input
-                                                type="text"
-                                                value={formData.name}
-                                                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                                                className="w-full bg-transparent border-b border-[#13231F]/20 py-3 outline-none focus:border-[#2D5A43] text-xl transition-all"
-                                                placeholder="Enter Full Name"
-                                            />
+                                <motion.div key="step1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-16">
+                                    <div className="grid md:grid-cols-1 gap-12">
+                                        <div className="space-y-4">
+                                            <label className={labelStyle}>Full Name / पूरा नाम</label>
+                                            <input type="text" placeholder="Your Name" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-2xl font-medium focus:border-[#2D5A43] outline-none transition-colors" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                                         </div>
-                                        <div className="group">
-                                            <label className="text-[10px] font-bold tracking-[0.2em] uppercase block mb-2 opacity-40 group-focus-within:text-[#2D5A43] group-focus-within:opacity-100 transition-all font-sans">District / जिल्ला</label>
-                                            <input
-                                                type="text"
-                                                value={formData.district}
-                                                onChange={(e) => setFormData({ ...formData, district: e.target.value })}
-                                                className="w-full bg-transparent border-b border-[#13231F]/20 py-3 outline-none focus:border-[#2D5A43] text-xl transition-all"
-                                                placeholder="Current District"
-                                            />
+                                        <div className="grid md:grid-cols-2 gap-12">
+                                            <div className="space-y-4">
+                                                <label className={labelStyle}>District / जिल्ला</label>
+                                                <input type="text" placeholder="Location" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} />
+                                            </div>
+                                            <div className="space-y-4">
+                                                <label className={labelStyle}>Contact / सम्पर्क</label>
+                                                <input type="text" placeholder="Email or Phone" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none" value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
+                                            </div>
                                         </div>
                                     </div>
 
-                                    <div className="space-y-6">
-                                        <label className="text-[10px] font-bold tracking-[0.2em] uppercase block opacity-40 font-sans">Select Profession / पेशा</label>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div className="space-y-8">
+                                        <label className={labelStyle}>Select Profession / पेशा वा भूमिका</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                             {PROFESSIONS.map(p => (
-                                                <button
-                                                    key={p.en}
-                                                    onClick={() => setFormData({ ...formData, profession: p.en })}
-                                                    className={`text-left px-5 py-4 transition-all border ${formData.profession === p.en ? 'bg-[#13231F] text-[#F5F2ED] border-[#13231F]' : 'bg-[#13231F]/5 border-transparent hover:bg-[#13231F]/10'}`}
-                                                >
-                                                    <div className="text-base font-semibold uppercase tracking-tight">{p.en}</div>
-                                                    <div className="text-base font-medium opacity-50">{p.ne}</div>
+                                                <button key={p.en} onClick={() => setFormData({ ...formData, profession: p.en })} className={`text-left p-4 rounded-xl border transition-all ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}>
+                                                    <p className="text-[15px] font-medium leading-tight mb-1">{p.en}</p>
+                                                    <p className="text-[15px] font-medium leading-tight">{p.ne}</p>
                                                 </button>
                                             ))}
                                         </div>
                                     </div>
-                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-[#F5F2ED] py-6 rounded-full font-bold text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#2D5A43] transition-all group font-sans">
-                                        Next Stage <ChevronRight size={16} className="group-hover:translate-x-1 transition-transform" />
+
+                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-8 rounded-2xl font-bold uppercase tracking-widest hover:bg-[#2D5A43] transition-all">
+                                        Proceed to Vision
                                     </button>
                                 </motion.div>
                             )}
 
                             {step === 2 && (
-                                <motion.div key="step2" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="space-y-10">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                        {CONCERNS.map((item) => {
-                                            const isSelected = selectedConcerns.includes(item.en);
-                                            return (
-                                                <button
-                                                    key={item.id}
-                                                    onClick={() => toggleConcern(item.id)}
-                                                    className={`text-left px-5 py-5 border transition-all ${isSelected ? 'bg-[#2D5A43] text-[#F5F2ED] border-[#2D5A43]' : 'bg-[#13231F]/5 border-transparent hover:bg-[#13231F]/10'}`}
-                                                >
-                                                    <div className="text-base font-semibold uppercase tracking-tight leading-none mb-1">{item.en}</div>
-                                                    <div className="text-base font-medium opacity-50">{item.ne}</div>
-                                                </button>
-                                            );
-                                        })}
+                                <motion.div key="step2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-16">
+                                    <div className="space-y-8">
+                                        <label className={labelStyle}>Core Concerns / सरोकारका मुख्य विषयहरू</label>
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                            {CONCERNS.map((item) => {
+                                                const active = selectedConcerns.includes(item.en);
+                                                return (
+                                                    <button key={item.id} onClick={() => toggleConcern(item.id)} className={`text-left p-4 rounded-xl border transition-all ${active ? 'bg-[#2D5A43] border-[#2D5A43] text-white' : 'bg-white border-black/5 hover:border-[#2D5A43]/40'}`}>
+                                                        <p className="text-[15px] font-medium mb-1">{item.en}</p>
+                                                        <p className="text-[15px] font-medium">{item.ne}</p>
+                                                    </button>
+                                                );
+                                            })}
+                                        </div>
                                     </div>
-                                    <div className="flex flex-col md:flex-row gap-4">
-                                        <button onClick={prevStep} className="flex-1 border border-[#13231F]/20 py-6 rounded-full font-bold text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 font-sans opacity-60 hover:opacity-100 transition-opacity">
-                                            <ChevronLeft size={16} /> Back
-                                        </button>
-                                        <button onClick={nextStep} className="flex-[2] bg-[#13231F] text-[#F5F2ED] py-6 rounded-full font-bold text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#2D5A43] font-sans">
-                                            Continue <ChevronRight size={16} />
+
+                                    <div className="space-y-10">
+                                        <div className="space-y-6 p-10 bg-white rounded-[2rem] border border-black/5">
+                                            <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies</h3>
+                                            <textarea className="w-full bg-[#FAF9F6] rounded-2xl p-8 h-80 text-lg font-sans outline-none border border-black/5 focus:border-[#2D5A43]/30 resize-none" placeholder="Your suggestions..." value={formData.suggestions} onChange={e => setFormData({ ...formData, suggestions: e.target.value })} />
+                                        </div>
+                                    </div>
+
+                                    <div className="flex gap-6">
+                                        <button onClick={prevStep} className="w-1/4 py-6 rounded-2xl border-2 border-black/5 font-bold uppercase tracking-widest">Back</button>
+                                        <button onClick={handleSubmit} disabled={isSubmitting} className="flex-1 bg-[#13231F] text-white py-6 rounded-2xl font-bold uppercase tracking-widest hover:bg-[#2D5A43] flex justify-center items-center gap-4">
+                                            {isSubmitting ? <Loader2 className="animate-spin" /> : "Submit Agenda"}
                                         </button>
                                     </div>
                                 </motion.div>
                             )}
 
                             {step === 3 && (
-                                <motion.div key="step3" initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -15 }} className="space-y-12">
-                                    <div className="space-y-8">
-                                        <div className="group">
-                                            <label className="text-[10px] font-bold tracking-[0.2em] uppercase block mb-3 opacity-40 font-sans">Concrete Suggestions / सुझाव</label>
-                                            <textarea
-                                                value={formData.suggestions}
-                                                onChange={(e) => setFormData({ ...formData, suggestions: e.target.value })}
-                                                className="w-full bg-[#13231F]/5 border-none p-6 rounded-2xl h-56 focus:ring-1 focus:ring-[#2D5A43] outline-none text-lg font-medium"
-                                                placeholder="Describe policy proposals..."
-                                            />
-                                        </div>
-                                        <div className="group">
-                                            <label className="text-[10px] font-bold tracking-[0.2em] uppercase block mb-3 opacity-40 font-sans">Local Comments / टिप्पणी</label>
-                                            <textarea
-                                                value={formData.comments}
-                                                onChange={(e) => setFormData({ ...formData, comments: e.target.value })}
-                                                className="w-full bg-[#13231F]/5 border-none p-6 rounded-2xl h-32 focus:ring-1 focus:ring-[#2D5A43] outline-none text-lg font-medium"
-                                                placeholder="Additional notes..."
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col md:flex-row gap-4">
-                                        <button onClick={prevStep} className="flex-1 border border-[#13231F]/20 py-6 rounded-full font-bold text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 font-sans opacity-60">
-                                            <ChevronLeft size={16} /> Back
-                                        </button>
-                                        <button
-                                            onClick={handleSubmit}
-                                            disabled={isSubmitting}
-                                            className="flex-[2] bg-[#2D5A43] text-[#F5F2ED] py-6 rounded-full font-bold text-sm uppercase tracking-[0.2em] flex items-center justify-center gap-3 hover:bg-[#13231F] font-sans transition-all disabled:opacity-50"
-                                        >
-                                            {isSubmitting ? <Loader2 className="animate-spin" size={16} /> : <>Submit Agenda / पठाउनुहोस् <Send size={16} /></>}
-                                        </button>
-                                    </div>
+                                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-40 bg-white rounded-[3rem] border border-black/5 shadow-2xl space-y-10">
+                                    {isRestricted ? (
+                                        <><ShieldAlert size={80} className="mx-auto text-red-500" /><h2 className="text-4xl font-bold">Limit Reached</h2><p className="text-black/40 px-10">You have already submitted or are in Incognito Mode.</p></>
+                                    ) : (
+                                        <><CheckCircle2 size={100} className="mx-auto text-[#2D5A43]" /><h2 className="text-6xl font-bold">धन्यवाद</h2><p className="text-xl text-black/40">Your response has been recorded.</p></>
+                                    )}
                                 </motion.div>
                             )}
                         </AnimatePresence>

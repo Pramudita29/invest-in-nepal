@@ -234,7 +234,7 @@ export default function StartupSupportPage() {
             <footer className="bg-[#13231F] py-40 text-center relative z-40">
                 <div className="max-w-4xl mx-auto px-8">
                     <h2 className="text-5xl md:text-7xl font-serif text-[#F5F2ED] italic lowercase mb-12">
-                        Build your <span className="not-italic text-[#004b33]">Legacy.</span>
+                        Build your <span className="not-italic text-[#fffff]">Legacy.</span>
                     </h2>
                     <Link to="/contact" className="inline-flex items-center gap-10 bg-[#F5F2ED] text-[#13231F] px-16 py-8 font-mono text-xs uppercase tracking-[0.5em] font-bold hover:bg-[#004b33] hover:text-white transition-all">
                         Inquire Protocol <ArrowRight size={20} />

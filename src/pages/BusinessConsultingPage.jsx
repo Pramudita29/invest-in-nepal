@@ -17,7 +17,7 @@ export default function BusinessConsultingPage() {
     ];
 
     return (
-        <div className="min-h-screen bg-[#FDFCFB] text-[#13231F] antialiased">
+        <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] antialiased">
             <style>
                 {`
                     @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=JetBrains+Mono:wght@500&display=swap');

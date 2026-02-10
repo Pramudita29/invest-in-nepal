@@ -19,7 +19,7 @@ const stories = [
     title: 'Upper Tamakoshi',
     subtitle: 'Infrastructure // Energy',
     description: 'Nepal’s largest domestically funded project (456 MW) redefining the regional power grid.',
-    image: 'https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80',
+    image: 'https://images.unsplash.com/photo-1513828583688-c52646db42da?q=80&w=1200&auto=format&fit=crop',
     url: 'https://www.sasec.asia/index.php?page=news&nid=1290&url=upper-tamakoshi-operates'
   },
   {

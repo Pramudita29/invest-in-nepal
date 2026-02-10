@@ -92,19 +92,19 @@ export default function ContactUsPage() {
 
             {/* SECTION 1 */}
             <div className="space-y-8">
-              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">01 / Your Info</span>
+              <span className="font-mono text-[18px] text-[#004b33] font-bold tracking-tighter">01 / Your Info</span>
               <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
-                <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Name & Company</label>
+                <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Name & Company</label>
                 <input type="text" placeholder="Your name or business" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
-                  <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Email Address</label>
+                  <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Email Address</label>
                   <input type="email" placeholder="name@email.com" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
                 </div>
                 <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
-                  <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Phone Number</label>
+                  <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Phone Number</label>
                   <input type="tel" placeholder="+977" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
                 </div>
               </div>
@@ -112,23 +112,23 @@ export default function ContactUsPage() {
 
             {/* SECTION 2 */}
             <div className="space-y-8">
-              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">02 / Project</span>
+              <span className="font-mono text-[18px] text-[#004b33] font-bold tracking-tighter">02 / Project</span>
               <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
-                <label className="block font-mono text-[9px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Project Details</label>
+                <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Project Details</label>
                 <textarea rows={4} placeholder="Tell us what you are building..." className="w-full bg-transparent font-body text-xl outline-none resize-none placeholder:opacity-20 text-[#13231F]" />
               </div>
             </div>
 
             {/* SECTION 3 */}
             <div className="space-y-8">
-              <span className="font-mono text-[10px] text-[#004b33] font-bold tracking-tighter">03 / Budget (NPR)</span>
+              <span className="font-mono text-[18px] text-[#004b33] font-bold tracking-tighter">03 / Budget (NPR)</span>
               <div className="flex flex-wrap gap-3">
                 {budgets.map((range) => (
                   <button
                     key={range}
                     type="button"
                     onClick={() => setBudget(range)}
-                    className={`px-6 py-3 font-mono text-[10px] uppercase tracking-widest border transition-all ${budget === range
+                    className={`px-6 py-3 font-mono text-[12px] uppercase tracking-widest border transition-all ${budget === range
                       ? "bg-[#004b33] border-[#004b33] text-white shadow-md"
                       : "border-[#13231F]/10 hover:border-[#004b33] text-[#13231F]/60"
                       }`}

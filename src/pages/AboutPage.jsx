@@ -6,93 +6,97 @@ import Navbar from '../components/Navbar/Navbar';
 
 const AboutPage = () => {
     const fadeIn = {
-        initial: { opacity: 0, y: 20 },
+        initial: { opacity: 0, y: 30 },
         whileInView: { opacity: 1, y: 0 },
         viewport: { once: true },
-        transition: { duration: 0.8, ease: "easeOut" }
+        transition: { duration: 0.8, ease: [0.215, 0.61, 0.355, 1] }
     };
 
     return (
-        <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] font-serif overflow-x-hidden relative selection:bg-[#2D5A43] selection:text-[#F5F2ED]">
+        <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#2D5A43] selection:text-[#F5F2ED]">
             <Navbar />
 
-            {/* HERO SECTION - LARGER TYPEFACE */}
-            <section className="pt-48 pb-24 px-8 lg:px-20 max-w-7xl mx-auto">
-                <motion.div {...fadeIn} className="max-w-5xl">
-                    <div className="flex items-center gap-4 mb-8">
-                        <span className="w-12 h-[1.5px] bg-[#2D5A43]"></span>
-                        <span className="font-sans font-black tracking-[0.25em] text-sm uppercase text-[#2D5A43]">About StratB Partners</span>
+            {/* HERO SECTION */}
+            <section className="pt-56 pb-24 px-8 lg:px-20 max-w-[100rem] mx-auto">
+                <motion.div {...fadeIn} className="max-w-6xl">
+                    <div className="flex items-center gap-4 mb-10">
+                        <span className="w-12 h-[1px] bg-[#2D5A43]"></span>
+                        <span className="font-sans font-bold tracking-[0.4em] text-[10px] uppercase text-[#2D5A43]">About StratB Partners</span>
                     </div>
-                    <h1 className="text-6xl md:text-8xl font-medium tracking-tight leading-[1.05] mb-12">
-                        The Vision: <br /><span className="italic font-light text-[#2D5A43]">A Unified Ecosystem for Growth</span>
+
+                    <h1 className="text-6xl md:text-[7.5rem] font-serif font-medium tracking-tight leading-[1.05] mb-16">
+                        The Vision: <br />
+                        <span className="italic font-light text-[#2D5A43]">A Unified Ecosystem</span>
                     </h1>
 
-                    <div className="font-sans text-xl md:text-2xl opacity-90 leading-relaxed text-justify space-y-8 max-w-4xl">
-                        <p>
-                            StratB Partners was established to solve a fundamental challenge in the modern business landscape: <strong className="font-bold">Silos in Human & Financial Capital.</strong> In a rapidly evolving economy like Nepal’s, growth doesn't happen in a vacuum.
+                    <div className="grid md:grid-cols-2 gap-12 font-sans text-lg md:text-xl leading-relaxed text-[#13231F]/90">
+                        <p className="font-medium">
+                            StratB Partners was established to solve a fundamental challenge in the modern business landscape: <span className="text-[#2D5A43] italic">Silos in Human & Financial Capital.</span> In a rapidly evolving economy like Nepal’s, growth doesn't happen in a vacuum.
                         </p>
-                        <p>
-                            It requires the seamless integration of legal foresight, policy intelligence, technological innovation, and capital. StratB is the ecosystem where these worlds converge.
+                        <p className="opacity-80">
+                            It requires the seamless integration of legal foresight, policy intelligence, technological innovation, and capital. StratB is the ecosystem where these worlds converge into actionable strategy.
                         </p>
                     </div>
 
-                    <div className="mt-16 bg-[#13231F] text-[#F5F2ED] p-12 md:p-20 rounded-3xl shadow-2xl relative overflow-hidden group">
-                        <div className="relative z-10">
-                            <span className="text-xs uppercase tracking-[0.5em] text-[#2D5A43] mb-6 block font-sans font-black">The StratB Mission</span>
-                            <p className="text-3xl md:text-5xl italic leading-tight tracking-tight">
+                    <div className="mt-24 bg-[#13231F] text-[#F5F2ED] p-12 md:p-24 rounded-[2rem] relative overflow-hidden">
+                        <div className="relative z-10 max-w-3xl">
+                            <span className="text-[20px] uppercase tracking-[0.5em] text-[#fffff] mb-8 block font-sans font-bold">The StratB Mission</span>
+                            <p className="text-3xl md:text-5xl font-serif italic leading-[1.2] tracking-tight">
                                 "To accelerate Nepal’s economic potential by harmonizing the interests of innovators, regulators, and investors."
                             </p>
                         </div>
-                        <div className="absolute top-0 right-0 opacity-5 group-hover:scale-110 transition-transform duration-700">
-                            <Target size={300} strokeWidth={0.5} />
+                        <div className="absolute top-1/2 -right-20 -translate-y-1/2 opacity-[0.03] pointer-events-none">
+                            <Target size={500} strokeWidth={0.5} />
                         </div>
                     </div>
                 </motion.div>
             </section>
 
-            {/* WHO WE ARE - LIST FORMAT FOR READABILITY */}
-            <section className="py-32 px-8 lg:px-20 max-w-7xl mx-auto border-t border-[#13231F]/10">
+            {/* WHO WE ARE */}
+            <section className="py-40 px-8 lg:px-20 max-w-[100rem] mx-auto border-t border-[#13231F]/5">
                 <div className="grid lg:grid-cols-12 gap-16">
                     <div className="lg:col-span-4">
-                        <h2 className="text-lg font-sans font-black uppercase tracking-[0.4em] text-[#2D5A43] sticky top-32">Who We Are</h2>
+                        <h2 className="text-[20px] font-sans font-bold uppercase tracking-[0.5em] text-[#2D5A43] sticky top-32">Who We Are</h2>
                     </div>
-                    <div className="lg:col-span-8 font-sans">
-                        <p className="text-2xl leading-snug mb-16 text-justify opacity-90">
-                            We are more than just a consulting firm; we are a strategic hub. Our organization brings together a diverse network of:
+                    <div className="lg:col-span-8">
+                        <p className="text-3xl md:text-4xl font-serif leading-tight mb-20 text-[#13231F]">
+                            We are a strategic hub bringing together a diverse network of leaders.
                         </p>
-                        <div className="grid gap-12 mb-16">
+
+                        <div className="space-y-0 mb-20">
                             {[
-                                { t: "Industry Leaders & Business Consultants", d: "Who understand market dynamics." },
-                                { t: "Legal Professionals", d: "Who provide the structural foundation for security." },
-                                { t: "Startup Founders", d: "Who drive innovation and disruption." },
-                                { t: "Policy Analysts", d: "Who bridge the gap between private enterprise and regulatory frameworks." }
+                                { t: "Industry Leaders", d: "Market dynamics & execution." },
+                                { t: "Legal Professionals", d: "Structural foundation & security." },
+                                { t: "Startup Founders", d: "Innovation & disruption." },
+                                { t: "Policy Analysts", d: "Regulatory frameworks & bridge building." }
                             ].map((item, i) => (
-                                <div key={i} className="group border-b border-[#13231F]/10 pb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                                    <h4 className="text-2xl md:text-3xl font-bold tracking-tight group-hover:text-[#2D5A43] transition-colors">{item.t}</h4>
-                                    <span className="text-lg opacity-50 italic">{item.d}</span>
+                                <div key={i} className="group border-b border-[#13231F]/10 py-10 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:px-4 transition-all duration-300">
+                                    <h4 className="text-2xl md:text-3xl font-serif font-medium tracking-tight group-hover:italic transition-all">{item.t}</h4>
+                                    <span className="font-sans text-xs uppercase tracking-widest opacity-40 group-hover:opacity-100 transition-opacity">/ {item.d}</span>
                                 </div>
                             ))}
                         </div>
-                        <p className="text-xl opacity-80 leading-relaxed text-justify py-10 bg-white/40 px-8 rounded-xl italic">
+
+                        <div className="font-sans text-lg md:text-xl leading-relaxed opacity-80 border-l-2 border-[#2D5A43] pl-8 py-4 italic max-w-3xl">
                             By housing these distinct disciplines under one roof, we eliminate the silos that typically slow down progress. We provide the "comprehensive picture" that allows leaders to make informed, high-stakes decisions with confidence.
-                        </p>
+                        </div>
                     </div>
                 </div>
             </section>
 
-            {/* WHAT WE DO - BOLD CARDS */}
-            <section className="py-32 px-8 lg:px-20 bg-[#13231F] text-[#F5F2ED]">
+            {/* WHAT WE DO */}
+            <section className="py-40 px-8 lg:px-20 bg-[#13231F] text-[#F5F2ED] rounded-t-[3rem]">
                 <div className="max-w-7xl mx-auto">
-                    <h2 className="text-xs font-sans font-bold uppercase tracking-[0.5em] text-[#2D5A43] mb-20">What We Do</h2>
-                    <div className="grid md:grid-cols-3 gap-16">
+                    <h2 className="text-[20px] font-sans font-bold uppercase tracking-[0.6em] text-[#FFFFF] mb-24">What We Do</h2>
+                    <div className="grid md:grid-cols-3 gap-16 md:gap-24 ">
                         {[
                             { title: "Connecting the Dots", text: "We facilitate the collision of ideas and resources. Our space serves as a literal and metaphorical 'Chamber' where investors meet innovators, and where traditional industry meets the digital future." },
-                            { title: "Navigating Complexity", text: "Nepal’s business environment is rich with opportunity but complex in its execution. We simplify this journey by providing a holistic vantage point—analyzing legal requirements, policy climate, and technical feasibility." },
-                            { title: "Cultivating the Future", text: "Our commitment is to the long-term economic architecture of Nepal. By fostering a collaborative environment, we are building a more resilient, transparent, and scalable business culture." }
+                            { title: "Navigating Complexity", text: "Nepal’s business environment is rich with opportunity but complex in its execution. We simplify this journey by providing a holistic vantage point." },
+                            { title: "Cultivating the Future", text: "Our commitment is to the long-term economic architecture of Nepal. By fostering a collaborative environment, we are building a more resilient business culture." }
                         ].map((item, i) => (
-                            <div key={i} className="space-y-8">
-                                <h4 className="text-4xl font-serif italic text-[#2D5A43] border-b border-[#2D5A43]/30 pb-4">{item.title}</h4>
-                                <p className="text-lg opacity-70 leading-relaxed text-justify">
+                            <div key={i} className="group">
+                                <h4 className="text-3xl font-serif italic text-[#ffffff] mb-8 group-hover:pl-2 transition-all duration-300">{item.title}</h4>
+                                <p className="font-sans text-base leading-relaxed opacity-60 group-hover:opacity-90 transition-opacity">
                                     {item.text}
                                 </p>
                             </div>
@@ -101,64 +105,79 @@ const AboutPage = () => {
                 </div>
             </section>
 
-            {/* OUR STORY - EMPHASIZED NARRATIVE */}
-            <section className="py-32 px-8 lg:px-20 bg-[#EAE6DF]">
-                <div className="max-w-5xl mx-auto">
-                    <h2 className="text-xs font-sans font-black uppercase tracking-[0.4em] text-[#2D5A43] mb-12">Our Story</h2>
-                    <div className="font-serif text-2xl md:text-3xl opacity-90 leading-relaxed text-justify space-y-10">
-                        <p>
-                            StratB Partners was born from a simple realization during a candid discussion among friends. As professionals across law, technology, and business, we were dissecting the recurring hurdles within Nepal’s economy— the disconnect between policy and practice.
+            {/* OUR STORY */}
+            <section className="py-40 px-8 lg:px-20 bg-[#EAE6DF]">
+                <div className="max-w-4xl mx-auto">
+                    <span className="text-[20px] font-sans font-bold uppercase tracking-[0.5em] text-[#2D5A43] mb-16 block">Our Story</span>
+                    <div className="space-y-12">
+                        <p className="font-serif text-3xl md:text-4xl leading-snug">
+                            StratB Partners was born from a simple realization: the disconnect between policy and practice in Nepal was a hurdle that talent alone couldn't fix.
                         </p>
-                        <div className="text-4xl md:text-6xl text-[#13231F] font-medium leading-tight py-6 border-y border-[#13231F]/10">
-                            "The problem wasn't a lack of talent, but the lack of a <span className="italic text-[#2D5A43]">unified home</span> for it."
+                        <div className="text-5xl md:text-7xl text-[#13231F] font-serif italic leading-tight py-12 border-y border-[#13231F]/10">
+                            "The problem wasn't a lack of talent, but the lack of a <span className="text-[#2D5A43]">unified home</span> for it."
                         </div>
-                        <p className="font-sans text-xl opacity-80">
-                            That realization transformed our shared vision into a platform. We built StratB to be the one-stop ecosystem we felt was missing: a strategic hub where legal precision, technical innovation, and business intelligence converge.
+                        <p className="font-sans text-xl leading-relaxed opacity-70">
+                            We built StratB to be the one-stop ecosystem we felt was missing: a strategic hub where legal precision, technical innovation, and business intelligence converge.
                         </p>
                     </div>
                 </div>
             </section>
 
-            {/* MODALITY - IMPROVED VISUAL WEIGHT */}
-            <section className="py-32 px-8 lg:px-20 max-w-7xl mx-auto">
-                <h2 className="text-sm font-sans font-black uppercase tracking-[0.4em] text-[#2D5A43] mb-20">Working Modality: The Platform Hub</h2>
-                <div className="grid lg:grid-cols-2 gap-24">
-                    <div className="space-y-10 font-sans">
-                        <h4 className="text-3xl md:text-4xl font-bold tracking-tight">A Collaborative Partnership Model</h4>
-                        <p className="text-xl opacity-80 leading-relaxed text-justify">
+            {/* MODALITY */}
+            <section className="py-40 px-8 lg:px-20 max-w-7xl mx-auto">
+                <h2 className="text-[20px] font-sans font-bold uppercase tracking-[0.5em] text-[#2D5A43] mb-24">Working Modality: The Platform Hub</h2>
+                <div className="grid lg:grid-cols-2 gap-20 md:gap-32">
+                    <div className="space-y-8">
+                        <h4 className="text-3xl md:text-4xl font-serif font-medium tracking-tight italic">A Collaborative Model</h4>
+                        <p className="font-sans text-lg opacity-80 leading-relaxed">
                             We operate as a dynamic Platform Hub. We believe that the complexities of the modern economy cannot be solved by a single entity.
                         </p>
-                        <div className="bg-[#2D5A43] text-white p-12 rounded-2xl shadow-xl">
-                            <p className="text-xl leading-relaxed italic">
-                                Currently, our platform serves as the central hub for <strong className="underline underline-offset-8">Robin Law and Policy Associates</strong>, integrating specialized legal expertise with a wider network of independent consultants.
+                        <div className="bg-[#2D5A43] text-[#F5F2ED] p-10 rounded-2xl">
+                            <p className="font-sans text-lg leading-relaxed italic opacity-90">
+                                Currently, our platform serves as the central hub for <span className="font-bold underline underline-offset-4">Robin Law and Policy Associates</span>, integrating specialized legal expertise.
                             </p>
                         </div>
                     </div>
-                    <div className="space-y-10 font-sans pt-12">
-                        <h4 className="text-3xl md:text-4xl font-bold tracking-tight">Our "One-Stop" Approach</h4>
-                        <p className="text-xl opacity-80 leading-relaxed text-justify mb-8">
+                    <div className="space-y-8">
+                        <h4 className="text-3xl md:text-4xl font-serif font-medium tracking-tight italic">Our Approach</h4>
+                        <p className="font-sans text-lg opacity-80 leading-relaxed">
                             We are actively expanding our ecosystem by reaching out to eminent figures from finance, industry, technology, and governance.
                         </p>
-                        <div className="border-2 border-[#13231F] p-10 rounded-2xl">
-                            <p className="text-2xl font-medium leading-snug">
-                                "When you work with StratB, you gain access to a curated collective dedicated to the Nepalese market."
-                            </p>
+                        <div className="border border-[#13231F]/20 p-10 rounded-2xl italic font-serif text-2xl">
+                            "Access a curated collective dedicated to the Nepalese market."
                         </div>
                     </div>
                 </div>
             </section>
 
-            {/* FINAL CALL TO ACTION */}
-            <section className="py-40 px-8 lg:px-20 text-center border-t border-[#13231F]/10">
-                <h3 className="text-5xl md:text-7xl font-serif italic mb-16">Let's grow together.</h3>
-                <Link to="/contact-us" className="bg-[#13231F] text-[#F5F2ED] px-16 py-10 rounded-full font-bold uppercase text-sm tracking-[0.4em] hover:bg-[#2D5A43] transition-all inline-flex items-center gap-6 shadow-2xl">
-                    Get in Touch <ArrowRight size={24} />
-                </Link>
-            </section>
+            {/* CTA */}
+            {/* FINAL CALL TO ACTION - REFINED & COMPACT */}
+            <section className="py-24 px-8 text-center border-t border-[#13231F]/5 bg-[#F5F2ED]">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8 }}
+                    className="max-w-2xl mx-auto"
+                >
+                    <h3 className="text-8xl md:text-6xl font-serif italic mb-10 tracking-tight text-[#13231F]">
+                        Let's grow together.
+                    </h3>
 
-            <footer className="py-16 border-t border-[#13231F]/10 px-8 text-center opacity-40 text-xs font-sans font-bold uppercase tracking-[0.4em]">
-                StratB Partners © 2026 / Integrated Intelligence
-            </footer>
+                    <Link
+                        to="/contact-us"
+                        className="group relative inline-flex items-center gap-4 bg-[#13231F] text-[#F5F2ED] px-10 py-5 rounded-full overflow-hidden transition-all duration-500 hover:bg-[#2D5A43] hover:shadow-lg"
+                    >
+                        <span className="relative z-10 font-sans font-bold uppercase text-[10px] tracking-[0.4em]">
+                            Get in Touch
+                        </span>
+                        <ArrowRight
+                            size={16}
+                            className="relative z-10 group-hover:translate-x-1 transition-transform duration-300"
+                        />
+                    </Link>
+                </motion.div>
+            </section>
         </div>
     );
 };
