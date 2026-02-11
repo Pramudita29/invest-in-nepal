@@ -21,9 +21,9 @@ import StartupHubPage from './pages/StartupHubPage';
 import StartupSupportPage from './pages/StartupSupportPage';
 import StoriesPage from './pages/StoriesPage';
 import StrategicInsightsPage from './pages/StrategicInsightsPage';
+import VolunteerPage from './pages/VolunteerPage'; // <--- Added this import
 
 // 1. Root Layout Wrapper
-// This ensures Navbar, ScrollRestoration, and Footer stay constant
 const RootLayout = () => (
     <div className="relative min-h-screen flex flex-col bg-[#FAF9F6] selection:bg-[#2D5A43] selection:text-white">
         <ScrollRestoration />
@@ -102,6 +102,7 @@ const router = createBrowserRouter([
             { path: "initiatives", element: <InitiativesPage /> },
             { path: "proposal", element: <ProposalPage /> },
             { path: "agenda", element: <AgendaPage /> },
+            { path: "volunteer", element: <VolunteerPage /> }, // <--- New Route Added
         ]
     }
 ]);

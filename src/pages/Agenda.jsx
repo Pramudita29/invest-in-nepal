@@ -1,15 +1,18 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Info, Loader2, Send, ShieldAlert } from 'lucide-react';
+import { ArrowRight, CheckCircle2, Info, Loader2, Send, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
+import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png'; // Adjust extension (.png/.jpg) if needed
+import kumariLogo from '../assets/images/image.png';
 import Navbar from '../components/Navbar/Navbar';
 
 // Configuration
-const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeGYyxFhGLkIPsgpLfCOkYWwS4DrockShZscPNxbe8mkEjZBg/formResponse";
+const GOOGLE_FORM_BASE_URL = "https://docs.google.com/forms/e/1FAIpQLSeGYyxFhGLkIPsgpLfCOkYWwS4DrockShZscPNxbe8mkEjZBg/formResponse";
 
 const ENTRY_IDS = {
     name: 'entry.2117875584',
+    age: 'entry.1199713018',
     district: 'entry.1718190618',
     contact: 'entry.1657225923',
     profession: 'entry.976442586',
@@ -58,11 +61,23 @@ const AgendaStepPage = () => {
     const [showExample, setShowExample] = useState(false);
     const [selectedConcerns, setSelectedConcerns] = useState([]);
     const [formData, setFormData] = useState({
-        name: '', contact: '', district: '', profession: '', otherProfession: '', suggestions: ''
+        name: '', contact: '', district: '', age: '', profession: '', otherProfession: '', suggestions: ''
     });
 
     const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
-    const nextStep = () => { scrollToTop(); setStep((s) => s + 1); };
+
+    const nextStep = () => {
+        if (!formData.name || !formData.district || !formData.contact || !formData.age || !formData.profession) {
+            toast.error("Please fill in all fields.");
+            return;
+        }
+        if (formData.profession === 'Other' && !formData.otherProfession) {
+            toast.error("Please specify your profession.");
+            return;
+        }
+        scrollToTop(); setStep((s) => s + 1);
+    };
+
     const prevStep = () => { scrollToTop(); setStep((s) => s - 1); };
 
     const toggleConcern = (id) => {
@@ -72,6 +87,10 @@ const AgendaStepPage = () => {
 
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
+        if (selectedConcerns.length === 0 || !formData.suggestions) {
+            toast.error("Please select your concerns and provide suggestions.");
+            return;
+        }
 
         const normalizedContact = formData.contact.trim().toLowerCase().replace(/[\s-]/g, '');
         const pastContacts = JSON.parse(localStorage.getItem('submitted_contacts') || '[]');
@@ -89,6 +108,7 @@ const AgendaStepPage = () => {
         queryParams.append(ENTRY_IDS.name, formData.name);
         queryParams.append(ENTRY_IDS.district, formData.district);
         queryParams.append(ENTRY_IDS.contact, formData.contact);
+        queryParams.append(ENTRY_IDS.age, formData.age);
         queryParams.append(ENTRY_IDS.profession, finalProfession);
         queryParams.append(ENTRY_IDS.concerns, selectedConcerns.join(', '));
         queryParams.append(ENTRY_IDS.suggestions, formData.suggestions);
@@ -123,8 +143,7 @@ const AgendaStepPage = () => {
 
             <main className="max-w-[1400px] mx-auto px-6 lg:px-20 pt-40 pb-32">
                 <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
-
-                    {/* LEFT SIDEBAR WITH FULL DESCRIPTIONS */}
+                    {/* LEFT SIDEBAR */}
                     <div className="lg:w-1/3">
                         <div className="lg:sticky lg:top-40 space-y-12">
                             <div className="space-y-6">
@@ -156,28 +175,32 @@ const AgendaStepPage = () => {
 
                     {/* RIGHT FORM AREA */}
                     <div className="lg:w-2/3">
+                        {/* ... Existing Step 1 & 2 content remains same as your original ... */}
                         <AnimatePresence mode="wait">
                             {step === 1 && (
                                 <motion.div key="step1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-16">
                                     <div className="grid md:grid-cols-1 gap-12">
                                         <div className="space-y-4">
-                                            <label className={labelStyle}>Full Name / पूरा नाम</label>
+                                            <label className={labelStyle}>Full Name / पूरा नाम *</label>
                                             <input type="text" placeholder="Your Name" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-2xl font-medium focus:border-[#2D5A43] outline-none transition-colors" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                                         </div>
-                                        <div className="grid md:grid-cols-2 gap-12">
+                                        <div className="grid md:grid-cols-3 gap-12">
                                             <div className="space-y-4">
-                                                <label className={labelStyle}>District / जिल्ला</label>
+                                                <label className={labelStyle}>District / जिल्ला *</label>
                                                 <input type="text" placeholder="Location" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} />
                                             </div>
                                             <div className="space-y-4">
-                                                <label className={labelStyle}>Contact / सम्पर्क (Unique Phone/Email)</label>
+                                                <label className={labelStyle}>Age / उमेर *</label>
+                                                <input type="number" placeholder="Age" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.age} onChange={e => setFormData({ ...formData, age: e.target.value })} />
+                                            </div>
+                                            <div className="space-y-4">
+                                                <label className={labelStyle}>Contact / सम्पर्क *</label>
                                                 <input type="text" placeholder="Email or Phone" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
                                             </div>
                                         </div>
                                     </div>
-
                                     <div className="space-y-8">
-                                        <label className={labelStyle}>Select Profession / पेशा वा भूमिका</label>
+                                        <label className={labelStyle}>Select Profession / पेशा वा भूमिका *</label>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
                                             {PROFESSIONS.map(p => (
                                                 <button key={p.en} onClick={() => setFormData({ ...formData, profession: p.en })} className={`group text-left p-4 rounded-xl border transition-all duration-200 ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}>
@@ -186,11 +209,14 @@ const AgendaStepPage = () => {
                                                 </button>
                                             ))}
                                         </div>
+                                        {formData.profession === 'Other' && (
+                                            <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="pt-4">
+                                                <label className={labelStyle}>Specify Profession / पेशा खुलाउनुहोस् *</label>
+                                                <input type="text" placeholder="Your specific profession" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.otherProfession} onChange={e => setFormData({ ...formData, otherProfession: e.target.value })} />
+                                            </motion.div>
+                                        )}
                                     </div>
-
-                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-8 rounded-2xl text-[14px] font-bold uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all shadow-xl">
-                                        Proceed to Vision
-                                    </button>
+                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-8 rounded-2xl text-[14px] font-bold uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all shadow-xl">Proceed to Vision</button>
                                 </motion.div>
                             )}
 
@@ -198,7 +224,7 @@ const AgendaStepPage = () => {
                                 <motion.div key="step2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-16">
                                     <div className="space-y-8">
                                         <div className="space-y-4">
-                                            <label className={labelStyle}>Core Concerns / सरोकारका मुख्य विषयहरू</label>
+                                            <label className={labelStyle}>Core Concerns / सरोकारका मुख्य विषयहरू *</label>
                                             <p className="text-lg text-black/50">Select all that apply / लागू हुने सबै छनोट गर्नुहोस्।</p>
                                         </div>
                                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -213,34 +239,26 @@ const AgendaStepPage = () => {
                                             })}
                                         </div>
                                     </div>
-
                                     <div className="space-y-10">
                                         <div className="space-y-6 p-10 bg-white rounded-[2rem] border border-black/5 shadow-sm">
-                                            <div className="space-y-4">
-                                                <div className="flex justify-between items-center">
-                                                    <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies</h3>
-                                                    <button onClick={() => setShowExample(!showExample)} className="flex items-center gap-2 text-sm font-bold text-[#2D5A43] hover:underline">
-                                                        <Info size={16} /> {showExample ? "Hide Example" : "See Example"}
-                                                    </button>
-                                                </div>
-                                                <p className={bodyTextStyle}>Please share your concrete suggestions or policies you wish to see implemented.</p>
-                                                <p className="text-lg text-[#2D5A43] font-medium italic">नेपाल निर्माणका लागि तपाईंले देख्न चाहनुभएको ठोस सुझाव, नीतिहरू वा स्थानीय क्षेत्रका समस्याहरू यहाँ उल्लेख गर्नुहोस्।</p>
+                                            <div className="flex justify-between items-center">
+                                                <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies *</h3>
+                                                <button onClick={() => setShowExample(!showExample)} className="flex items-center gap-2 text-sm font-bold text-[#2D5A43] hover:underline">
+                                                    <Info size={16} /> {showExample ? "Hide Example" : "See Example"}
+                                                </button>
                                             </div>
-
+                                            <p className={bodyTextStyle}>Please share your concrete suggestions or policies you wish to see implemented.</p>
+                                            <p className="text-lg text-[#2D5A43] font-medium italic">नेपाल निर्माणका लागि तपाईंले देख्न चाहनुभएको ठोस सुझाव, नीतिहरू वा स्थानीय क्षेत्रका समस्याहरू यहाँ उल्लेख गर्नुहोस्।</p>
                                             <AnimatePresence>
                                                 {showExample && (
                                                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                                                        <p className="bg-[#FAF9F6] p-6 rounded-xl text-black/50 text-[15px] italic mb-4 border-l-4 border-[#2D5A43]">
-                                                            "{EXAMPLE_VISION}"
-                                                        </p>
+                                                        <p className="bg-[#FAF9F6] p-6 rounded-xl text-black/50 text-[15px] italic mb-4 border-l-4 border-[#2D5A43]">"{EXAMPLE_VISION}"</p>
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>
-
                                             <textarea className="w-full bg-[#FAF9F6] rounded-2xl p-8 h-80 text-lg font-sans outline-none border border-black/5 focus:border-[#2D5A43]/30 transition-all resize-none" placeholder="Your suggestions..." value={formData.suggestions} onChange={e => setFormData({ ...formData, suggestions: e.target.value })} />
                                         </div>
                                     </div>
-
                                     <div className="flex flex-col sm:flex-row gap-6">
                                         <button onClick={prevStep} className="sm:w-1/4 py-6 rounded-2xl border-2 border-black/5 font-bold text-[12px] uppercase tracking-widest hover:bg-black/5 transition-all">Back</button>
                                         <button onClick={handleSubmit} disabled={isSubmitting} className="flex-1 bg-[#13231F] text-white py-6 rounded-2xl font-bold text-[14px] uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all flex justify-center items-center gap-4 shadow-2xl">
@@ -257,7 +275,7 @@ const AgendaStepPage = () => {
                                             <ShieldAlert size={100} className="mx-auto text-red-500 stroke-[1px]" />
                                             <div className="space-y-4 px-10">
                                                 <h2 className="text-4xl font-bold tracking-tighter">Limit Reached</h2>
-                                                <p className="text-xl text-black/40">This contact number has already been used to set an agenda on this device. We only allow one entry per unique contact.</p>
+                                                <p className="text-xl text-black/40">This contact number has already been used to set an agenda on this device.</p>
                                                 <button onClick={() => { setStep(1); setIsRestricted(false); }} className="text-[#2D5A43] font-bold underline">Try a different contact</button>
                                             </div>
                                         </>
@@ -268,6 +286,11 @@ const AgendaStepPage = () => {
                                                 <h2 className="text-6xl font-bold tracking-tighter">धन्यवाद</h2>
                                                 <p className="text-xl text-black/40">Your response has been successfully recorded.</p>
                                             </div>
+                                            <div className="pt-4">
+                                                <a href="/volunteer" className="inline-flex items-center gap-3 bg-[#13231F] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-[#2D5A43] transition-all group">
+                                                    Join the Cohort <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
+                                                </a>
+                                            </div>
                                         </>
                                     )}
                                     <p className="font-bold text-sm uppercase tracking-widest text-[#2D5A43]">The Agenda Cohort 2082</p>
@@ -276,6 +299,71 @@ const AgendaStepPage = () => {
                         </AnimatePresence>
                     </div>
                 </div>
+
+                {/* ENHANCED SPONSORS SECTION */}
+                <div className="mt-40 pt-20 border-t border-black/5">
+                    <div className="text-center space-y-4 mb-16">
+                        <p className={labelStyle}>Strategic Partners / सहकार्य</p>
+                        <h3 className="text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
+                        <p className="max-w-2xl mx-auto text-black/50 text-lg">
+                            Collaborating with organizations dedicated to legal excellence and social impact.
+                        </p>
+                    </div>
+
+                    <div className="flex flex-wrap justify-center gap-10 md:gap-16">
+                        {/* Sponsor 1: Robin Law */}
+                        <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
+                            className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
+
+                            {/* Black Background Container for Logo */}
+                            <div className="h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
+                                <img
+                                    src={robinLogo}
+                                    alt="Robin Law and Policy Associates"
+                                    className="max-h-20 max-w-[80%] object-contain grayscale brightness-200 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
+                                />
+                            </div>
+
+                            <div className="space-y-4 text-center md:text-left">
+                                <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
+                                    Robin Law & Policy Associates
+                                </h4>
+                                <p className="text-[15px] leading-relaxed text-black/60">
+                                    A premier legal firm specializing in policy research, legislative drafting, and strategic advocacy to foster a rule-based society in Nepal.
+                                </p>
+                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Visit Website <ArrowRight size={14} className="ml-2" />
+                                </div>
+                            </div>
+                        </a>
+
+                        {/* Sponsor 2: Kumari Trust */}
+                        <a href="https://kumaritrust.com" target="_blank" rel="noopener noreferrer"
+                            className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
+
+                            <div className="h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-[1.02]">
+                                <img
+                                    src={kumariLogo}
+                                    alt="Kumari Trust"
+                                    className="max-h-20 max-w-[80%] object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
+                                />
+                            </div>
+
+                            <div className="space-y-4 text-center md:text-left">
+                                <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
+                                    Kumari Trust
+                                </h4>
+                                <p className="text-[15px] leading-relaxed text-black/60">
+                                    A philanthropic initiative dedicated to empowering communities through sustainable health projects, education, and social welfare programs.
+                                </p>
+                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                    Visit Website <ArrowRight size={14} className="ml-2" />
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
             </main>
         </div>
     );

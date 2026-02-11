@@ -1,19 +1,12 @@
 'use client';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, MapPin, Send, Zap } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../components/Navbar/Navbar';
 
 const ProposalPage = () => {
     const [hoveredId, setHoveredId] = useState(null);
-    const [showFab, setShowFab] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => setShowFab(window.scrollY > 400);
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     const fadeIn = {
         initial: { opacity: 0, y: 15 },
@@ -26,44 +19,58 @@ const ProposalPage = () => {
         <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] font-serif overflow-x-hidden relative">
             <Navbar />
 
-            {/* FLOATING ACTION BUTTON */}
-            <AnimatePresence>
-                {showFab && (
+            {/* EYE-CATCHING FLOATING ACTION BUTTON */}
+            <motion.div
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="fixed bottom-8 right-8 md:bottom-12 md:right-12 z-[120] pointer-events-none"
+            >
+                <Link
+                    to="/volunteer"
+                    className="pointer-events-auto relative group flex items-center justify-center h-28 w-28 md:h-32 md:w-32 transition-all active:scale-95"
+                    onMouseEnter={() => setHoveredId('fab')}
+                    onMouseLeave={() => setHoveredId(null)}
+                >
+                    {/* Pulsing Outer Ring for Attention */}
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 20 }}
-                        className="fixed bottom-10 right-10 z-[120] pointer-events-none"
-                    >
-                        <Link
-                            to="/agenda"
-                            className="pointer-events-auto relative group flex items-center justify-center h-24 w-24 transition-all active:scale-95"
-                            onMouseEnter={() => setHoveredId('fab')}
-                            onMouseLeave={() => setHoveredId(null)}
-                        >
-                            <div className="absolute inset-0 rounded-full bg-[#F5F2ED] shadow-[0_10px_30px_rgba(0,0,0,0.08)] border border-[#13231F]/5 z-0" />
-                            <div className="absolute inset-0 z-10 p-[1px]">
-                                <svg viewBox="0 0 100 100" className="w-full h-full">
-                                    <circle cx="50" cy="50" r="48.5" fill="none" stroke="#13231F" strokeWidth="1" className="opacity-10" />
-                                    <motion.circle
-                                        cx="50" cy="50" r="48.5" fill="none" stroke="#2D5A43" strokeWidth="1.5"
-                                        strokeDasharray="305"
-                                        initial={{ strokeDashoffset: 305 }}
-                                        animate={{ strokeDashoffset: hoveredId === 'fab' ? 0 : 260 }}
-                                        transition={{ duration: 0.6 }}
-                                    />
-                                </svg>
-                            </div>
-                            <div className="relative z-20 flex flex-col items-center">
-                                <Send size={18} className="mb-1 text-[#2D5A43]" />
-                                <span className="text-[9px] font-sans font-bold uppercase tracking-[0.15em] text-center leading-tight">Join The<br />Cohort</span>
-                            </div>
-                        </Link>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+                        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.1, 0.3] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="absolute inset-0 rounded-full bg-[#2D5A43] z-0"
+                    />
 
-            {/* HERO SECTION (RESTORED TO ORIGINAL) */}
+                    {/* Main Button Body */}
+                    <div className="absolute inset-2 rounded-full bg-[#13231F] shadow-[0_15px_40px_rgba(0,0,0,0.3)] border border-white/10 z-10 transition-transform duration-500 group-hover:scale-105" />
+
+                    {/* Animated SVG Border */}
+                    <div className="absolute inset-0 z-20 p-[2px]">
+                        <svg viewBox="0 0 100 100" className="w-full h-full rotate-[-90deg]">
+                            <motion.circle
+                                cx="50" cy="50" r="48" fill="none" stroke="#F5F2ED" strokeWidth="2"
+                                strokeDasharray="302"
+                                initial={{ strokeDashoffset: 302 }}
+                                animate={{ strokeDashoffset: hoveredId === 'fab' ? 0 : 250 }}
+                                transition={{ duration: 0.8, ease: "easeInOut" }}
+                                className="opacity-80"
+                            />
+                        </svg>
+                    </div>
+
+                    {/* Content */}
+                    <div className="relative z-30 flex flex-col items-center text-[#F5F2ED]">
+                        <motion.div
+                            animate={{ y: hoveredId === 'fab' ? -3 : 0 }}
+                            transition={{ type: "spring", stiffness: 300 }}
+                        >
+                            <Send size={24} className="mb-1 text-[#EAE6DF]" />
+                        </motion.div>
+                        <span className="text-[10px] md:text-[11px] font-sans font-black uppercase tracking-[0.1em] text-center leading-tight">
+                            Join The<br /><span className="text-[#2D5A43]">Cohort</span>
+                        </span>
+                    </div>
+                </Link>
+            </motion.div>
+
+            {/* HERO SECTION */}
             <section className="pt-44 pb-20 px-8 lg:px-20 max-w-7xl mx-auto">
                 <div className="grid lg:grid-cols-12 gap-16 items-start">
                     <motion.div {...fadeIn} className="lg:col-span-8">
@@ -118,15 +125,15 @@ const ProposalPage = () => {
 
                     <div className="grid md:grid-cols-3 gap-12 border-t border-white/10 pt-16">
                         <div className="space-y-4">
-                            <h4 className="text-[#fffff] font-sans font-black uppercase tracking-widest text-[10px]">The Problem</h4>
+                            <h4 className="text-[#ffffff] font-sans font-black uppercase tracking-widest text-[10px]">The Problem</h4>
                             <p className="opacity-70 text-lg">Governance fails when it ignores the lived experience of citizens across Nepal’s diverse geography.</p>
                         </div>
                         <div className="space-y-4">
-                            <h4 className="text-[#fffff] font-sans font-black uppercase tracking-widest text-[10px]">Our Solution</h4>
+                            <h4 className="text-[#ffffff] font-sans font-black uppercase tracking-widest text-[10px]">Our Solution</h4>
                             <p className="opacity-70 text-lg">We capture grassroots priorities to drive real policy decisions—not just during elections, but every day.</p>
                         </div>
                         <div className="space-y-4">
-                            <h4 className="text-[#fffff] font-sans font-black uppercase tracking-widest text-[10px]">The Outcome</h4>
+                            <h4 className="text-[#ffffff] font-sans font-black uppercase tracking-widest text-[10px]">The Outcome</h4>
                             <p className="opacity-70 text-lg">A credible, public framework that political leaders cannot ignore.</p>
                         </div>
                     </div>
@@ -154,7 +161,7 @@ const ProposalPage = () => {
             {/* CONCLUSION & CTA */}
             <section className="py-40 px-8 lg:px-20 max-w-4xl mx-auto text-center">
                 <h3 className="text-4xl md:text-5xl font-serif italic mb-12 leading-tight text-[#13231F]">
-                    Be part of the solution. Help us build a government that truly listens.
+                    Be part of the solution. Let us build a government that truly listens.
                 </h3>
                 <Link to="/agenda" className="bg-[#13231F] text-[#F5F2ED] px-12 py-8 rounded-full font-bold uppercase text-xs tracking-[0.3em] hover:bg-[#2D5A43] transition-all group shadow-2xl inline-flex items-center gap-4 mb-16">
                     Set Your Agenda <ArrowRight size={18} />
