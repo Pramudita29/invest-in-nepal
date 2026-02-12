@@ -4,16 +4,18 @@ import Lenis from '@studio-freight/lenis';
 import { AnimatePresence, motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowLeft, ArrowUpRight, ChevronDown } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Bar, BarChart, Cell, ResponsiveContainer } from 'recharts';
 import { sectorData } from '../data/sectorData';
 
 export default function SectorDetail() {
     const { id } = useParams();
+    const navigate = useNavigate();
     const data = sectorData[id];
     const [openFaq, setOpenFaq] = useState(null);
     const containerRef = useRef(null);
 
+    // Initialize Smooth Scroll (Lenis)
     useEffect(() => {
         const lenis = new Lenis({
             duration: 1.4,
@@ -30,6 +32,7 @@ export default function SectorDetail() {
         return () => lenis.destroy();
     }, []);
 
+    // Scroll Progress for Hero Parallax
     const { scrollYProgress } = useScroll({
         target: containerRef,
         offset: ["start start", "end end"]
@@ -37,25 +40,40 @@ export default function SectorDetail() {
 
     const heroScale = useTransform(scrollYProgress, [0, 0.3], [1, 1.1]);
 
+    // Reset scroll on mount
     useEffect(() => {
         window.scrollTo(0, 0);
     }, [id]);
 
-    if (!data) return <main className="min-h-screen bg-[#F5F2ED] flex items-center justify-center font-serif italic text-2xl uppercase tracking-tighter">Sector Not Found</main>;
+    if (!data) {
+        return (
+            <main className="min-h-screen bg-[#F5F2ED] flex items-center justify-center font-serif italic text-2xl uppercase tracking-tighter text-[#13231F]">
+                Sector Not Found
+            </main>
+        );
+    }
 
     return (
-        <main ref={containerRef} className="min-h-screen bg-[#F5F2ED] font-sans text-[#13231F] selection:bg-[#344E41] selection:text-[#F5F2ED]">
-
-            {/* --- HIGH VISIBILITY BACK BUTTON --- */}
-            <nav className="fixed top-8 left-8 z-50">
-                <Link to="/" className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-[#13231F] rounded-full shadow-[0_20px_50px_rgba(0,0,0,0.2)] transition-all duration-500 hover:scale-105 active:scale-95 border border-[#13231F]/5">
-                    <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
-                    <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold">Return to Index</span>
-                </Link>
-            </nav>
+        <main ref={containerRef} className="relative min-h-screen bg-[#F5F2ED] font-sans text-[#13231F] selection:bg-[#344E41] selection:text-[#F5F2ED]">
 
             {/* --- HERO SECTION --- */}
             <section className="relative h-screen w-full overflow-hidden bg-[#0A0F0D]">
+
+                {/* --- BACK BUTTON (ANCHORED TO HERO ONLY) --- */}
+                <div className="absolute top-32 left-8 z-[40]">
+                    {/* 1. Changed to 'absolute' so it stays inside the Hero section.
+                      2. Top-32 clears standard navbars.
+                      3. Z-40 keeps it visible but usually behind a Navbar (typically z-50+).
+                    */}
+                    <button
+                        onClick={() => window.history.length > 1 ? navigate(-1) : navigate('/')}
+                        className="group inline-flex items-center gap-4 px-6 py-3 bg-white text-[#13231F] rounded-full shadow-[0_10px_30px_rgba(0,0,0,0.3)] transition-all duration-500 hover:scale-105 active:scale-95 border border-white/10"
+                    >
+                        <ArrowLeft className="w-5 h-5 transition-transform group-hover:-translate-x-1" />
+                        <span className="font-mono text-xs uppercase tracking-[0.2em] font-bold">Return to Home</span>
+                    </button>
+                </div>
+
                 <motion.div
                     style={{ scale: heroScale, backgroundImage: `url(${data.heroImage})` }}
                     className="absolute inset-0 bg-cover bg-center grayscale-[10%] brightness-[0.35]"
@@ -162,7 +180,7 @@ export default function SectorDetail() {
                             <div key={i} className="group border-l-2 border-[#13231F]/5 pl-8 py-6 hover:border-[#344E41] transition-all duration-700">
                                 <span className="text-[10px] font-mono text-[#344E41] uppercase mb-8 inline-block tracking-widest font-bold px-3 py-1 border border-[#344E41]/20">{project.status}</span>
                                 <h4 className="text-3xl font-serif lowercase mb-6 leading-tight">{project.name}</h4>
-                                <p className="text-[#13231F]/60 font-bold leading-relaxed mb-10 text-base">{project.details}</p>
+                                <p className="text-[#13231F]/60 font-medium leading-relaxed mb-10 text-base">{project.details}</p>
                                 <div className="text-xs font-mono uppercase tracking-[0.1em] text-[#13231F]/40 flex justify-between items-center pt-6 border-t border-[#13231F]/5">
                                     <span>{project.developer}</span>
                                     <span className="text-[#344E41] font-bold">{project.completion}</span>
@@ -194,8 +212,8 @@ export default function SectorDetail() {
                     </div>
                 </section>
 
-                {/* --- FOOTER CTA (ZERO BOTTOM MARGIN) --- */}
-                <section className="w-full px-4 md:px-8">
+                {/* --- FOOTER CTA --- */}
+                <section className="w-full px-4 md:px-8 pb-4">
                     <div className="relative py-40 bg-[#13231F] rounded-t-2xl text-center overflow-hidden shadow-2xl">
                         <div className="absolute inset-0 opacity-20 grayscale brightness-50 scale-110" style={{ backgroundImage: `url(${data.heroImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
                         <div className="relative z-10 max-w-2xl mx-auto px-8">
@@ -203,7 +221,7 @@ export default function SectorDetail() {
                             <h2 className="text-6xl md:text-8xl font-serif text-[#F5F2ED] mb-16 tracking-tighter lowercase italic leading-none">
                                 Request <span className="not-italic">Advisory.</span>
                             </h2>
-                            <Link to="/invest" className="group inline-flex items-center justify-between gap-12 bg-white text-[#13231F] px-10 md:px-16 py-8 hover:bg-[#A3B18A] transition-all duration-500 rounded-sm shadow-xl w-full md:w-auto min-w-[320px]">
+                            <Link to="/contact-us" className="group inline-flex items-center justify-between gap-12 bg-white text-[#13231F] px-10 md:px-16 py-8 hover:bg-[#A3B18A] transition-all duration-500 rounded-sm shadow-xl w-full md:w-auto min-w-[320px]">
                                 <span className="font-mono text-xs uppercase tracking-[0.5em] font-bold">Initiate Protocol</span>
                                 <ArrowUpRight className="w-5 h-5 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
                             </Link>

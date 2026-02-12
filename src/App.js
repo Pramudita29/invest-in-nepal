@@ -8,6 +8,7 @@ import AboutPage from './pages/AboutPage';
 import AgendaPage from './pages/Agenda';
 import ArticlePage from './pages/ArticlePage';
 import BusinessConsultingPage from './pages/BusinessConsultingPage';
+import ConsultationPage from './pages/ConsultationPage'; // <--- Added this import
 import ContactUsPage from './pages/ContactUsPage';
 import Home from './pages/Home';
 import InitiativesPage from './pages/Initiatives';
@@ -22,7 +23,6 @@ import StartupSupportPage from './pages/StartupSupportPage';
 import StoriesPage from './pages/StoriesPage';
 import StrategicInsightsPage from './pages/StrategicInsightsPage';
 import VolunteerPage from './pages/VolunteerPage'; // <--- Added this import
-import ConsultationPage from './pages/ConsultationPage'; // <--- Added this import
 
 // 1. Root Layout Wrapper
 const RootLayout = () => (
@@ -101,10 +101,10 @@ const router = createBrowserRouter([
             { path: "sector/:id", element: <SectorDetail /> },
             { path: "reason/:slug", element: <ReasonDetail /> },
             { path: "initiatives", element: <InitiativesPage /> },
-            { path: "proposal", element: <ProposalPage /> },
+            { path: "cohort", element: <ProposalPage /> },
             { path: "agenda", element: <AgendaPage /> },
             { path: "volunteer", element: <VolunteerPage /> },
-            { path: "consultation", element: <ConsultationPage /> }, // Add this route// <--- New Route Added
+            { path: "consultation", element: <ConsultationPage /> },
         ]
     }
 ]);
