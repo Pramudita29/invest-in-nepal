@@ -148,7 +148,10 @@ export default function LegalSupportPage() {
                     <p className="text-[#F5F2ED]/40 font-body text-lg mb-12 italic">
                         Our strategic intelligence bridges the gap between vision and regulation.
                     </p>
-                    <button className="inline-flex items-center gap-4 bg-[#004b33] text-white font-mono font-bold py-6 px-12 uppercase tracking-[0.4em] text-[10px] hover:bg-white hover:text-[#13231F] transition-all group">
+                    <button
+                        onClick={() => navigate('/consultation')}
+                        className="inline-flex items-center gap-4 bg-[#004b33] text-white font-mono font-bold py-6 px-12 uppercase tracking-[0.4em] text-[10px] hover:bg-white hover:text-[#13231F] transition-all group"
+                    >
                         Inquire Protocol <Zap size={14} fill="currentColor" />
                     </button>
                 </div>

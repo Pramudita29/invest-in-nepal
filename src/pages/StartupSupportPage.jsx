@@ -122,7 +122,10 @@ export default function StartupSupportPage() {
                             <p className="text-xl font-light italic text-[#13231F]/50 mb-10 max-w-lg">
                                 Providing the strategic capital and institutional mentorship required to build the next generation of Nepali giants.
                             </p>
-                            <button className="px-10 py-5 bg-[#004b33] text-[#F5F2ED] rounded-none font-mono text-xs uppercase tracking-[0.3em] font-bold hover:bg-[#13231F] transition-all flex items-center gap-4">
+                            <button
+                                onClick={() => navigate('/consultation')}
+                                className="px-10 py-5 bg-[#004b33] text-[#F5F2ED] rounded-none font-mono text-xs uppercase tracking-[0.3em] font-bold hover:bg-[#13231F] transition-all flex items-center gap-4"
+                            >
                                 Apply Now <ArrowRight size={18} />
                             </button>
                         </div>

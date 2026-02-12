@@ -209,7 +209,7 @@ export default function StrategyPolicyAdvisory() {
                         Build your venture on a foundation of protocol.
                     </p>
                     <Link
-                        to="/contact"
+                        to="/consultation"
                         className="inline-flex items-center gap-6 bg-[#004b33] text-[#F5F2ED] px-12 py-6 font-mono text-[10px] font-bold uppercase tracking-[0.4em] hover:bg-[#F5F2ED] hover:text-[#13231F] transition-all"
                     >
                         Request Protocol Briefing <ArrowRight size={18} />
