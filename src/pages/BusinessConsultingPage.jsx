@@ -138,7 +138,7 @@ export default function BusinessConsultingPage() {
                         Whether you’re planning growth, restructuring, or a major decision, we’ll help you move forward.
                     </p>
                     <button
-                        onClick={() => navigate('/contact-us')}
+                        onClick={() => navigate('/consultation')}
                         className="group relative inline-flex items-center gap-12 bg-[#13231F] text-white px-16 py-8 hover:bg-[#004b33] transition-all overflow-hidden"
                     >
                         <span className="font-mono text-sm uppercase tracking-[0.5em] font-bold relative z-10">Start a Conversation</span>

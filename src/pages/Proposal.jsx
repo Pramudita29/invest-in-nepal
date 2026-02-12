@@ -3,10 +3,14 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, MapPin, Send, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png'; // Adjust extension (.png/.jpg) if needed
+import kumariLogo from '../assets/images/image.png';
 import Navbar from '../components/Navbar/Navbar';
 
 const ProposalPage = () => {
     const [hoveredId, setHoveredId] = useState(null);
+    const labelStyle = "font-sans font-bold text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
+
 
     const fadeIn = {
         initial: { opacity: 0, y: 15 },
@@ -141,7 +145,7 @@ const ProposalPage = () => {
             </section>
 
             {/* HOW IT WORKS SECTION */}
-            <section className="py-24 px-8 lg:px-20 max-w-7xl mx-auto">
+            <section className="pt-20 pb-0 px-8 lg:px-20 max-w-7xl mx-auto">
                 <h2 className="text-sm font-sans font-black uppercase tracking-[0.3em] text-[#2D5A43] mb-16">How It Works: Your Role in Governance</h2>
                 <div className="grid lg:grid-cols-3 gap-12">
                     {[
@@ -157,6 +161,71 @@ const ProposalPage = () => {
                     ))}
                 </div>
             </section>
+
+            {/* ENHANCED SPONSORS SECTION */}
+            {/* Changed mt-40 to mt-12 to significantly reduce the gap */}
+            <div className="mt-12 pt-10 border-t border-black/5">
+                <div className="text-center space-y-4 mb-16">
+                    <p className={labelStyle}>Strategic Partners / सहकार्य</p>
+                    <h3 className="text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
+                    <p className="max-w-2xl mx-auto text-black/50 text-lg">
+                        Collaborating with organizations dedicated to legal excellence and social impact.
+                    </p>
+                </div>
+
+                <div className="flex flex-wrap justify-center gap-10 md:gap-16">
+                    {/* Sponsor 1: Robin Law */}
+                    <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
+                        className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
+
+                        {/* Black Background Container for Logo */}
+                        <div className="h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
+                            <img
+                                src={robinLogo}
+                                alt="Robin Law and Policy Associates"
+                                className="max-h-20 max-w-[80%] object-contain grayscale brightness-200 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
+                            />
+                        </div>
+
+                        <div className="space-y-4 text-center md:text-left">
+                            <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
+                                Robin Law & Policy Associates
+                            </h4>
+                            <p className="text-[15px] leading-relaxed text-black/60">
+                                A premier legal firm specializing in policy research, legislative drafting, and strategic advocacy to foster a rule-based society in Nepal.
+                            </p>
+                            <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                Visit Website <ArrowRight size={14} className="ml-2" />
+                            </div>
+                        </div>
+                    </a>
+
+                    {/* Sponsor 2: Kumari Trust */}
+                    <a href="https://kumaritrust.com" target="_blank" rel="noopener noreferrer"
+                        className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
+
+                        <div className="h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-[1.02]">
+                            <img
+                                src={kumariLogo}
+                                alt="Kumari Trust"
+                                className="max-h-20 max-w-[80%] object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
+                            />
+                        </div>
+
+                        <div className="space-y-4 text-center md:text-left">
+                            <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
+                                Kumari Trust
+                            </h4>
+                            <p className="text-[15px] leading-relaxed text-black/60">
+                                A philanthropic initiative dedicated to empowering communities through sustainable health projects, education, and social welfare programs.
+                            </p>
+                            <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                Visit Website <ArrowRight size={14} className="ml-2" />
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
 
             {/* CONCLUSION & CTA */}
             <section className="py-40 px-8 lg:px-20 max-w-4xl mx-auto text-center">

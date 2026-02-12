@@ -22,6 +22,7 @@ import StartupSupportPage from './pages/StartupSupportPage';
 import StoriesPage from './pages/StoriesPage';
 import StrategicInsightsPage from './pages/StrategicInsightsPage';
 import VolunteerPage from './pages/VolunteerPage'; // <--- Added this import
+import ConsultationPage from './pages/ConsultationPage'; // <--- Added this import
 
 // 1. Root Layout Wrapper
 const RootLayout = () => (
@@ -102,7 +103,8 @@ const router = createBrowserRouter([
             { path: "initiatives", element: <InitiativesPage /> },
             { path: "proposal", element: <ProposalPage /> },
             { path: "agenda", element: <AgendaPage /> },
-            { path: "volunteer", element: <VolunteerPage /> }, // <--- New Route Added
+            { path: "volunteer", element: <VolunteerPage /> },
+            { path: "consultation", element: <ConsultationPage /> }, // Add this route// <--- New Route Added
         ]
     }
 ]);

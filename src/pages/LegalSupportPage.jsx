@@ -143,7 +143,7 @@ export default function LegalSupportPage() {
             <footer className="bg-[#13231F] py-24 px-6 lg:px-12 text-center overflow-hidden relative">
                 <div className="max-w-3xl mx-auto relative z-10">
                     <h2 className="text-4xl md:text-6xl font-heading text-[#F5F2ED] italic lowercase mb-8">
-                        Ready to <span className="not-italic text-[#004b33]">Scale?</span>
+                        Ready to <span className="not-italic text-[#fffff]">Scale?</span>
                     </h2>
                     <p className="text-[#F5F2ED]/40 font-body text-lg mb-12 italic">
                         Our strategic intelligence bridges the gap between vision and regulation.
