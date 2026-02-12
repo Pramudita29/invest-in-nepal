@@ -66,7 +66,7 @@ export default function NationalAgendaModal() {
                         {/* The "Real" Button */}
                         <div className="flex flex-col items-center gap-5">
                             <button
-                                onClick={() => { handleClose(); navigate('/proposal'); }}
+                                onClick={() => { handleClose(); navigate('/cohort'); }}
                                 className="w-full bg-slate-950 hover:bg-orange-600 text-white font-bold py-4 px-8 rounded-full transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-slate-200 hover:shadow-orange-200 active:scale-[0.98]"
                             >
                                 <span className="text-sm tracking-widest uppercase">Set Your Agenda</span>
