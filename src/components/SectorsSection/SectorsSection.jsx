@@ -27,81 +27,81 @@ export default function DeepHorizontalSectors() {
         .editorial-serif { font-family: 'Cormorant Garamond', serif; }
         .label-sans { font-family: 'Montserrat', sans-serif; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        .smooth-scroll { -webkit-overflow-scrolling: touch; }
       `}</style>
 
       {/* HEADER */}
-      <div className="w-full py-12 px-8 md:px-20 flex justify-between items-end border-b border-black/5 bg-[#F5F2ED] z-20">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-[1px]" style={{ backgroundColor: BRAND.orange }} />
-            <span className="label-sans text-[10px] font-bold uppercase tracking-[0.4em]" style={{ color: BRAND.orange }}>
+      <div className="w-full py-8 md:py-12 px-6 md:px-20 flex justify-between items-end border-b border-black/5 bg-[#F5F2ED] z-20">
+        <div className="space-y-1 md:space-y-2">
+          <div className="flex items-center gap-2 md:gap-3">
+            <div className="w-6 md:w-8 h-[1px]" style={{ backgroundColor: BRAND.orange }} />
+            <span className="label-sans text-[8px] md:text-[10px] font-bold uppercase tracking-[0.3em] md:tracking-[0.4em]" style={{ color: BRAND.orange }}>
               Strategic Capital
             </span>
           </div>
-          <h2 className="editorial-serif text-5xl md:text-7xl italic tracking-tighter" style={{ color: BRAND.green }}>
+          <h2 className="editorial-serif text-4xl md:text-7xl italic tracking-tighter leading-tight" style={{ color: BRAND.green }}>
             Key Sectors.
           </h2>
         </div>
 
-        <div className="hidden md:flex items-center gap-4 pb-2 opacity-40">
-          <span className="label-sans text-[9px] font-bold uppercase tracking-widest" style={{ color: BRAND.green }}>
-            Swipe to Navigate
+        <div className="flex items-center gap-3 md:gap-4 pb-1 md:pb-2 opacity-40">
+          <span className="label-sans text-[8px] md:text-[9px] font-bold uppercase tracking-widest" style={{ color: BRAND.green }}>
+            Swipe
           </span>
-          <MoveRight size={16} style={{ color: BRAND.green }} className="animate-pulse" />
+          <MoveRight style={{ color: BRAND.green }} className="animate-pulse w-3.5 h-3.5 md:w-4 md:h-4" />
         </div>
       </div>
 
       {/* MAIN HORIZONTAL CARDS */}
-      <div className="flex-1 overflow-x-auto overflow-y-hidden flex no-scrollbar snap-x snap-mandatory">
+      <div className="flex-1 overflow-x-auto overflow-y-hidden flex no-scrollbar smooth-scroll snap-x snap-mandatory">
         {sectors.map((item) => (
           <Link
             key={item.id}
             to={`/sector/${item.id}`}
-            className="group relative min-w-[90vw] md:min-w-[40vw] lg:min-w-[30vw] h-full border-r border-black/5 flex flex-col justify-end p-10 md:p-20 snap-start overflow-hidden transition-all duration-700 hover:bg-[#002E28]"
+            className="group relative min-w-[85vw] sm:min-w-[50vw] md:min-w-[40vw] lg:min-w-[30vw] h-full border-r border-black/5 flex flex-col justify-end p-8 sm:p-12 md:p-20 snap-center sm:snap-start overflow-hidden transition-all duration-700 hover:bg-[#002E28]"
           >
-            {/* DARKER INITIAL IMAGE STATE */}
+            {/* IMAGE LAYER */}
             <div className="absolute inset-0 z-0 bg-[#002E28]">
               <img
                 src={item.src}
                 alt={item.title}
-                className="w-full h-full object-cover grayscale opacity-20 group-hover:grayscale-0 group-hover:opacity-60 group-hover:scale-110 transition-all duration-[1.8s] ease-out"
+                className="w-full h-full object-cover grayscale opacity-30 sm:opacity-20 group-hover:grayscale-0 group-hover:opacity-60 group-hover:scale-105 transition-all duration-[1.8s] ease-out"
               />
-              {/* VIGNETTE & GRADIENT */}
-              <div className="absolute inset-0 bg-gradient-to-t from-[#002E28] via-transparent to-transparent opacity-80 group-hover:opacity-100 transition-opacity duration-700" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#002E28] via-[#002E28]/40 sm:via-transparent to-transparent opacity-90 group-hover:opacity-100 transition-opacity duration-700" />
             </div>
 
             {/* CONTENT */}
-            <div className="relative z-10 space-y-4">
-              <span className="editorial-serif text-3xl italic block transition-all duration-500 text-white opacity-40 group-hover:text-[#FF4F00] group-hover:opacity-100">
+            <div className="relative z-10 space-y-3 md:space-y-4 text-left">
+              <span className="editorial-serif text-2xl md:text-3xl italic block transition-all duration-500 text-white opacity-60 sm:opacity-40 group-hover:text-[#FF4F00] group-hover:opacity-100">
                 {item.num}
               </span>
 
               <div>
-                <h3 className="editorial-serif text-4xl md:text-5xl italic leading-none text-white group-hover:translate-x-2 transition-transform duration-500">
+                <h3 className="editorial-serif text-3xl sm:text-4xl md:text-5xl italic leading-none text-white group-hover:translate-x-2 transition-transform duration-500">
                   {item.title}
                 </h3>
-                <p className="label-sans text-[10px] font-bold uppercase tracking-[0.3em] mt-4 text-white/40 group-hover:text-white/70 transition-colors">
+                <p className="label-sans text-[9px] md:text-[10px] font-bold uppercase tracking-[0.2em] md:tracking-[0.3em] mt-3 md:mt-4 text-white/60 sm:text-white/40 group-hover:text-white/70 transition-colors">
                   {item.desc}
                 </p>
               </div>
 
               {/* ACTION INDICATOR */}
-              <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 translate-y-4 group-hover:translate-y-0 transition-all duration-700">
-                <span className="label-sans text-[9px] font-bold uppercase tracking-widest text-white">
+              <div className="flex items-center gap-3 opacity-100 sm:opacity-0 group-hover:opacity-100 translate-y-0 sm:translate-y-4 group-hover:translate-y-0 transition-all duration-700">
+                <span className="label-sans text-[8px] md:text-[9px] font-bold uppercase tracking-widest text-white">
                   Learn More
                 </span>
-                <ArrowRight size={14} className="text-[#FF4F00]" />
+                <ArrowRight className="text-[#FF4F00] w-3 h-3 md:w-3.5 md:h-3.5" />
               </div>
             </div>
           </Link>
         ))}
 
         {/* SPACER AT THE END */}
-        <div className="min-w-[15vw]" />
+        <div className="min-w-[10vw] md:min-w-[15vw]" />
       </div>
 
-      {/* SILENT FOOTER GAP (NO TEXT) */}
-      <div className="w-full h-16 md:h-24 bg-[#F5F2ED] border-t border-black/5" />
+      {/* FOOTER GAP */}
+      <div className="w-full h-12 md:h-24 bg-[#F5F2ED] border-t border-black/5" />
     </section>
   );
 }

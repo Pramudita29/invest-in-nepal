@@ -48,7 +48,7 @@ export default function LegalSupportPage() {
     }, []);
 
     return (
-        <div ref={mainRef} className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white">
+        <div ref={mainRef} className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white overflow-x-hidden">
             {/* FONT IMPORT */}
             <style>
                 {`
@@ -62,9 +62,9 @@ export default function LegalSupportPage() {
             <Navbar />
 
             {/* SEQUOIA INSTITUTIONAL HERO */}
-            <header className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 lg:px-12 border-b border-[#13231F]/10">
+            <header className="relative pt-24 pb-12 md:pt-32 md:pb-20 lg:pt-48 lg:pb-32 px-6 lg:px-12 border-b border-[#13231F]/10">
                 <div className="max-w-7xl mx-auto">
-                    <div className="hero-reveal mb-12">
+                    <div className="hero-reveal mb-8 md:mb-12">
                         <button
                             onClick={() => navigate(-1)}
                             className="group flex items-center gap-3 text-[#004b33] font-mono text-[10px] font-bold uppercase tracking-[0.4em] transition-all hover:translate-x-[-4px]"
@@ -73,15 +73,15 @@ export default function LegalSupportPage() {
                         </button>
                     </div>
 
-                    <div className="grid lg:grid-cols-12 gap-12">
-                        <div className="lg:col-span-8">
-                            <p className="hero-reveal font-mono text-[10px] uppercase tracking-[0.6em] text-[#004b33] font-bold mb-6">
+                    <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+                        <div className="lg:col-span-10 xl:col-span-8">
+                            <p className="hero-reveal font-mono text-[9px] md:text-[10px] uppercase tracking-[0.4em] md:tracking-[0.6em] text-[#004b33] font-bold mb-4 md:mb-6">
                                 Professional Services / 2026
                             </p>
-                            <h1 className="hero-reveal text-6xl md:text-[7rem] font-heading font-normal tracking-tighter leading-[0.85] mb-10 lowercase">
+                            <h1 className="hero-reveal text-5xl sm:text-7xl md:text-8xl lg:text-[7rem] font-heading font-normal tracking-tighter leading-[0.9] md:leading-[0.85] mb-6 md:mb-10 lowercase">
                                 Legal <span className="italic text-[#004b33]">Frameworks.</span>
                             </h1>
-                            <p className="hero-reveal text-xl md:text-2xl text-[#13231F]/60 font-heading italic max-w-2xl leading-relaxed">
+                            <p className="hero-reveal text-lg md:text-2xl text-[#13231F]/60 font-heading italic max-w-2xl leading-relaxed">
                                 "Navigating regulatory complexity with the precision of a strategic partner."
                             </p>
                         </div>
@@ -93,20 +93,20 @@ export default function LegalSupportPage() {
             </header>
 
             {/* PRACTICE AREAS GRID */}
-            <section className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
+            <section className="max-w-7xl mx-auto px-4 md:px-6 lg:px-12 py-12 md:py-24">
                 <div
                     ref={cardsRef}
-                    className="grid md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#13231F]/10 border border-[#13231F]/10"
+                    className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-[#13231F]/10 border border-[#13231F]/10"
                 >
                     {practiceAreas.map((area, i) => {
                         const Icon = area.icon;
                         return (
                             <div
                                 key={i}
-                                className="group bg-[#F5F2ED] p-10 hover:bg-white transition-all duration-500 cursor-pointer flex flex-col min-h-[400px]"
+                                className="group bg-[#F5F2ED] p-8 md:p-10 hover:bg-white transition-all duration-500 cursor-pointer flex flex-col min-h-[350px] md:min-h-[400px]"
                                 onClick={() => navigate(`/legal/${area.id}`)}
                             >
-                                <div className="flex justify-between items-start mb-12">
+                                <div className="flex justify-between items-start mb-8 md:mb-12">
                                     <div className="text-[#004b33] group-hover:scale-110 transition-transform duration-500">
                                         <Icon size={32} strokeWidth={1.2} />
                                     </div>
@@ -116,11 +116,11 @@ export default function LegalSupportPage() {
                                 </div>
 
                                 <div className="mt-auto">
-                                    <h3 className="text-3xl font-heading italic text-[#13231F] mb-6 lowercase group-hover:text-[#004b33] transition-colors">
+                                    <h3 className="text-2xl md:text-3xl font-heading italic text-[#13231F] mb-4 md:mb-6 lowercase group-hover:text-[#004b33] transition-colors">
                                         {area.title}
                                     </h3>
 
-                                    <p className="font-body text-sm text-[#13231F]/50 leading-relaxed mb-10 line-clamp-3">
+                                    <p className="font-body text-sm text-[#13231F]/50 leading-relaxed mb-8 md:mb-10 line-clamp-3 md:line-clamp-4">
                                         {area.desc}
                                     </p>
 
@@ -140,24 +140,24 @@ export default function LegalSupportPage() {
             </section>
 
             {/* INSTITUTIONAL SIGN-OFF */}
-            <footer className="bg-[#13231F] py-24 px-6 lg:px-12 text-center overflow-hidden relative">
+            <footer className="bg-[#13231F] py-16 md:py-24 px-6 lg:px-12 text-center overflow-hidden relative">
                 <div className="max-w-3xl mx-auto relative z-10">
-                    <h2 className="text-4xl md:text-6xl font-heading text-[#F5F2ED] italic lowercase mb-8">
-                        Ready to <span className="not-italic text-[#fffff]">Scale?</span>
+                    <h2 className="text-3xl md:text-6xl font-heading text-[#F5F2ED] italic lowercase mb-6 md:mb-8">
+                        Ready to <span className="not-italic text-white">Scale?</span>
                     </h2>
-                    <p className="text-[#F5F2ED]/40 font-body text-lg mb-12 italic">
+                    <p className="text-[#F5F2ED]/40 font-body text-base md:text-lg mb-8 md:mb-12 italic">
                         Our strategic intelligence bridges the gap between vision and regulation.
                     </p>
                     <button
                         onClick={() => navigate('/consultation')}
-                        className="inline-flex items-center gap-4 bg-[#004b33] text-white font-mono font-bold py-6 px-12 uppercase tracking-[0.4em] text-[10px] hover:bg-white hover:text-[#13231F] transition-all group"
+                        className="inline-flex items-center gap-4 bg-[#004b33] text-white font-mono font-bold py-4 md:py-6 px-8 md:px-12 uppercase tracking-[0.3em] md:tracking-[0.4em] text-[9px] md:text-[10px] hover:bg-white hover:text-[#13231F] transition-all group w-full sm:w-auto justify-center"
                     >
                         Inquire Protocol <Zap size={14} fill="currentColor" />
                     </button>
                 </div>
 
-                {/* Back Decor */}
-                <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 text-[15vw] font-heading font-bold text-white/[0.02] whitespace-nowrap pointer-events-none">
+                {/* Back Decor - Hidden on small mobile to prevent overflow, visible on tablet+ */}
+                <div className="absolute -bottom-6 md:-bottom-10 left-1/2 -translate-x-1/2 text-[18vw] md:text-[15vw] font-heading font-bold text-white/[0.02] whitespace-nowrap pointer-events-none select-none">
                     INSTITUTIONAL ADVISORY
                 </div>
             </footer>

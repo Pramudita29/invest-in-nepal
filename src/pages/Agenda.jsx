@@ -3,7 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, CheckCircle2, Info, Loader2, Send, ShieldAlert } from 'lucide-react';
 import { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png'; // Adjust extension (.png/.jpg) if needed
+import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png';
 import kumariLogo from '../assets/images/image.png';
 import Navbar from '../components/Navbar/Navbar';
 
@@ -129,42 +129,44 @@ const AgendaStepPage = () => {
         }
     };
 
-    const labelStyle = "font-sans font-bold text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
-    const bodyTextStyle = "font-sans text-lg text-black/60 leading-relaxed";
+    const labelStyle = "font-sans font-bold text-[10px] md:text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
+    const bodyTextStyle = "font-sans text-base md:text-lg text-black/60 leading-relaxed";
 
     return (
         <div className="min-h-screen bg-[#FAF9F6] text-[#1A1A1A] font-sans selection:bg-[#2D5A43] selection:text-white">
             <Toaster position="top-center" />
             <Navbar />
 
+            {/* Progress Bar */}
             <div className="fixed top-0 left-0 w-full h-1 bg-black/5 z-[100]">
                 <motion.div className="h-full bg-[#2D5A43]" animate={{ width: `${(step / 3) * 100}%` }} transition={{ duration: 0.8 }} />
             </div>
 
-            <main className="max-w-[1400px] mx-auto px-6 lg:px-20 pt-40 pb-32">
-                <div className="flex flex-col lg:flex-row gap-16 lg:gap-24">
+            <main className="max-w-[1400px] mx-auto px-6 md:px-12 lg:px-20 pt-28 md:pt-40 pb-20 md:pb-32">
+                <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
+
                     {/* LEFT SIDEBAR */}
                     <div className="lg:w-1/3">
-                        <div className="lg:sticky lg:top-40 space-y-12">
-                            <div className="space-y-6">
+                        <div className="lg:sticky lg:top-40 space-y-8 md:space-y-12">
+                            <div className="space-y-4 md:space-y-6">
                                 <h2 className={labelStyle}>Beyond Voting: The Agenda Cohort</h2>
-                                <h1 className="text-5xl font-bold tracking-tight leading-tight text-[#13231F]">
+                                <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight text-[#13231F]">
                                     “भोलिको लागि हाम्रो एजेन्डा”<br />
-                                    <span className="text-[#2D5A43] font-medium">“Your Agenda for Tomorrow”</span>
+                                    <span className="text-[#2D5A43] font-medium text-2xl sm:text-3xl md:text-4xl">“Your Agenda for Tomorrow”</span>
                                 </h1>
                                 <div className="h-[2px] w-20 bg-[#2D5A43]" />
                             </div>
 
-                            <div className="space-y-10">
+                            <div className="space-y-6 md:space-y-10">
                                 <AnimatePresence mode="wait">
                                     {step === 1 ? (
                                         <motion.div key="text1" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
-                                            <p className="text-xl text-[#13231F] font-medium">First, help us understand the perspective behind the vision.</p>
+                                            <p className="text-lg md:text-xl text-[#13231F] font-medium">First, help us understand the perspective behind the vision.</p>
                                             <p className={bodyTextStyle}>तपाईंको पेशा र ठेगानाले तपाईंको दृष्टिकोणलाई बुझ्न मद्दत गर्नेछ।</p>
                                         </motion.div>
                                     ) : step === 2 ? (
                                         <motion.div key="text2" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="space-y-4">
-                                            <p className="text-xl text-[#13231F] font-medium">Define the roadmap. What needs to change?</p>
+                                            <p className="text-lg md:text-xl text-[#13231F] font-medium">Define the roadmap. What needs to change?</p>
                                             <p className={bodyTextStyle}>२०८२ को लागि कार्यदिशा तय गर्नुहोस्। आफ्ना मुख्य सरोकारहरू र ठोस नीतिगत सुझावहरू उल्लेख गर्नुहोस्।</p>
                                         </motion.div>
                                     ) : null}
@@ -175,93 +177,92 @@ const AgendaStepPage = () => {
 
                     {/* RIGHT FORM AREA */}
                     <div className="lg:w-2/3">
-                        {/* ... Existing Step 1 & 2 content remains same as your original ... */}
                         <AnimatePresence mode="wait">
                             {step === 1 && (
-                                <motion.div key="step1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-16">
-                                    <div className="grid md:grid-cols-1 gap-12">
+                                <motion.div key="step1" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 md:space-y-16">
+                                    <div className="space-y-8 md:space-y-12">
                                         <div className="space-y-4">
                                             <label className={labelStyle}>Full Name / पूरा नाम *</label>
-                                            <input type="text" placeholder="Your Name" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-2xl font-medium focus:border-[#2D5A43] outline-none transition-colors" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
+                                            <input type="text" placeholder="Your Name" className="w-full bg-transparent border-b-2 border-black/5 py-3 md:py-4 text-xl md:text-2xl font-medium focus:border-[#2D5A43] outline-none transition-colors" value={formData.name} onChange={e => setFormData({ ...formData, name: e.target.value })} />
                                         </div>
-                                        <div className="grid md:grid-cols-3 gap-12">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
                                             <div className="space-y-4">
                                                 <label className={labelStyle}>District / जिल्ला *</label>
-                                                <input type="text" placeholder="Location" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} />
+                                                <input type="text" placeholder="Location" className="w-full bg-transparent border-b-2 border-black/5 py-2 text-lg focus:border-[#2D5A43] outline-none transition-colors" value={formData.district} onChange={e => setFormData({ ...formData, district: e.target.value })} />
                                             </div>
                                             <div className="space-y-4">
                                                 <label className={labelStyle}>Age / उमेर *</label>
-                                                <input type="number" placeholder="Age" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.age} onChange={e => setFormData({ ...formData, age: e.target.value })} />
+                                                <input type="number" placeholder="Age" className="w-full bg-transparent border-b-2 border-black/5 py-2 text-lg focus:border-[#2D5A43] outline-none transition-colors" value={formData.age} onChange={e => setFormData({ ...formData, age: e.target.value })} />
                                             </div>
                                             <div className="space-y-4">
                                                 <label className={labelStyle}>Contact / सम्पर्क *</label>
-                                                <input type="text" placeholder="Email or Phone" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
+                                                <input type="text" placeholder="Email or Phone" className="w-full bg-transparent border-b-2 border-black/5 py-2 text-lg focus:border-[#2D5A43] outline-none transition-colors" value={formData.contact} onChange={e => setFormData({ ...formData, contact: e.target.value })} />
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="space-y-8">
+                                    <div className="space-y-6 md:space-y-8">
                                         <label className={labelStyle}>Select Profession / पेशा वा भूमिका *</label>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                                             {PROFESSIONS.map(p => (
-                                                <button key={p.en} onClick={() => setFormData({ ...formData, profession: p.en })} className={`group text-left p-4 rounded-xl border transition-all duration-200 ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}>
-                                                    <p className="text-[15px] font-sans font-medium leading-tight mb-1">{p.en}</p>
-                                                    <p className="text-[15px] font-sans font-medium leading-tight">{p.ne}</p>
+                                                <button key={p.en} onClick={() => setFormData({ ...formData, profession: p.en })} className={`group text-left p-4 rounded-xl border transition-all duration-200 ${formData.profession === p.en ? 'border-[#2D5A43] bg-[#2D5A43] text-white shadow-lg' : 'border-black/5 bg-white hover:border-[#2D5A43]/40'}`}>
+                                                    <p className="text-[14px] md:text-[15px] font-sans font-medium leading-tight mb-1">{p.en}</p>
+                                                    <p className="text-[12px] md:text-[13px] opacity-70">{p.ne}</p>
                                                 </button>
                                             ))}
                                         </div>
                                         {formData.profession === 'Other' && (
                                             <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="pt-4">
                                                 <label className={labelStyle}>Specify Profession / पेशा खुलाउनुहोस् *</label>
-                                                <input type="text" placeholder="Your specific profession" className="w-full bg-transparent border-b-2 border-black/5 py-4 text-xl focus:border-[#2D5A43] outline-none transition-colors" value={formData.otherProfession} onChange={e => setFormData({ ...formData, otherProfession: e.target.value })} />
+                                                <input type="text" placeholder="Your specific profession" className="w-full bg-transparent border-b-2 border-black/5 py-3 text-lg focus:border-[#2D5A43] outline-none transition-colors" value={formData.otherProfession} onChange={e => setFormData({ ...formData, otherProfession: e.target.value })} />
                                             </motion.div>
                                         )}
                                     </div>
-                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-8 rounded-2xl text-[14px] font-bold uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all shadow-xl">Proceed to Vision</button>
+                                    <button onClick={nextStep} className="w-full bg-[#13231F] text-white py-6 md:py-8 rounded-2xl text-[12px] md:text-[14px] font-bold uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all shadow-xl">Proceed to Vision</button>
                                 </motion.div>
                             )}
 
                             {step === 2 && (
-                                <motion.div key="step2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-16">
-                                    <div className="space-y-8">
-                                        <div className="space-y-4">
+                                <motion.div key="step2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="space-y-12 md:space-y-16">
+                                    <div className="space-y-6 md:space-y-8">
+                                        <div className="space-y-2 md:space-y-4">
                                             <label className={labelStyle}>Core Concerns / सरोकारका मुख्य विषयहरू *</label>
-                                            <p className="text-lg text-black/50">Select all that apply / लागू हुने सबै छनोट गर्नुहोस्।</p>
+                                            <p className="text-sm md:text-base text-black/50">Select all that apply / लागू हुने सबै छनोट गर्नुहोस्।</p>
                                         </div>
-                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
                                             {CONCERNS.map((item) => {
                                                 const active = selectedConcerns.includes(item.en);
                                                 return (
-                                                    <button key={item.id} onClick={() => toggleConcern(item.id)} className={`text-left p-4 rounded-xl border transition-all duration-200 ${active ? 'bg-[#2D5A43] border-[#2D5A43] text-white' : 'bg-white border-black/5 hover:border-[#2D5A43]/40'}`}>
-                                                        <p className="text-[15px] font-sans font-medium leading-tight mb-1">{item.en}</p>
-                                                        <p className="text-[15px] font-sans font-medium leading-tight">{item.ne}</p>
+                                                    <button key={item.id} onClick={() => toggleConcern(item.id)} className={`text-left p-4 rounded-xl border transition-all duration-200 ${active ? 'bg-[#2D5A43] border-[#2D5A43] text-white shadow-md' : 'bg-white border-black/5 hover:border-[#2D5A43]/40'}`}>
+                                                        <p className="text-[14px] md:text-[15px] font-sans font-medium leading-tight mb-1">{item.en}</p>
+                                                        <p className="text-[12px] md:text-[13px] opacity-70">{item.ne}</p>
                                                     </button>
                                                 );
                                             })}
                                         </div>
                                     </div>
-                                    <div className="space-y-10">
-                                        <div className="space-y-6 p-10 bg-white rounded-[2rem] border border-black/5 shadow-sm">
-                                            <div className="flex justify-between items-center">
-                                                <h3 className="text-2xl font-bold text-[#13231F]">Vision & Concrete Policies *</h3>
-                                                <button onClick={() => setShowExample(!showExample)} className="flex items-center gap-2 text-sm font-bold text-[#2D5A43] hover:underline">
+                                    <div className="space-y-8 md:space-y-10">
+                                        <div className="space-y-6 p-6 md:p-10 bg-white rounded-[1.5rem] md:rounded-[2rem] border border-black/5 shadow-sm">
+                                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                                                <h3 className="text-xl md:text-2xl font-bold text-[#13231F]">Vision & Concrete Policies *</h3>
+                                                <button onClick={() => setShowExample(!showExample)} className="flex items-center gap-2 text-xs md:text-sm font-bold text-[#2D5A43] hover:underline">
                                                     <Info size={16} /> {showExample ? "Hide Example" : "See Example"}
                                                 </button>
                                             </div>
                                             <p className={bodyTextStyle}>Please share your concrete suggestions or policies you wish to see implemented.</p>
-                                            <p className="text-lg text-[#2D5A43] font-medium italic">नेपाल निर्माणका लागि तपाईंले देख्न चाहनुभएको ठोस सुझाव, नीतिहरू वा स्थानीय क्षेत्रका समस्याहरू यहाँ उल्लेख गर्नुहोस्।</p>
+                                            <p className="text-base md:text-lg text-[#2D5A43] font-medium italic">नेपाल निर्माणका लागि तपाईंले देख्न चाहनुभएको ठोस सुझाव, नीतिहरू वा स्थानीय क्षेत्रका समस्याहरू यहाँ उल्लेख गर्नुहोस्।</p>
                                             <AnimatePresence>
                                                 {showExample && (
                                                     <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="overflow-hidden">
-                                                        <p className="bg-[#FAF9F6] p-6 rounded-xl text-black/50 text-[15px] italic mb-4 border-l-4 border-[#2D5A43]">"{EXAMPLE_VISION}"</p>
+                                                        <p className="bg-[#FAF9F6] p-4 md:p-6 rounded-xl text-black/50 text-[13px] md:text-[15px] italic mb-4 border-l-4 border-[#2D5A43]">"{EXAMPLE_VISION}"</p>
                                                     </motion.div>
                                                 )}
                                             </AnimatePresence>
-                                            <textarea className="w-full bg-[#FAF9F6] rounded-2xl p-8 h-80 text-lg font-sans outline-none border border-black/5 focus:border-[#2D5A43]/30 transition-all resize-none" placeholder="Your suggestions..." value={formData.suggestions} onChange={e => setFormData({ ...formData, suggestions: e.target.value })} />
+                                            <textarea className="w-full bg-[#FAF9F6] rounded-xl md:rounded-2xl p-4 md:p-8 h-64 md:h-80 text-base md:text-lg font-sans outline-none border border-black/5 focus:border-[#2D5A43]/30 transition-all resize-none" placeholder="Your suggestions..." value={formData.suggestions} onChange={e => setFormData({ ...formData, suggestions: e.target.value })} />
                                         </div>
                                     </div>
-                                    <div className="flex flex-col sm:flex-row gap-6">
-                                        <button onClick={prevStep} className="sm:w-1/4 py-6 rounded-2xl border-2 border-black/5 font-bold text-[12px] uppercase tracking-widest hover:bg-black/5 transition-all">Back</button>
-                                        <button onClick={handleSubmit} disabled={isSubmitting} className="flex-1 bg-[#13231F] text-white py-6 rounded-2xl font-bold text-[14px] uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all flex justify-center items-center gap-4 shadow-2xl">
+                                    <div className="flex flex-col-reverse sm:flex-row gap-4 md:gap-6">
+                                        <button onClick={prevStep} className="w-full sm:w-1/4 py-5 md:py-6 rounded-2xl border-2 border-black/5 font-bold text-[11px] md:text-[12px] uppercase tracking-widest hover:bg-black/5 transition-all">Back</button>
+                                        <button onClick={handleSubmit} disabled={isSubmitting} className="flex-1 bg-[#13231F] text-white py-5 md:py-6 rounded-2xl font-bold text-[13px] md:text-[14px] uppercase tracking-[0.2em] hover:bg-[#2D5A43] transition-all flex justify-center items-center gap-4 shadow-2xl">
                                             {isSubmitting ? <Loader2 className="animate-spin" /> : <>Submit Response <Send size={18} /></>}
                                         </button>
                                     </div>
@@ -269,101 +270,79 @@ const AgendaStepPage = () => {
                             )}
 
                             {step === 3 && (
-                                <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-40 bg-white rounded-[3rem] border border-black/5 shadow-2xl space-y-10">
+                                <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-20 md:py-40 bg-white rounded-[2rem] md:rounded-[3rem] border border-black/5 shadow-2xl space-y-8 md:space-y-10 px-6">
                                     {isRestricted ? (
                                         <>
-                                            <ShieldAlert size={100} className="mx-auto text-red-500 stroke-[1px]" />
-                                            <div className="space-y-4 px-10">
-                                                <h2 className="text-4xl font-bold tracking-tighter">Limit Reached</h2>
-                                                <p className="text-xl text-black/40">This contact number has already been used to set an agenda on this device.</p>
+                                            <ShieldAlert size={80} className="mx-auto text-red-500 stroke-[1px] md:size-[100px]" />
+                                            <div className="space-y-4">
+                                                <h2 className="text-3xl md:text-4xl font-bold tracking-tighter">Limit Reached</h2>
+                                                <p className="text-lg md:text-xl text-black/40">This contact number has already been used on this device.</p>
                                                 <button onClick={() => { setStep(1); setIsRestricted(false); }} className="text-[#2D5A43] font-bold underline">Try a different contact</button>
                                             </div>
                                         </>
                                     ) : (
                                         <>
-                                            <CheckCircle2 size={100} className="mx-auto text-[#2D5A43] stroke-[1px]" />
+                                            <CheckCircle2 size={80} className="mx-auto text-[#2D5A43] stroke-[1px] md:size-[100px]" />
                                             <div className="space-y-4">
-                                                <h2 className="text-6xl font-bold tracking-tighter">धन्यवाद</h2>
-                                                <p className="text-xl text-black/40">Your response has been successfully recorded.</p>
+                                                <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">धन्यवाद</h2>
+                                                <p className="text-lg md:text-xl text-black/40">Your response has been successfully recorded.</p>
                                             </div>
                                             <div className="pt-4">
-                                                <a href="/volunteer" className="inline-flex items-center gap-3 bg-[#13231F] text-white px-10 py-5 rounded-2xl font-bold uppercase tracking-widest text-sm hover:bg-[#2D5A43] transition-all group">
+                                                <a href="/volunteer" className="inline-flex items-center gap-3 bg-[#13231F] text-white px-8 md:px-10 py-4 md:py-5 rounded-2xl font-bold uppercase tracking-widest text-xs md:text-sm hover:bg-[#2D5A43] transition-all group">
                                                     Join the Cohort <ArrowRight size={18} className="group-hover:translate-x-2 transition-transform" />
                                                 </a>
                                             </div>
                                         </>
                                     )}
-                                    <p className="font-bold text-sm uppercase tracking-widest text-[#2D5A43]">The Agenda Cohort 2082</p>
+                                    <p className="font-bold text-[11px] md:text-sm uppercase tracking-widest text-[#2D5A43]">The Agenda Cohort 2082</p>
                                 </motion.div>
                             )}
                         </AnimatePresence>
                     </div>
                 </div>
 
-                {/* ENHANCED SPONSORS SECTION */}
-                <div className="mt-40 pt-20 border-t border-black/5">
-                    <div className="text-center space-y-4 mb-16">
+                {/* SPONSORS SECTION */}
+                <div className="mt-24 md:mt-40 pt-16 md:pt-20 border-t border-black/5">
+                    <div className="text-center space-y-4 mb-12 md:mb-16 px-4">
                         <p className={labelStyle}>Strategic Partners / सहकार्य</p>
-                        <h3 className="text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
-                        <p className="max-w-2xl mx-auto text-black/50 text-lg">
+                        <h3 className="text-3xl md:text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
+                        <p className="max-w-2xl mx-auto text-black/50 text-base md:text-lg">
                             Collaborating with organizations dedicated to legal excellence and social impact.
                         </p>
                     </div>
 
-                    <div className="flex flex-wrap justify-center gap-10 md:gap-16">
-                        {/* Sponsor 1: Robin Law */}
+                    <div className="flex flex-col md:flex-row flex-wrap justify-center gap-8 md:gap-12">
+                        {/* Sponsor 1 */}
                         <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
-                            className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
-
-                            {/* Black Background Container for Logo */}
-                            <div className="h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
-                                <img
-                                    src={robinLogo}
-                                    alt="Robin Law and Policy Associates"
-                                    className="max-h-20 max-w-[80%] object-contain grayscale brightness-200 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500"
-                                />
+                            className="group relative flex flex-col p-8 md:p-10 bg-white border border-black/5 rounded-[2rem] md:rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[45%] lg:w-[400px]">
+                            <div className="h-28 md:h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
+                                <img src={robinLogo} alt="Robin Law" className="max-h-16 md:max-h-20 max-w-[80%] object-contain grayscale brightness-200 group-hover:grayscale-0 group-hover:brightness-100 transition-all duration-500" />
                             </div>
-
                             <div className="space-y-4 text-center md:text-left">
-                                <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
-                                    Robin Law & Policy Associates
-                                </h4>
-                                <p className="text-[15px] leading-relaxed text-black/60">
-                                    A premier legal firm specializing in policy research, legislative drafting, and strategic advocacy to foster a rule-based society in Nepal.
-                                </p>
-                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                <h4 className="text-lg md:text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">Robin Law & Policy Associates</h4>
+                                <p className="text-sm md:text-[15px] leading-relaxed text-black/60">A premier legal firm specializing in policy research, legislative drafting, and strategic advocacy.</p>
+                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-[10px] md:text-xs uppercase tracking-widest sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                     Visit Website <ArrowRight size={14} className="ml-2" />
                                 </div>
                             </div>
                         </a>
 
-                        {/* Sponsor 2: Kumari Trust */}
+                        {/* Sponsor 2 */}
                         <a href="https://kumaritrust.com" target="_blank" rel="noopener noreferrer"
-                            className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
-
-                            <div className="h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-[1.02]">
-                                <img
-                                    src={kumariLogo}
-                                    alt="Kumari Trust"
-                                    className="max-h-20 max-w-[80%] object-contain grayscale group-hover:grayscale-0 transition-all duration-500"
-                                />
+                            className="group relative flex flex-col p-8 md:p-10 bg-white border border-black/5 rounded-[2rem] md:rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[45%] lg:w-[400px]">
+                            <div className="h-28 md:h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-[1.02]">
+                                <img src={kumariLogo} alt="Kumari Trust" className="max-h-16 md:max-h-20 max-w-[80%] object-contain grayscale group-hover:grayscale-0 transition-all duration-500" />
                             </div>
-
                             <div className="space-y-4 text-center md:text-left">
-                                <h4 className="text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">
-                                    Kumari Trust
-                                </h4>
-                                <p className="text-[15px] leading-relaxed text-black/60">
-                                    A philanthropic initiative dedicated to empowering communities through sustainable health projects, education, and social welfare programs.
-                                </p>
-                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+                                <h4 className="text-lg md:text-xl font-bold text-[#13231F] group-hover:text-[#2D5A43] transition-colors">Kumari Trust</h4>
+                                <p className="text-sm md:text-[15px] leading-relaxed text-black/60">A philanthropic initiative dedicated to empowering communities through sustainable health and education.</p>
+                                <div className="pt-2 flex items-center justify-center md:justify-start text-[#2D5A43] font-bold text-[10px] md:text-xs uppercase tracking-widest sm:opacity-0 group-hover:opacity-100 transition-opacity">
                                     Visit Website <ArrowRight size={14} className="ml-2" />
                                 </div>
                             </div>
                         </a>
                     </div>
                 </div>
-
             </main>
         </div>
     );

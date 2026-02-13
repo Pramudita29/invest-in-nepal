@@ -8,6 +8,9 @@ import Navbar from '../components/Navbar/Navbar';
 
 export default function ContactUsPage() {
   const [budget, setBudget] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [statusMessage, setStatusMessage] = useState("");
+
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -27,18 +30,53 @@ export default function ContactUsPage() {
     }
   };
 
-  // Simplified Budget in NPR
+  // --- FORM SUBMISSION LOGIC ---
+  const onSubmit = async (event) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    setStatusMessage("Sending your message...");
+
+    const formData = new FormData(event.target);
+
+    // Add the budget and access key to the form data
+    formData.append("access_key", "481c59ef-2625-4f2c-997a-3311e1529749");
+    formData.append("budget_npr", budget || "Not selected");
+
+    try {
+      const response = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        body: formData
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setStatusMessage("Success! We'll be in touch soon.");
+        event.target.reset();
+        setBudget(null);
+      } else {
+        setStatusMessage("Something went wrong. Please try again.");
+        console.error("Error", data);
+      }
+    } catch (error) {
+      setStatusMessage("Network error. Please check your connection.");
+      console.error("Submit Error:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   const budgets = ["Under 1 Lakh", "1L - 5 Lakh", "5L - 10 Lakh", "10 Lakh+"];
 
   return (
-    <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white antialiased">
+    <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white antialiased font-body">
       <style>
         {`
-                    @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap');
-                    .font-heading { font-family: 'Playfair Display', serif; }
-                    .font-body { font-family: 'Hanken Grotesk', sans-serif; }
-                    .font-mono { font-family: 'JetBrains Mono', monospace; }
-                `}
+            @import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@500&display=swap');
+            .font-heading { font-family: 'Playfair Display', serif; }
+            .font-body { font-family: 'Hanken Grotesk', sans-serif; }
+            .font-mono { font-family: 'JetBrains Mono', monospace; }
+        `}
       </style>
 
       <Navbar />
@@ -88,24 +126,42 @@ export default function ContactUsPage() {
 
         {/* RIGHT PANEL */}
         <div className="bg-white p-8 lg:p-24">
-          <form className="max-w-xl space-y-12">
+          <form onSubmit={onSubmit} className="max-w-xl space-y-12">
 
             {/* SECTION 1 */}
             <div className="space-y-8">
               <span className="font-mono text-[18px] text-[#004b33] font-bold tracking-tighter">01 / Your Info</span>
               <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
                 <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Name & Company</label>
-                <input type="text" placeholder="Your name or business" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+                <input
+                  required
+                  name="Name_and_Company"
+                  type="text"
+                  placeholder="Your name or business"
+                  className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]"
+                />
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                 <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
                   <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Email Address</label>
-                  <input type="email" placeholder="name@email.com" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+                  <input
+                    required
+                    name="email"
+                    type="email"
+                    placeholder="name@email.com"
+                    className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]"
+                  />
                 </div>
                 <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
                   <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Phone Number</label>
-                  <input type="tel" placeholder="+977" className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]" />
+                  <input
+                    required
+                    name="phone"
+                    type="tel"
+                    placeholder="+977"
+                    className="w-full bg-transparent font-body text-xl outline-none placeholder:opacity-20 text-[#13231F]"
+                  />
                 </div>
               </div>
             </div>
@@ -115,7 +171,13 @@ export default function ContactUsPage() {
               <span className="font-mono text-[18px] text-[#004b33] font-bold tracking-tighter">02 / Project</span>
               <div className="group border-b border-[#13231F]/10 focus-within:border-[#004b33] transition-colors pb-4">
                 <label className="block font-mono text-[12px] uppercase tracking-widest text-[#000000] mb-2 font-bold">Project Details</label>
-                <textarea rows={4} placeholder="Tell us what you are building..." className="w-full bg-transparent font-body text-xl outline-none resize-none placeholder:opacity-20 text-[#13231F]" />
+                <textarea
+                  required
+                  name="Project_Details"
+                  rows={4}
+                  placeholder="Tell us what you are building..."
+                  className="w-full bg-transparent font-body text-xl outline-none resize-none placeholder:opacity-20 text-[#13231F]"
+                />
               </div>
             </div>
 
@@ -141,10 +203,23 @@ export default function ContactUsPage() {
 
             {/* SUBMIT */}
             <div className="pt-12">
-              <button className="w-full group flex items-center justify-between bg-[#13231F] text-white p-8 hover:bg-[#004b33] transition-colors duration-500 shadow-xl">
-                <span className="font-mono text-[11px] uppercase tracking-[0.6em] font-bold">Send Message</span>
-                <Send size={18} className="group-hover:translate-x-2 transition-transform" />
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="w-full group flex items-center justify-between bg-[#13231F] text-white p-8 hover:bg-[#004b33] transition-colors duration-500 shadow-xl disabled:bg-gray-400 disabled:cursor-not-allowed"
+              >
+                <span className="font-mono text-[11px] uppercase tracking-[0.6em] font-bold">
+                  {isSubmitting ? "Sending..." : "Send Message"}
+                </span>
+                <Send size={18} className={`${isSubmitting ? 'animate-pulse' : 'group-hover:translate-x-2'} transition-transform`} />
               </button>
+
+              {/* STATUS NOTIFICATION */}
+              {statusMessage && (
+                <p className="mt-6 font-mono text-[10px] uppercase tracking-widest text-[#004b33] font-bold text-center">
+                  {statusMessage}
+                </p>
+              )}
             </div>
           </form>
 
@@ -154,7 +229,6 @@ export default function ContactUsPage() {
               <p className="font-heading text-2xl italic leading-none text-[#000000]">Need a call?</p>
               <p className="font-mono text-[9px] uppercase tracking-widest text-[#000000] mt-2 font-bold">Schedule a free 30-min meeting</p>
             </div>
-
           </div>
         </div>
       </main>

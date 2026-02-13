@@ -92,11 +92,12 @@ export default function RegisterInnovateGuide() {
   }, []);
 
   return (
-    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#F5F2ED] text-[#13231F] min-h-screen">
+    <motion.section initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-[#F5F2ED] text-[#13231F] min-h-screen overflow-x-hidden">
 
       {/* --- HERO: ARCHITECTURAL OVERLAP --- */}
-      <header className="relative w-full h-[90vh] flex items-center pt-20">
-        <div className="absolute top-0 right-0 w-full lg:w-2/3 h-[85%] overflow-hidden">
+      <header className="relative w-full min-h-[80vh] lg:h-[90vh] flex items-center pt-20 lg:pt-0">
+        {/* Background Image: Becomes top-aligned on mobile */}
+        <div className="absolute top-0 right-0 w-full lg:w-2/3 h-[50vh] lg:h-[85%] overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=1200&q=80"
             className="w-full h-full object-cover grayscale-[30%] brightness-75"
@@ -104,41 +105,41 @@ export default function RegisterInnovateGuide() {
           />
         </div>
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-8 md:px-16">
-          <div className="bg-[#F5F2ED] p-12 md:p-20 max-w-3xl shadow-[30px_0_60px_-15px_rgba(0,0,0,0.1)] border-l-4 border-[#004B33]">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-8 md:px-16 mt-[35vh] lg:mt-0">
+          <div className="bg-[#F5F2ED] p-8 md:p-12 lg:p-20 max-w-3xl shadow-xl lg:shadow-[30px_0_60px_-15px_rgba(0,0,0,0.1)] border-l-4 border-[#004B33]">
             <button
               onClick={() => navigate(-1)}
-              className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#004B33] mb-10 flex items-center gap-2 hover:-translate-x-2 transition-transform"
+              className="font-mono text-[10px] uppercase tracking-[0.4em] text-[#004B33] mb-6 md:mb-10 flex items-center gap-2 hover:-translate-x-2 transition-transform"
             >
-              <ArrowLeft size={14} /> Back to Hub
+              <ArrowLeft size={14} /> Back
             </button>
-            <h1 className="text-5xl md:text-8xl font-serif tracking-tighter leading-none lowercase mb-10">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-serif tracking-tighter leading-tight lg:leading-none lowercase mb-6 md:mb-10">
               Start Your Company <br /> in <span className="italic text-[#004B33]">Nepal.</span>
             </h1>
-            <p className="text-xl md:text-2xl font-light text-[#13231F]/60 italic leading-relaxed border-t border-[#13231F]/10 pt-10">
-              100% Online • 7–15 Days • From idea to legal entity — zero office visits.
+            <p className="text-lg md:text-2xl font-light text-[#13231F]/60 italic leading-relaxed border-t border-[#13231F]/10 pt-6 md:pt-10">
+              100% Online • 7–15 Days • Zero office visits.
             </p>
           </div>
         </div>
       </header>
 
       {/* --- NARRATIVE SECTION --- */}
-      <article className="max-w-7xl mx-auto px-8 md:px-16 py-32">
-        <div className="max-w-3xl mb-32">
-          <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#004B33] mb-6 block font-bold">The 2026 Landscape</span>
-          <h2 className="text-4xl md:text-5xl font-serif italic mb-8 lowercase">Why Register?</h2>
-          <p className="text-xl text-[#13231F]/70 font-light leading-relaxed">
+      <article className="max-w-7xl mx-auto px-6 sm:px-8 md:px-16 py-20 md:py-32">
+        <div className="max-w-3xl mb-16 md:mb-32">
+          <span className="font-mono text-[10px] uppercase tracking-[0.5em] text-[#004B33] mb-4 md:mb-6 block font-bold">The 2026 Landscape</span>
+          <h2 className="text-3xl md:text-5xl font-serif italic mb-6 md:mb-8 lowercase text-[#13231F]">Why Register?</h2>
+          <p className="text-lg md:text-xl text-[#13231F]/70 font-light leading-relaxed">
             Nepal saw 200+ startups funded this year. But 68% fail to raise without proper registration.
-            Unlock grants, bank accounts, hiring, and investor trust today.
+            Unlock grants, bank accounts, and investor trust today.
           </p>
         </div>
 
-        {/* --- THE 6-STEP ROADMAP (CLEAN GRID) --- */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-[#13231F]/10 border border-[#13231F]/10">
+        {/* --- THE 6-STEP ROADMAP --- */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-px bg-[#13231F]/10 border border-[#13231F]/10">
           {steps.map((step, i) => (
-            <div key={i} className="bg-white p-12 flex flex-col justify-between hover:bg-[#F9F7F2] transition-colors group">
+            <div key={i} className="bg-white p-8 md:p-12 flex flex-col justify-between hover:bg-[#F9F7F2] transition-colors group">
               <div>
-                <div className="flex justify-between items-start mb-12">
+                <div className="flex justify-between items-start mb-8 md:mb-12">
                   <div className="p-4 bg-[#F5F2ED] group-hover:bg-[#004B33] transition-colors">
                     <step.icon size={24} className="text-[#004B33] group-hover:text-white transition-colors" />
                   </div>
@@ -147,12 +148,12 @@ export default function RegisterInnovateGuide() {
                     <span className="block font-mono text-[9px] uppercase tracking-widest opacity-30 mt-1">{step.cost}</span>
                   </div>
                 </div>
-                <h3 className="text-2xl font-serif mb-6 lowercase italic">{step.title}</h3>
-                <p className="text-[#13231F]/60 mb-8 font-light leading-relaxed">{step.description}</p>
-                <ul className="space-y-4 mb-12">
+                <h3 className="text-xl md:text-2xl font-serif mb-4 md:mb-6 lowercase italic">{step.title}</h3>
+                <p className="text-sm md:text-base text-[#13231F]/60 mb-6 md:mb-8 font-light leading-relaxed">{step.description}</p>
+                <ul className="space-y-3 md:space-y-4 mb-8 md:mb-12">
                   {step.details.map((d, j) => (
-                    <li key={j} className="flex items-start gap-3 text-[11px] font-mono uppercase tracking-widest opacity-50 leading-tight">
-                      <Check size={12} className="text-[#004B33] mt-0.5" /> {d}
+                    <li key={j} className="flex items-start gap-3 text-[10px] md:text-[11px] font-mono uppercase tracking-widest opacity-60 leading-tight">
+                      <Check size={12} className="text-[#004B33] mt-0.5 flex-shrink-0" /> {d}
                     </li>
                   ))}
                 </ul>
@@ -166,50 +167,56 @@ export default function RegisterInnovateGuide() {
         </div>
       </article>
 
-      {/* --- FEE TABLE: TABULAR PRECISION --- */}
-      <section className="bg-white py-32 border-y border-[#13231F]/5">
-        <div className="max-w-4xl mx-auto px-8">
-          <h3 className="text-3xl font-serif italic text-center mb-20 lowercase">Official Registration Fees</h3>
-          <div className="overflow-hidden border border-[#13231F]/10">
-            <table className="w-full text-left border-collapse">
-              <thead className="bg-[#F5F2ED]">
-                <tr>
-                  <th className="p-6 font-mono text-[10px] uppercase tracking-widest opacity-40 border-r border-[#13231F]/10">Authorized Capital</th>
-                  <th className="p-6 font-mono text-[10px] uppercase tracking-widest opacity-40 text-right">Fee (NPR)</th>
-                </tr>
-              </thead>
-              <tbody className="font-serif italic text-lg">
-                {feeTiers.map((tier, i) => (
-                  <tr key={i} className="border-t border-[#13231F]/10">
-                    <td className="p-8 border-r border-[#13231F]/10">{tier.capital}</td>
-                    <td className="p-8 text-right text-[#004B33] font-bold">{tier.fee}</td>
+      {/* --- FEE TABLE --- */}
+      <section className="bg-white py-20 md:py-32 border-y border-[#13231F]/5">
+        <div className="max-w-4xl mx-auto px-6 sm:px-8">
+          <h3 className="text-2xl md:text-3xl font-serif italic text-center mb-12 md:mb-20 lowercase">Official Registration Fees</h3>
+          <div className="overflow-x-auto -mx-6 px-6 sm:mx-0 sm:px-0">
+            <div className="inline-block min-w-full align-middle border border-[#13231F]/10">
+              <table className="min-w-full text-left border-collapse">
+                <thead className="bg-[#F5F2ED]">
+                  <tr>
+                    <th className="p-4 md:p-6 font-mono text-[9px] md:text-[10px] uppercase tracking-widest opacity-40 border-r border-[#13231F]/10">Authorized Capital</th>
+                    <th className="p-4 md:p-6 font-mono text-[9px] md:text-[10px] uppercase tracking-widest opacity-40 text-right">Fee (NPR)</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="font-serif italic text-base md:text-lg">
+                  {feeTiers.map((tier, i) => (
+                    <tr key={i} className="border-t border-[#13231F]/10">
+                      <td className="p-6 md:p-8 border-r border-[#13231F]/10">{tier.capital}</td>
+                      <td className="p-6 md:p-8 text-right text-[#004B33] font-bold">{tier.fee}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* --- FINAL CTA: REFINED --- */}
-      <section className="bg-[#13231F] py-32 px-8 text-center rounded-t-[2.5rem] mt-20">
+      {/* --- FINAL CTA --- */}
+      <section className="bg-[#13231F] py-20 md:py-32 px-6 sm:px-8 text-center rounded-t-[2rem] md:rounded-t-[2.5rem] mt-20">
         <div className="max-w-2xl mx-auto">
-          <h2 className="text-5xl md:text-6xl font-serif text-white mb-10 italic lowercase leading-tight">
+          <h2 className="text-4xl md:text-6xl font-serif text-white mb-8 md:mb-10 italic lowercase leading-tight">
             Ready to <span className="not-italic text-[#A3B18A]">Register?</span>
           </h2>
-          <p className="text-[#F5F2ED]/60 font-light italic mb-12">
+          <p className="text-sm md:text-base text-[#F5F2ED]/60 font-light italic mb-10 md:mb-12">
             Let our experts handle everything — from name reservation to certificate delivery in 7–15 days.
           </p>
-          <Link to="/contact" className="group inline-flex items-center gap-10 bg-white text-[#13231F] px-12 py-6 hover:bg-[#F5F2ED] transition-all rounded-sm">
-            <span className="font-mono text-[10px] uppercase tracking-[0.4em] font-bold">Get Expert Help Now</span>
+          <Link to="/contact" className="group w-full sm:w-auto inline-flex items-center justify-between sm:justify-center gap-6 md:gap-10 bg-white text-[#13231F] px-8 md:px-12 py-5 md:py-6 hover:bg-[#F5F2ED] transition-all rounded-sm">
+            <span className="font-mono text-[10px] uppercase tracking-[0.3em] md:tracking-[0.4em] font-bold text-left">Get Expert Help</span>
             <ChevronRight size={18} className="group-hover:translate-x-2 transition-transform" />
           </Link>
         </div>
       </section>
 
       {/* FLOATING CONTACT */}
-      <Link to="/contact" className="fixed bottom-8 right-8 w-14 h-14 bg-[#004B33] text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:scale-110 transition-transform border border-white/10">
-        <PhoneCall size={20} />
+      <Link
+        to="/contact"
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 w-12 h-12 md:w-14 md:h-14 bg-[#004B33] text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:scale-110 active:scale-95 transition-transform border border-white/10"
+      >
+        {/* We use CSS classes to control the icon size instead of the md:size prop */}
+        <PhoneCall className="w-5 h-5 md:w-6 md:h-6" />
       </Link>
     </motion.section>
   );

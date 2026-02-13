@@ -32,7 +32,6 @@ const VolunteerPage = () => {
         otherRole: ''
     });
 
-    // Unified Styles
     const labelStyle = "text-[11px] font-bold uppercase tracking-[0.2em] text-[#2D5A43]/60 mb-2 block";
     const inputStyle = "w-full bg-white/60 border border-[#13231F]/5 rounded-2xl px-6 py-4 text-[#13231F] placeholder:text-[#13231F]/20 focus:border-[#2D5A43]/30 focus:bg-white focus:shadow-sm outline-none transition-all duration-300 font-sans";
 
@@ -54,38 +53,44 @@ const VolunteerPage = () => {
         return true;
     };
 
+    // --- GOOGLE FORM SUBMISSION LOGIC ---
     const handleSubmit = async (e) => {
         if (e) e.preventDefault();
         if (!validate()) return;
         setIsSubmitting(true);
 
+        // URL from your provided link (ending in formResponse)
         const GOOGLE_FORM_URL = "https://docs.google.com/forms/d/e/1FAIpQLSeBkYxzeWDx5XIKq2HnR0iBRDoIdsG1x4LC1oLN1WXHQN3jeQ/formResponse";
-
-        const formBody = new FormData();
-        formBody.append('entry.577226955', formData.name);
-        formBody.append('entry.1594764281', formData.email);
-        formBody.append('entry.1614149903', formData.phone);
-        formBody.append('entry.1115223043', formData.location);
 
         const rolesString = selectedRoles.includes('Others')
             ? [...selectedRoles.filter(r => r !== 'Others'), `Other: ${formData.otherRole}`].join(', ')
             : selectedRoles.join(', ');
 
-        const occupationInfo = `Occupation: ${formData.occupation} | Interests: ${rolesString}`;
-
-        formBody.append('entry.1425969737', occupationInfo);
-        formBody.append('entry.2115440581', formData.availability);
-        formBody.append('entry.1438618639', formData.message);
+        // Mapping your state to the Google Form Entry IDs
+        const formBody = new URLSearchParams();
+        formBody.append('entry.577226955', formData.name);         // Name
+        formBody.append('entry.1594764281', formData.phone);        // Phone (Corrected mapping)
+        formBody.append('entry.1614149903', formData.email);        // Email (Corrected mapping)
+        formBody.append('entry.1115223043', formData.location);     // Location
+        formBody.append('entry.628598553', formData.occupation);    // Occupation
+        formBody.append('entry.1425969737', rolesString);           // Roles/Interests
+        formBody.append('entry.2115440581', formData.availability); // Part-time/Volunteer
+        formBody.append('entry.1438618639', formData.message);      // Message/Background
 
         try {
             await fetch(GOOGLE_FORM_URL, {
                 method: 'POST',
-                mode: 'no-cors',
-                body: formBody
+                mode: 'no-cors', // Essential for Google Forms to bypass CORS
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formBody.toString()
             });
+
             setIsSubmitted(true);
             window.scrollTo({ top: 0, behavior: 'smooth' });
         } catch (error) {
+            console.error("Submission error:", error);
             toast.error("Something went wrong. Please try again.");
         } finally {
             setIsSubmitting(false);
@@ -282,7 +287,7 @@ const VolunteerPage = () => {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-10 md:gap-16">
-                        {/* Robin Law */}
+                        {/* Partner Cards remain the same */}
                         <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
                             className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
                             <div className="h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
@@ -297,7 +302,6 @@ const VolunteerPage = () => {
                             </div>
                         </a>
 
-                        {/* Kumari Trust */}
                         <a href="https://kumaritrust.com" target="_blank" rel="noopener noreferrer"
                             className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
                             <div className="h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-8 transition-transform duration-500 group-hover:scale-[1.02]">
