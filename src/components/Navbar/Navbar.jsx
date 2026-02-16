@@ -1,6 +1,6 @@
 'use client';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react'; // Added Menu icon for mobile
+import { Menu, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ export default function Navbar() {
     useEffect(() => {
         const handleScroll = () => setIsScrolled(window.scrollY > 10);
         window.addEventListener('scroll', handleScroll);
-        // Prevent scrolling when menu is open
+
         if (isOpen) {
             document.body.style.overflow = 'hidden';
         } else {
@@ -65,10 +65,10 @@ export default function Navbar() {
 
     return (
         <>
-            <nav className={`fixed inset-x-0 top-0 z-[100] transition-all duration-500 bg-[#F5F2ED] ${isScrolled ? 'h-16 shadow-sm' : 'h-20'}`}>
+            <nav className={`fixed inset-x-0 top-0 z-[130] transition-all duration-500 bg-[#F5F2ED] ${isScrolled ? 'h-16 shadow-sm' : 'h-20'}`}>
                 <div className="mx-auto max-w-[100rem] h-full px-6 md:px-16 flex items-center justify-between text-[#13231F]">
 
-                    <Link to="/" className="flex flex-col relative z-[120]" onClick={closeMenu}>
+                    <Link to="/" className="flex flex-col relative z-[140]" onClick={closeMenu}>
                         <span className="text-xl md:text-2xl font-serif tracking-tighter uppercase font-semibold leading-none">Stratbridge</span>
                         <span className="text-[9px] font-bold tracking-[0.4em] uppercase mt-1 text-[#344E41] opacity-60 font-sans">Partners</span>
                     </Link>
@@ -79,7 +79,7 @@ export default function Navbar() {
                             <span className="relative z-10">About</span>
                             <AnimatePresence>{hoveredId === 'nav-about' && <SingleStrokeScribble isSmall />}</AnimatePresence>
                         </Link>
-
+                        {/* ... other desktop links ... */}
                         <Link to="/initiatives" className="relative px-4 py-2 flex items-center justify-center group" onMouseEnter={() => setHoveredId('nav-init')} onMouseLeave={() => setHoveredId(null)}>
                             <span className="relative z-10">Initiatives</span>
                             <AnimatePresence>{hoveredId === 'nav-init' && <SingleStrokeScribble isSmall />}</AnimatePresence>
@@ -91,19 +91,27 @@ export default function Navbar() {
                         </Link>
                     </div>
 
-                    {/* TOGGLE BUTTON (Mobile: Menu Icon | Desktop: "Services" label) */}
+                    {/* TOGGLE BUTTON (Works for both Laptop & Mobile) */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
-                        className="relative z-[120] flex items-center gap-2 px-4 py-2 group"
+                        className="relative z-[140] flex items-center gap-3 px-4 py-2 group transition-colors"
                         onMouseEnter={() => setHoveredId('nav-services')}
                         onMouseLeave={() => setHoveredId(null)}
                     >
+                        {/* Desktop Text Toggle */}
                         <span className="hidden md:block text-[13px] font-serif font-bold uppercase tracking-widest relative z-10">
                             {isOpen ? 'Close' : 'Services'}
                         </span>
-                        <div className="md:hidden relative z-10 p-2">
-                            {isOpen ? <X size={24} strokeWidth={1.5} /> : <Menu size={24} strokeWidth={1.5} />}
+
+                        {/* Icon Toggle (Always visible on mobile, Cross shows on Desktop when open) */}
+                        <div className="relative z-10 flex items-center justify-center">
+                            {isOpen ? (
+                                <X size={22} strokeWidth={1.5} className="text-[#13231F]" />
+                            ) : (
+                                <Menu size={22} strokeWidth={1.5} className="md:hidden lg:hidden" />
+                            )}
                         </div>
+
                         <AnimatePresence>
                             {(hoveredId === 'nav-services' || (isOpen && hoveredId === null)) && <SingleStrokeScribble isSmall />}
                         </AnimatePresence>
@@ -112,7 +120,7 @@ export default function Navbar() {
             </nav>
 
             {/* SERVICES OVERLAY */}
-            <div className={`fixed inset-0 z-[110] transform transition-transform duration-[0.8s] cubic-bezier(0.19,1,0.22,1) ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
+            <div className={`fixed inset-0 z-[110] transform transition-transform duration-[0.8s] ease-[cubic-bezier(0.19,1,0.22,1)] ${isOpen ? 'translate-y-0' : '-translate-y-full'}`}>
                 <div className="h-full w-full bg-[#F5F2ED] flex flex-col pt-32 md:pt-40 px-6 md:px-20 overflow-y-auto overflow-x-hidden">
                     <div className="max-w-7xl mx-auto w-full pb-20">
                         <div className="grid lg:grid-cols-12 gap-12 text-[#13231F]">

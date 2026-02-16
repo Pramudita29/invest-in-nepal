@@ -3,8 +3,6 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { ArrowRight, Check, CheckCircle2, Loader2, Sparkles, Users } from 'lucide-react';
 import { useState } from 'react';
 import { toast, Toaster } from 'react-hot-toast';
-import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png';
-import kumariLogo from '../assets/images/image.png';
 import Navbar from '../components/Navbar/Navbar';
 
 const ROLES = [
@@ -277,7 +275,7 @@ const VolunteerPage = () => {
                 </AnimatePresence>
 
                 {/* PARTNERS SECTION */}
-                <div className="mt-40 pt-20 border-t border-black/5">
+                {/* <div className="mt-40 pt-20 border-t border-black/5">
                     <div className="text-center space-y-4 mb-16">
                         <p className={labelStyle}>Strategic Partners / सहकार्य</p>
                         <h3 className="text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
@@ -287,7 +285,6 @@ const VolunteerPage = () => {
                     </div>
 
                     <div className="flex flex-wrap justify-center gap-10 md:gap-16">
-                        {/* Partner Cards remain the same */}
                         <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
                             className="group relative flex flex-col p-10 bg-white border border-black/5 rounded-[2.5rem] hover:shadow-2xl hover:border-[#2D5A43]/20 transition-all duration-500 w-full md:w-[400px]">
                             <div className="h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-8 overflow-hidden transition-transform duration-500 group-hover:scale-[1.02]">
@@ -316,7 +313,7 @@ const VolunteerPage = () => {
                             </div>
                         </a>
                     </div>
-                </div>
+                </div> */}
             </main>
         </div>
     );

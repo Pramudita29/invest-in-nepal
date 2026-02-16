@@ -5,10 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import {
     ArrowLeft,
     ArrowRight,
-    Clock,
     FileText,
-    Globe,
-    MapPin,
     TrendingUp
 } from "lucide-react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
@@ -32,7 +29,7 @@ const getPlainTextFromBlocks = (blocks = []) => {
 export default function StrategicInsightsPage() {
     const mainRef = useRef(null);
     const heroRef = useRef(null);
-    const eventRef = useRef(null);
+    //const eventRef = useRef(null);
     const cardsRef = useRef(null);
     const researchRef = useRef(null);
     const navigate = useNavigate();
@@ -123,43 +120,6 @@ export default function StrategicInsightsPage() {
                 </div>
             </header>
 
-            {/* EVENT SECTION */}
-            <section className="px-6 md:px-12 lg:px-24 py-12 md:py-20 max-w-screen-2xl mx-auto">
-                <div ref={eventRef} className="bg-white border border-[#13231F]/10 flex flex-col lg:flex-row shadow-sm">
-                    <div className="p-8 md:p-12 lg:p-20 flex flex-col justify-center lg:w-3/5 border-b lg:border-b-0 lg:border-r border-[#13231F]/5">
-                        <div className="flex items-center gap-3 text-[#13231F]/40 text-[10px] font-mono uppercase tracking-[0.3em] mb-6 md:mb-8">
-                            <Globe size={14} className="text-[#004b33]" />
-                            <span>Exclusive Invitation</span>
-                        </div>
-                        <h2 className="text-3xl md:text-5xl font-heading font-bold mb-4 text-[#13231F] leading-tight">
-                            Annual Strategy <br className="hidden sm:block" /> Roundtable 2025
-                        </h2>
-                        <p className="text-[#004b33] font-mono font-bold uppercase text-[10px] tracking-[0.2em] mb-8 md:mb-10">
-                            Hosted by StratBridge
-                        </p>
-                        <div className="grid sm:grid-cols-2 gap-6 md:gap-8 mb-10 md:mb-12">
-                            <div className="flex items-center gap-4 text-[#13231F]/70">
-                                <Clock size={18} className="text-[#004b33]" />
-                                <span className="text-[11px] md:text-sm font-mono uppercase tracking-widest font-bold">Dec 22 • 10:00 AM</span>
-                            </div>
-                            <div className="flex items-center gap-4 text-[#13231F]/70">
-                                <MapPin size={18} className="text-[#004b33]" />
-                                <span className="text-[11px] md:text-sm font-mono uppercase tracking-widest font-bold">StratBridge HQ</span>
-                            </div>
-                        </div>
-                        <button className="bg-[#13231F] text-white px-8 md:px-10 py-4 md:py-5 font-mono text-xs uppercase tracking-[0.3em] font-bold hover:bg-[#004b33] transition-colors w-full sm:w-fit">
-                            RSVP Now
-                        </button>
-                    </div>
-                    <div className="lg:w-2/5 relative min-h-[250px] md:min-h-[300px] bg-[#13231F]">
-                        <img
-                            src="https://images.unsplash.com/photo-1511632765486-a01980e01a18?q=80&w=2070"
-                            alt="Strategy Roundtable Event"
-                            className="absolute inset-0 w-full h-full object-cover grayscale opacity-40"
-                        />
-                    </div>
-                </div>
-            </section>
 
             {/* FEATURED REPORTS */}
             <section className="bg-white border-y border-[#13231F]/10">
@@ -260,16 +220,7 @@ export default function StrategicInsightsPage() {
                     <h2 className="text-4xl md:text-7xl font-heading font-bold text-white mb-10 tracking-tighter leading-tight">
                         Strategic clarity <br className="hidden sm:block" /> for <span className="italic font-normal text-[#ffffff]">decision makers.</span>
                     </h2>
-                    <div className="flex flex-col sm:flex-row gap-0 max-w-md mx-auto border border-white/20">
-                        <input
-                            type="email"
-                            placeholder="Email"
-                            className="bg-transparent px-6 py-4 md:py-5 text-white font-mono text-xs uppercase tracking-widest flex-1 focus:outline-none focus:bg-white/5"
-                        />
-                        <button className="bg-[#004b33] text-white px-8 py-4 md:py-5 font-mono text-xs uppercase tracking-[0.3em] font-bold hover:bg-white hover:text-black transition-all">
-                            Join
-                        </button>
-                    </div>
+
                 </div>
             </section>
         </div>

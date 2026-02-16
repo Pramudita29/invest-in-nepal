@@ -1,6 +1,6 @@
 'use client';
 
-import { ArrowLeft, ArrowUpRight, Zap } from "lucide-react";
+import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "../components/Navbar/Navbar";
 import { practiceAreas } from "../data/legalContent";
@@ -19,7 +19,7 @@ export default function LegalTemplate() {
         );
     }
 
-    const contact = area.contactInfo || { phone: '+977 1 000000', email: 'advisory@firm.com' };
+    //  const contact = area.contactInfo || { phone: '+977 1 000000', email: 'advisory@firm.com' };
 
     return (
         <div className="min-h-screen bg-[#F5F2ED] text-[#13231F] selection:bg-[#004b33] selection:text-white antialiased overflow-x-hidden">
@@ -52,7 +52,7 @@ export default function LegalTemplate() {
 
 
 
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-normal tracking-tight leading-[1] md:leading-[0.9] text-balance">
+                    <h1 className="text-3xl md:text-5xl lg:text-7xl font-heading font-normal tracking-tight leading-[1] md:leading-[0.9] text-balance">
                         {area.title} <br />
                         <span className="italic font-normal text-[#004b33]">Protocol</span>
                     </h1>
@@ -127,34 +127,6 @@ export default function LegalTemplate() {
                     </section>
                 )}
 
-                {/* 03 Advisory */}
-                <section className="px-6 md:px-12 lg:px-24 pb-24 md:pb-48">
-                    <div className="bg-[#13231F] text-white p-8 md:p-12 lg:p-20 relative overflow-hidden">
-                        <div className="relative z-10">
-                            <h3 className="font-heading text-4xl md:text-5xl mb-12 md:mb-20 italic">Initiate Briefing</h3>
-
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 mb-12 md:mb-20">
-                                <div className="space-y-3 md:space-y-4">
-                                    <p className="font-mono text-[8px] md:text-[9px] text-white/30 uppercase tracking-[0.5em]">Global Line</p>
-                                    <p className="text-xl md:text-2xl font-body font-light tracking-tighter">{contact.phone}</p>
-                                </div>
-                                <div className="space-y-3 md:space-y-4">
-                                    <p className="font-mono text-[8px] md:text-[9px] text-white/30 uppercase tracking-[0.5em]">Direct Endpoint</p>
-                                    <p className="text-xl md:text-2xl font-body font-light tracking-tighter break-words">{contact.email}</p>
-                                </div>
-                            </div>
-
-                            <button className="group w-full md:w-auto flex items-center justify-between md:justify-start gap-8 border border-white/20 hover:border-[#004b33] px-8 md:px-10 py-5 md:py-6 transition-all bg-white/5 md:bg-transparent">
-                                <span className="font-mono text-[9px] md:text-[10px] uppercase tracking-[0.6em]">Request Protocol</span>
-                                <Zap size={14} className="group-hover:text-[#004b33] transition-colors" fill="currentColor" />
-                            </button>
-                        </div>
-
-                        <div className="absolute -right-6 md:-right-12 -bottom-6 md:-bottom-12 text-[15rem] md:text-[24rem] font-heading font-bold text-white/[0.02] select-none pointer-events-none">
-                            S
-                        </div>
-                    </div>
-                </section>
 
 
             </main>

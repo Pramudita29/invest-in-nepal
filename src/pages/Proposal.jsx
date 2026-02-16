@@ -3,13 +3,11 @@ import { motion } from 'framer-motion';
 import { ArrowRight, Calendar, MapPin, Send, Zap } from 'lucide-react';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import robinLogo from '../assets/images/LAW-Policy-ASSOCIATES.png';
-import kumariLogo from '../assets/images/image.png';
 import Navbar from '../components/Navbar/Navbar';
 
 const ProposalPage = () => {
     const [hoveredId, setHoveredId] = useState(null);
-    const labelStyle = "font-sans font-bold text-[10px] md:text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
+    //  const labelStyle = "font-sans font-bold text-[10px] md:text-[12px] uppercase tracking-[0.2em] text-[#2D5A43]";
 
     const fadeIn = {
         initial: { opacity: 0, y: 15 },
@@ -152,14 +150,13 @@ const ProposalPage = () => {
             </section>
 
             {/* SPONSORS SECTION */}
-            <div className="mt-12 py-20 px-6 border-t border-black/5 bg-white/30">
+            {/* <div className="mt-12 py-20 px-6 border-t border-black/5 bg-white/30">
                 <div className="text-center space-y-4 mb-12 md:mb-16">
                     <p className={labelStyle}>Strategic Partners / सहकार्य</p>
                     <h3 className="text-3xl md:text-4xl font-bold text-[#13231F] tracking-tight">Supporting the Vision</h3>
                 </div>
 
                 <div className="flex flex-col lg:flex-row items-center justify-center gap-8 md:gap-12 max-w-7xl mx-auto">
-                    {/* Robin Law */}
                     <a href="https://robinlawandpolicy.com" target="_blank" rel="noopener noreferrer"
                         className="group relative flex flex-col p-8 md:p-10 bg-white border border-black/5 rounded-[2rem] hover:shadow-2xl transition-all duration-500 w-full max-w-md">
                         <div className="h-24 md:h-32 w-full bg-[#13231F] rounded-2xl flex items-center justify-center mb-6 md:mb-8 overflow-hidden">
@@ -169,7 +166,6 @@ const ProposalPage = () => {
                         <p className="text-sm md:text-[15px] text-black/60 leading-relaxed">Premier legal firm specializing in policy research and strategic advocacy.</p>
                     </a>
 
-                    {/* Kumari Trust */}
                     <a href="https://kumaritrust.com" target="_blank" rel="noopener noreferrer"
                         className="group relative flex flex-col p-8 md:p-10 bg-white border border-black/5 rounded-[2rem] hover:shadow-2xl transition-all duration-500 w-full max-w-md">
                         <div className="h-24 md:h-32 w-full bg-[#FAF9F6] rounded-2xl flex items-center justify-center mb-6 md:mb-8">
@@ -179,7 +175,7 @@ const ProposalPage = () => {
                         <p className="text-sm md:text-[15px] text-black/60 leading-relaxed">Dedicated to empowering communities through sustainable health and education projects.</p>
                     </a>
                 </div>
-            </div>
+            </div> */}
 
             {/* CONCLUSION */}
             <section className="py-24 md:py-40 px-6 md:px-10 max-w-4xl mx-auto text-center">
@@ -190,7 +186,7 @@ const ProposalPage = () => {
                     Set Your Agenda <ArrowRight size={18} />
                 </Link>
                 <p className="font-sans text-[9px] md:text-[10px] italic opacity-50 uppercase tracking-[0.2em] leading-loose">
-                    An initiative by StratBridge Partners in collaboration with partner entities across Nepal.
+                    An initiative by StratBridge Partners in collaboration with Robin Law & Policy Associates & Kumari Trust.
                 </p>
             </section>
         </div>
