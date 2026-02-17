@@ -27,7 +27,7 @@ const CONCERNS = [
     { id: 'edu', en: 'Quality Education', ne: 'गुणस्तरीय शिक्षा' },
     { id: 'elec', en: 'Electricity & Energy', ne: 'विद्युत र उर्जा' },
     { id: 'health', en: 'Health Services', ne: 'स्वास्थ्य सेवा' },
-    { id: 'tour', en: 'Tourism & Culture', ne: 'पर्यटन र संस्कृति' },
+    { id: 'tour', ne: 'पर्यटन र संस्कृति', en: 'Tourism & Culture' },
     { id: 'econ', en: 'Economic Growth', ne: 'आर्थिक वृद्धि' },
     { id: 'ent', en: 'Entrepreneurship', ne: 'उद्यमशीलता' },
     { id: 'infra', en: 'Infrastructure & Roads', ne: 'पूर्वाधार र सडक' },
@@ -40,6 +40,8 @@ const CONCERNS = [
     { id: 'ineq', en: 'Economic Inequality', ne: 'आर्थिक असमानता' },
     { id: 'tech', en: 'IT & Digital Nepal', ne: 'सूचना प्रविधि' },
     { id: 'inc', en: 'Inclusion', ne: 'समावेशीकरण' },
+    { id: 'fint', en: 'Foreign Intervention', ne: 'वैदेशिक हस्तक्षेप' },
+    { id: 'law', en: 'Law and Order', ne: 'कानुन र व्यवस्था' },
 ];
 
 const PROFESSIONS = [
