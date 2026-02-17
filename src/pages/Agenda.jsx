@@ -42,6 +42,7 @@ const CONCERNS = [
     { id: 'inc', en: 'Inclusion', ne: 'समावेशीकरण' },
     { id: 'fint', en: 'Foreign Intervention', ne: 'वैदेशिक हस्तक्षेप' },
     { id: 'law', en: 'Law and Order', ne: 'कानुन र व्यवस्था' },
+    { id: 'pol_stab', en: 'Political Stability', ne: 'राजनीतिक स्थिरता' },
 ];
 
 const PROFESSIONS = [
