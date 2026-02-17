@@ -55,6 +55,7 @@ export default function NationalAgendaModal() {
 
                             <h2 className="text-2xl md:text-3xl font-medium text-slate-900 leading-tight mb-4">
                                 Beyond Voting <br className="hidden xs:block" />
+                                <br />
                                 <span className="font-serif italic">The Agenda Cohort</span>
                             </h2>
 
